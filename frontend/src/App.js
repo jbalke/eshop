@@ -1,14 +1,14 @@
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+
 function App() {
   return (
     <div className='flex flex-col h-screen'>
       <Header />
-      <main className='flex-grow py-3'>
+      <main className='flex-grow py-3 px-2'>
         <div className='max-w-screen-lg mx-auto'>
-          <h1 className='text-3xl font-bold uppercase tracking-wider'>
-            Welcome To E-Shop
-          </h1>
+          <Home />
         </div>
       </main>
       <Footer />

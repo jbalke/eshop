@@ -13,3 +13,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1 {
+  @apply text-2xl tracking-widest font-bold uppercase my-3;
+}
+
+.card h1 {
+  @apply text-base font-semibold tracking-wide capitalize;
+}
+
+p {
+  @apply my-3;
+}
