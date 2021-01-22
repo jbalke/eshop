@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const products = require('../data/products');
+import products from '../data/products.js';
 
 router.get('/', (req, res) => {
   res.json(products);
@@ -17,4 +17,4 @@ router.get('/:id', (req, res) => {
   res.json(product);
 });
 
-module.exports = router;
+export default router;

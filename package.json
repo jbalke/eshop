@@ -2,6 +2,7 @@
   "name": "ecommerce-backend",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "module",
   "author": "John Balke <john.balke@gmail.com>",
   "license": "MIT",
   "nodemonConfig": {
@@ -12,11 +13,12 @@
   },
   "scripts": {
     "start": "node backend/server",
-    "start-backend": "nodemon backend/server",
-    "start-client": "yarn --cwd ./frontend start",
-    "dev": "concurrently yarn:start-*"
+    "watch-backend": "nodemon backend/server",
+    "watch-client": "yarn --cwd ./frontend start",
+    "dev": "concurrently yarn:watch-*"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.4.1"
   },
