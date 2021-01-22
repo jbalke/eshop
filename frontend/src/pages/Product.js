@@ -5,9 +5,10 @@ import { useQuery } from 'react-query';
 import { getProduct } from '../api/products';
 
 function Product({ match }) {
+  const { id } = match.params;
   const { isError, error, data, isLoading } = useQuery(
-    'product',
-    getProduct(match.params.id)
+    ['product', id],
+    getProduct(id)
   );
 
   if (isLoading) {
