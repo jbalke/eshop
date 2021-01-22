@@ -1,18 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Rating from '../components/Rating';
-import products from '../data/products';
+import { useQuery } from 'react-query';
+import { getProduct } from '../api/products';
 
 function Product({ match }) {
+  const { isError, error, data, isLoading } = useQuery(
+    'product',
+    getProduct(match.params.id)
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   const {
-    image,
     name,
+    image,
     rating,
     numReviews,
-    price,
     description,
     countInStock,
-  } = products.find((p) => p._id === match.params.id);
+    price,
+  } = data;
 
   const inStock = countInStock > 0;
   return (
@@ -31,7 +45,7 @@ function Product({ match }) {
           <h2 className='not-visible'>Product Description</h2>
           <p>{description}</p>
         </section>
-        <section className='stock-info-layout '>
+        <section className='stock-info-layout'>
           <h1 className='not-visible'>Stock Information</h1>
           <span className='font-bold'>Price:</span>
           <span>${price}</span>
