@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
       <h1>Latest Products</h1>
-      <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-col-6'>
+      <div className='products-grid'>
         {products.map((product, i) => {
           return <Product key={i} {...product} />;
         })}

@@ -21,12 +21,13 @@ function Rating({ value, text, color = '#f8e825' }) {
   return (
     <div className='rating flex'>
       <div className='inline-flex'>
-        {ratingStars.map((star) => (
-          <span style={{ color: color }} className='mr-0.5'>
+        {ratingStars.map((star, index) => (
+          <span key={index} style={{ color: color }} className='mr-0.5'>
             {star}
           </span>
         ))}
       </div>
+      <span className='not-visible'>{`Average Rating: ${value} out of 5`}</span>
       <span className='text-sm ml-1'>{text && text}</span>
     </div>
   );

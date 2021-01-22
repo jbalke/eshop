@@ -18,10 +18,46 @@ h1 {
   @apply text-2xl tracking-widest font-bold uppercase my-3;
 }
 
-.card h1 {
-  @apply text-base font-semibold tracking-wide capitalize;
-}
-
 p {
   @apply my-3;
+}
+
+.not-visible {
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+}
+
+.btn {
+  @apply p-4 inline-block transition-all font-semibold tracking-wide uppercase shadow-md;
+}
+
+.products-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.product-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.stock-info-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  place-content: start;
+  place-items: start;
+  @apply text-sm font-semibold tracking-widest gap-2;
+}
+
+@media (min-width: 1000px) {
+  .product-layout {
+    grid-template-columns: 40% 2fr 1fr;
+  }
 }
