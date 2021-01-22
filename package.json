@@ -4,11 +4,19 @@
   "main": "server.js",
   "author": "John Balke <john.balke@gmail.com>",
   "license": "MIT",
+  "nodemonConfig": {
+    "ignore": [
+      "frontend/*"
+    ],
+    "delay": "2500"
+  },
   "scripts": {
-    "start": "nodemon backend/server"
+    "start": "node backend/server",
+    "start-backend": "nodemon backend/server",
+    "start-client": "yarn --cwd ./frontend start",
+    "dev": "concurrently yarn:start-*"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.4.1"
   },
