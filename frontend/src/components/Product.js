@@ -2,9 +2,12 @@ import React from 'react';
 import Rating from './Rating';
 import { Link } from 'react-router-dom';
 
-const Product = ({ _id, image, name, rating, numReviews, price }) => {
+const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
   return (
-    <article className='card rounded p-3 shadow-md cursor-pointer flex flex-col transform hover:scale-105 hover:shadow-xl transition-all'>
+    <article
+      className='card rounded p-3 shadow-md cursor-pointer flex flex-col transform hover:scale-105 hover:shadow-xl transition-all'
+      onMouseEnter={prefetch}
+    >
       <Link to={`/product/${_id}`}>
         <img src={image} alt={name} />
       </Link>

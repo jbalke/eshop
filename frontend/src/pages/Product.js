@@ -8,7 +8,8 @@ function Product({ match }) {
   const { id } = match.params;
   const { isError, error, data, isLoading } = useQuery(
     ['product', id],
-    getProduct(id)
+    getProduct(id),
+    { staleTime: 10 * 1000 }
   );
 
   if (isLoading) {
