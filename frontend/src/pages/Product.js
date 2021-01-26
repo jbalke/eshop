@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Rating from '../components/Rating';
 import { useQuery } from 'react-query';
 import { getProduct } from '../api/products';
+import { ScrollToTop } from '../utils/scroll';
 
 function Product({ match }) {
   const { id } = match.params;
@@ -33,6 +34,7 @@ function Product({ match }) {
   const inStock = countInStock > 0;
   return (
     <>
+      <ScrollToTop />
       <Link
         className='btn text-xs my-3 text-black bg-gray-100  hover:bg-gray-400 hover:text-white'
         to='/'
