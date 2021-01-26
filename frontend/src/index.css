@@ -15,7 +15,9 @@ code {
 }
 
 h1 {
-  @apply text-2xl tracking-widest font-bold uppercase my-3;
+  font-size: calc(1rem + 0.3vmin);
+  margin: 0.5em 0;
+  @apply tracking-widest font-bold uppercase;
 }
 
 p {
@@ -56,8 +58,8 @@ p {
   @apply text-sm font-semibold tracking-widest gap-2;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 700px) {
   .product-layout {
-    grid-template-columns: 40% 2fr 1fr;
+    grid-template-columns: 35% 2fr 1fr;
   }
 }
