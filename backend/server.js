@@ -2,7 +2,7 @@ import express from 'express';
 import connectDatabase from './config/db.js';
 import helmet from 'helmet';
 import colors from 'colors';
-import productsRoutes from './routes/products.js';
+import productsRoutes from './routes/productRoutes.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
