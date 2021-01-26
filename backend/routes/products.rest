@@ -1,0 +1,16 @@
+// All Products
+GET {{URL}}/api/products
+
+###
+// Get existing product
+GET {{URL}}/api/products/60102dd894ab0d3118f5a1bb
+
+###
+// Get missing product
+GET {{URL}}/api/products/60102dd894ab0d3118f5a1b0
+
+###
+// Get invalid product
+GET {{URL}}/api/products/1
+
+###

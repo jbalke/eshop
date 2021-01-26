@@ -3,6 +3,7 @@ import connectDatabase from './config/db.js';
 import helmet from 'helmet';
 import colors from 'colors';
 import productsRoutes from './routes/productRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,11 +11,14 @@ dotenv.config();
 connectDatabase();
 const app = express();
 
-// MIDDLEWARE
 app.use(helmet());
 
-// ROUTES
+//* ROUTES
 app.use('/api/products', productsRoutes);
+
+//* ERROR HANDLERS
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 9999;
 app.listen(
