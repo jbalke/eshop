@@ -34,7 +34,7 @@ const Home = () => {
             <Product
               key={product._id}
               {...product}
-              prefetch={(e) => prefetchProduct(product._id)}
+              // prefetch={(e) => prefetchProduct(product._id)}
             />
           );
         })}
