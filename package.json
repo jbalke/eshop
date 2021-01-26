@@ -15,12 +15,17 @@
     "start": "node backend/server",
     "watch-backend": "nodemon backend/server",
     "watch-client": "yarn --cwd ./frontend start",
-    "dev": "concurrently yarn:watch-*"
+    "dev": "concurrently yarn:watch-*",
+    "data:import": "node backend/seeder",
+    "data:purge": "node backend/seeder -p"
   },
   "dependencies": {
+    "argon2": "^0.27.1",
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "helmet": "^4.4.1"
+    "helmet": "^4.4.1",
+    "mongoose": "^5.11.13"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

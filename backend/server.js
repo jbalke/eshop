@@ -1,10 +1,13 @@
 import express from 'express';
+import connectDatabase from './config/db.js';
 import helmet from 'helmet';
+import colors from 'colors';
 import productsRoutes from './routes/products.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
+connectDatabase();
 const app = express();
 
 // MIDDLEWARE
@@ -16,5 +19,7 @@ app.use('/api/products', productsRoutes);
 const PORT = process.env.PORT || 9999;
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
 );
