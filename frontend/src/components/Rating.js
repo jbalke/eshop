@@ -1,20 +1,20 @@
 import React from 'react';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
-function Rating({ value, text, color = '#f8e825' }) {
+function Rating({ value, text, color = '#f8e825', maxRating = 5 }) {
   const ratingStars = [];
-  let stars = 1;
+  let stars = 0;
 
-  for (; stars <= Math.floor(value); stars++) {
+  for (; stars < Math.min(Math.floor(value), maxRating); stars++) {
     ratingStars.push(<FaStar />);
   }
 
-  if (value % 1 >= 0.5) {
+  if (stars < maxRating && value % 1 >= 0.5) {
     ratingStars.push(<FaStarHalfAlt />);
     stars++;
   }
 
-  for (; stars <= 5; stars++) {
+  for (; stars < maxRating; stars++) {
     ratingStars.push(<FaRegStar />);
   }
 
