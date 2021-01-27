@@ -1,21 +1,27 @@
+import axios from 'axios';
+
 export const getProducts = async () => {
   try {
-    const response = await fetch('/api/products');
-    const data = await response.json();
+    const { data } = await axios.get('/api/products');
     return data;
   } catch (error) {
-    console.error(error);
-    throw new Error('failed to get products from server');
+    if (error?.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw error;
   }
 };
 
 export const getProduct = (id) => async () => {
   try {
-    const response = await fetch(`/api/products/${id}`);
-    const data = await response.json();
+    const { data } = await axios.get(`/api/products/${id}`);
     return data;
   } catch (error) {
-    console.error(error);
-    throw new Error('unable to get product from server');
+    if (error?.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw error;
   }
 };
