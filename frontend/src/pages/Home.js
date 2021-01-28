@@ -2,6 +2,8 @@ import React from 'react';
 import Product from '../components/Product';
 import { useQueryClient, useQuery } from 'react-query';
 import { getProducts, getProduct } from '../api/products';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
 const Home = () => {
   const { isLoading, isError, data, error } = useQuery(
@@ -21,9 +23,9 @@ const Home = () => {
     <>
       <h1>Latest Products</h1>
       {isLoading ? (
-        <span>Loading...</span>
+        <Loader />
       ) : isError ? (
-        <span>Error: {error.message}</span>
+        <Message type='info'>{error.message}</Message>
       ) : (
         <div className='products-grid'>
           {data.map((product) => {
