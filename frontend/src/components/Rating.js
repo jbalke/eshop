@@ -27,7 +27,7 @@ function Rating({ value, text, color = '#f8e825', maxRating = 5 }) {
           </span>
         ))}
       </div>
-      <span className='not-visible'>{`Average Rating: ${value} out of 5`}</span>
+      <span className='sr-only'>{`Average Rating: ${value} out of 5`}</span>
       <span className='text-sm ml-1'>{text && text}</span>
     </div>
   );
