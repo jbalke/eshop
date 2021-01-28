@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node backend/server",
     "watch-backend": "nodemon backend/server",
-    "watch-client": "yarn --cwd ./frontend start",
+    "watch-frontend": "yarn --cwd ./frontend start",
     "dev": "concurrently yarn:watch-*",
     "data:import": "node backend/seeder",
     "data:purge": "node backend/seeder -p"
