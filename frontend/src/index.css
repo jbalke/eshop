@@ -24,7 +24,7 @@ p {
   @apply my-3;
 }
 
-.not-visible {
+.sr-only {
   width: 1px;
   height: 1px;
   margin: -1px;
@@ -36,7 +36,11 @@ p {
 }
 
 .btn {
-  @apply p-4 inline-block transition-all font-semibold tracking-wide uppercase shadow-md;
+  @apply p-4 inline-block transition-all font-semibold tracking-wide uppercase;
+}
+
+.card {
+  @apply rounded border p-3 shadow-md cursor-pointer flex flex-col;
 }
 
 .products-grid {
@@ -52,14 +56,65 @@ p {
 
 .stock-info-layout {
   display: grid;
-  grid-template-columns: auto 1fr;
-  place-content: start;
-  place-items: start;
-  @apply text-sm font-semibold tracking-widest gap-2;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  align-items: center;
+  gap: 1em;
+  @apply text-sm font-semibold tracking-widest;
 }
 
 @media (min-width: 700px) {
   .product-layout {
     grid-template-columns: 35% 2fr 1fr;
   }
+}
+
+.cart-layout {
+  display: grid;
+  gap: 2rem;
+}
+
+.cart-items {
+  display: grid;
+  gap: 2rem;
+}
+
+.cart-item {
+  display: grid;
+  gap: 1rem;
+  justify-items: end;
+}
+
+@media (min-width: 700px) {
+  .cart-layout {
+    grid-template-columns: 75% 1fr;
+  }
+  .cart-item {
+    grid-template-columns: 1fr 2fr auto auto auto;
+    align-items: center;
+    justify-items: start;
+  }
+}
+
+.cart-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 1em;
+}
+
+.message-box {
+  @apply tracking-wider font-normal text-base capitalize p-4;
+}
+.message-box.danger {
+  @apply bg-red-100 text-red-900;
+}
+.message-box.success {
+  @apply bg-green-100 text-green-900;
+}
+.message-box.info {
+  @apply bg-blue-100 text-blue-900;
+}
+.message-box.warning {
+  @apply bg-yellow-100 text-yellow-900;
 }
