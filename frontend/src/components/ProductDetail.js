@@ -58,7 +58,7 @@ const ProductDetail = ({
           </>
         )}
         <button
-          className='btn shadow-md text-xs text-white bg-gray-700 col-span-2 justify-self-stretch hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed'
+          className='btn shadow-md text-xs text-white bg-gray-700 col-span-2 justify-self-stretch hover:bg-gray-500 disabled:opacity-30 disabled:cursor-not-allowed'
           disabled={!inStock}
           onClick={addToCartHandler}
           type='button'

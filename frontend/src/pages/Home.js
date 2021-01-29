@@ -6,17 +6,11 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const Home = () => {
-  const { isLoading, isError, data, error } = useQuery(
-    'products',
-    getProducts,
-    { staleTime: 60 * 1000 }
-  );
+  const { isLoading, isError, data, error } = useQuery('products', getProducts);
   const queryClient = useQueryClient();
 
   const prefetchProduct = async (id) => {
-    await queryClient.prefetchQuery(`product__${id}`, getProduct(id), {
-      staleTime: 10 * 1000, // only prefetch if older than 10 seconds
-    });
+    await queryClient.prefetchQuery(['product', id], getProduct(id));
   };
 
   return (
@@ -25,7 +19,7 @@ const Home = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <Message type='info'>{error.message}</Message>
+        <Message type='danger'>{error.message}</Message>
       ) : (
         <div className='products-grid'>
           {data.map((product) => {

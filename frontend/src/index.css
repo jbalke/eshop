@@ -15,7 +15,12 @@ code {
 }
 
 h1 {
-  font-size: calc(1rem + 0.3vmin);
+  font-size: calc(1.5rem + 0.8vmin);
+  margin: 0.5em 0;
+  @apply tracking-widest font-bold uppercase;
+}
+h2 {
+  font-size: calc(1.5rem + 0.3vmin);
   margin: 0.5em 0;
   @apply tracking-widest font-bold uppercase;
 }
@@ -54,6 +59,12 @@ p {
   gap: 1rem;
 }
 
+@media (min-width: 700px) {
+  .product-layout {
+    gap: 1.5rem;
+  }
+}
+
 .stock-info-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -85,9 +96,17 @@ p {
   justify-items: end;
 }
 
+.cart-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 2em;
+}
+
 @media (min-width: 700px) {
   .cart-layout {
-    grid-template-columns: 75% 1fr;
+    grid-template-columns: 50% 1fr;
+    gap: 12vw;
   }
   .cart-item {
     grid-template-columns: 1fr 2fr auto auto auto;
@@ -96,15 +115,8 @@ p {
   }
 }
 
-.cart-info {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-content: start;
-  gap: 1em;
-}
-
 .message-box {
-  @apply tracking-wider font-normal text-base capitalize p-4;
+  @apply tracking-wider font-normal text-base p-4;
 }
 .message-box.danger {
   @apply bg-red-100 text-red-900;
