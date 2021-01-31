@@ -47,3 +47,29 @@ Content-Type: application/json
 @authToken = {{login.response.body.token}}
 GET {{URL}}/api/users/profile
 Authorization: Bearer {{authToken}}
+
+###
+
+// Register user - new
+# @name register_new
+POST {{URL}}/api/users
+Content-Type: application/json
+
+{
+  "name" : "Dummy",
+  "password": "654321",
+  "email": "dummy@example.com"
+}
+
+###
+
+// Register user - existing
+# @name register_existing
+POST {{URL}}/api/users
+Content-Type: application/json
+
+{
+  "name" : "admin",
+  "password": "654321",
+  "email": "admin@example.com"
+}
