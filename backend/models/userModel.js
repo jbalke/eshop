@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import argon2 from 'argon2';
 
 const userSchema = mongoose.Schema(
   {
@@ -22,11 +23,20 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    tokenVersion: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.methods.matchPassword = async function (plainPassword) {
+  return await argon2.verify(this.password, plainPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
