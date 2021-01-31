@@ -1,8 +1,10 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import connectDatabase from './config/db.js';
 import helmet from 'helmet';
 import colors from 'colors';
 import productsRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import dotenv from 'dotenv';
 
@@ -12,9 +14,12 @@ connectDatabase();
 const app = express();
 
 app.use(helmet());
+app.use(express.json());
+app.use(cookieParser());
 
-//* ROUTES
+//* PUBLIC ROUTES
 app.use('/api/products', productsRoutes);
+app.use('/api/users', userRoutes);
 
 //* ERROR HANDLERS
 app.use(notFound);
