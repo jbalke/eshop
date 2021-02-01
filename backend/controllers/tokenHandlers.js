@@ -1,8 +1,17 @@
-export const setRefreshCookie = (res, token) => {
-  res.cookie(process.env.COOKIE_NAME, token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: 'strict',
-  });
-};
+import {
+  createAccessToken,
+  verifyRefeshToken,
+  setRefreshCookie,
+} from '../utils/tokens.js';
+import asyncHandler from 'express-async-handler';
+
+export const refreshTokenHandler = asyncHandler(async (req, res) => {
+  const user = await verifyRefeshToken(req);
+
+  if (!user) {
+    res.status(400);
+    throw new Error('invalid/expired refresh token');
+  }
+  setRefreshCookie(res, user);
+  res.status(201).json({ token: createAccessToken(user) });
+});

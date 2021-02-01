@@ -1,7 +1,10 @@
 import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
-import { createAccessToken, createRefreshToken } from '../utils/tokens.js';
-import { setRefreshCookie } from './tokenHandlers.js';
+import {
+  createAccessToken,
+  setRefreshCookie,
+  clearRefreshCookie,
+} from '../utils/tokens.js';
 
 // @desc     Auth user & get token
 // @route    POST /api/users/login
@@ -10,8 +13,9 @@ export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+
   if (user && (await user.matchPassword(password))) {
-    setRefreshCookie(res, createRefreshToken(user));
+    setRefreshCookie(res, user);
 
     res.json({
       _id: user._id,
@@ -65,3 +69,11 @@ export const newUser = asyncHandler(async (req, res) => {
     throw new Error('invalid user data');
   }
 });
+
+// @desc     Logout user
+// @route    POST /api/users/logout
+// @access   Public
+export const logoutUser = (req, res) => {
+  clearRefreshCookie(res);
+  res.json({ logout: true });
+};

@@ -1,8 +1,15 @@
-import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
+
+const COOKIE_OPTIONS = {
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  secure: process.env.NODE_ENV === 'production',
+  httpOnly: true,
+  sameSite: 'strict',
+};
 
 export const createAccessToken = (user) => {
-  const { _id, isAdmin, tokenVersion } = user;
+  const { _id, tokenVersion } = user;
   return jwt.sign(
     { user: _id, tokenVersion },
     process.env.ACCESS_TOKEN_SECRET,
@@ -21,4 +28,31 @@ export const createRefreshToken = (user) => {
       expiresIn: '7d',
     }
   );
+};
+
+export const setRefreshCookie = (res, user) => {
+  res.cookie(process.env.COOKIE_NAME, createRefreshToken(user), COOKIE_OPTIONS);
+};
+
+export const clearRefreshCookie = (res) => {
+  res.clearCookie(process.env.COOKIE_NAME, COOKIE_OPTIONS);
+};
+
+export const verifyRefeshToken = async (req) => {
+  const refreshToken = req.cookies[process.env.COOKIE_NAME];
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  try {
+    const { user, tokenVersion } = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    return await User.findOne({ _id: user, tokenVersion });
+  } catch (error) {
+    return null;
+  }
 };
