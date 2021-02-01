@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
   return (
-    <article
-      className='card transform hover:scale-105 hover:shadow-xl transition-all'
-      onMouseEnter={prefetch}
-    >
+    <article className='card' onMouseEnter={prefetch}>
       <Link to={`/product/${_id}`}>
         <img src={image} alt={name} />
       </Link>
