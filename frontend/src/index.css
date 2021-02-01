@@ -7,6 +7,7 @@ body {
   font-family: 'Nunito Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply text-black tracking-wide;
 }
 
 code {
@@ -29,6 +30,14 @@ p {
   @apply my-3;
 }
 
+a {
+  @apply font-semibold;
+}
+
+input {
+  @apply border p-2 block;
+}
+
 .sr-only {
   width: 1px;
   height: 1px;
@@ -41,7 +50,7 @@ p {
 }
 
 .btn {
-  @apply p-4 inline-block transition-all font-semibold tracking-wide uppercase;
+  @apply px-4 py-3 inline-block transition-all font-semibold tracking-wide uppercase;
 }
 
 .card {
