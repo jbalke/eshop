@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './customAxios.js';
 
 export const getProducts = async () => {
   try {
