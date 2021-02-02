@@ -11,7 +11,7 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
 
   if (!authHeader.startsWith('Bearer')) {
     res.status(400);
-    throw new Error('require Bearer token');
+    throw new Error('missing Bearer token');
   }
 
   const token = authHeader.split(' ')[1];
@@ -27,15 +27,15 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
     );
 
     if (!existUser) {
-      res.status(404);
-      throw new Error('usernot found');
+      res.status(403);
+      throw new Error('bad token');
     }
 
     req.user = existUser;
     next();
   } catch (error) {
     res.status(401);
-    throw new Error('not authorised');
+    throw new Error('missing or expired token');
   }
 });
 
