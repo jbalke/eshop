@@ -1,14 +1,23 @@
 import React, { useEffect } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import ApiService from '../api/ApiService';
+import tokenStorage from '../tokenStorage';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useHistory } from 'react-router-dom';
 import { sleep } from '../utils/sleep';
 
 const Logout = () => {
+  const queryClient = useQueryClient();
+
   const { isLoading, isSuccess, mutate, isError, error } = useMutation(
-    ApiService.users.logoutUser
+    ApiService.users.logoutUser,
+    {
+      onSuccess: () => {
+        tokenStorage.clear();
+        queryClient.invalidateQueries('user', { exact: true });
+      },
+    }
   );
 
   const history = useHistory();

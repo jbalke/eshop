@@ -18,10 +18,12 @@ export const authUser = asyncHandler(async (req, res) => {
     setRefreshCookie(res, user);
 
     res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
       token: createAccessToken(user),
     });
   } else {
@@ -58,10 +60,12 @@ export const newUser = asyncHandler(async (req, res) => {
   const user = await User.create({ name, email, password });
   if (user) {
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
       token: createAccessToken(user),
     });
   } else {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import ApiService from '../api/ApiService.js';
 import { Link, useHistory } from 'react-router-dom';
 import Message from '../components/Message.js';
@@ -15,8 +15,15 @@ function Login() {
   const redirect = searchParams.get('redirect');
   const history = useHistory();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading, isSuccess, data, isError, error } = useMutation(
-    ApiService.users.loginUser
+    ApiService.users.loginUser,
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData('user', data.user);
+      },
+    }
   );
 
   useEffect(() => {

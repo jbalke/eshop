@@ -3,7 +3,9 @@ import reduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { cartReducer } from './reducers/cartReducers';
 
-const reducer = combineReducers({ cart: cartReducer });
+const reducer = combineReducers({
+  cart: cartReducer,
+});
 
 const cartItemsFromStorage = localStorage.getItem('cartItems');
 const parsedCartItems = cartItemsFromStorage
