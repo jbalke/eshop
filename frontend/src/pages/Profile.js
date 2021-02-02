@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useHistory, useLocation } from 'react-router-dom';
+import { sleep } from '../utils/sleep';
 
 const Profile = () => {
   const history = useHistory();
@@ -16,7 +17,9 @@ const Profile = () => {
 
   useEffect(() => {
     if (isError) {
-      history.replace(`/login?redirect=${location.pathname}`);
+      sleep(2).then(() => {
+        history.replace(`/login?redirect=${location.pathname}`);
+      });
     }
   }, [isError, location, history]);
 

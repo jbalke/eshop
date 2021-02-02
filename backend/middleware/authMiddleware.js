@@ -27,8 +27,8 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
     );
 
     if (!existUser) {
-      res.status(403);
-      throw new Error('bad token');
+      res.status(401);
+      throw new Error('invalid token');
     }
 
     req.user = existUser;

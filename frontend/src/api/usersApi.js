@@ -40,13 +40,7 @@ export const userProfile = async () => {
 
 export const logoutUser = async () => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const { data } = await axios.post('/api/users/logout', config);
+    const { data } = await axios.post('/api/users/logout');
 
     return data;
   } catch (error) {

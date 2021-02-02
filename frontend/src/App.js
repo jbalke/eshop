@@ -5,6 +5,7 @@ import Product from './pages/Product';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Logout from './pages/Logout';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -28,6 +29,9 @@ function App() {
               <Switch>
                 <Route path='/login'>
                   <Login />
+                </Route>
+                <Route path='/logout'>
+                  <Logout />
                 </Route>
                 <Route path='/me'>
                   <Profile />
