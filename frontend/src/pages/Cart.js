@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useQueryString } from '../hooks/url';
 import { useQuery } from 'react-query';
 import Loader from '../components/Loader';
-import { getProduct } from '../api/products';
+import ApiService from '../api/ApiService';
 
-const Cart = ({ match, history }) => {
-  const productId = match.params.id;
+const Cart = () => {
+  const { id: productId } = useParams();
+  const history = useHistory();
 
   const searchParams = useQueryString();
   const qty = parseInt(searchParams.get('qty'));
@@ -20,7 +21,7 @@ const Cart = ({ match, history }) => {
 
   const { isError, data, isLoading } = useQuery(
     ['product', productId],
-    getProduct(productId),
+    ApiService.products.getProduct(productId),
     { enabled: !!productId }
   );
 

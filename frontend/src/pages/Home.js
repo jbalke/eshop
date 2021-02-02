@@ -1,16 +1,22 @@
 import React from 'react';
 import Product from '../components/Product';
 import { useQueryClient, useQuery } from 'react-query';
-import { getProducts, getProduct } from '../api/products';
+import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const Home = () => {
-  const { isLoading, isError, data, error } = useQuery('products', getProducts);
+  const { isLoading, isError, data, error } = useQuery(
+    'products',
+    ApiService.products.getProducts
+  );
   const queryClient = useQueryClient();
 
   const prefetchProduct = async (id) => {
-    await queryClient.prefetchQuery(['product', id], getProduct(id));
+    await queryClient.prefetchQuery(
+      ['product', id],
+      ApiService.products.getProduct(id)
+    );
   };
 
   return (

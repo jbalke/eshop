@@ -1,5 +1,6 @@
 import axios from 'axios';
 import tokenStorage from '../tokenStorage.js';
+import history from 'history/browser';
 
 const customAxios = axios.create({
   // headers: {
@@ -28,29 +29,28 @@ customAxios.interceptors.response.use(
   },
   (error) => {
     const originalRequest = error.config;
-    console.log(originalRequest);
+    // if (
+    //   (error.response.status === 401 &&
+    //     originalRequest.url.endsWith('/token_refresh')) ||
+    //   error.response.status === 400
+    // ) {
+    //   return Promise.reject(error);
+    // }
 
     if (
       error.response.status === 401 &&
-      !originalRequest._retry &&
-      originalRequest.url !== '/api/users/login'
+      error.response.data.message.includes('token') &&
+      !originalRequest._retry
     ) {
       originalRequest._rety = true;
 
-      return axios
-        .post(`/api/auth/token_refresh`)
-        .then((res) => {
-          if (res.status === 201) {
-            tokenStorage.setToken(res.data.token);
-            customAxios.defaults.headers[
-              'Authorization'
-            ] = `Bearer ${tokenStorage.getToken()}`;
-            console.log('Tokens refreshed');
-            return axios(originalRequest);
-          }
+      return tokenStorage
+        .refreshToken()
+        .then((token) => {
+          console.log(`new token: ${token}`);
+          return customAxios(originalRequest);
         })
         .catch((error) => {
-          tokenStorage.clear();
           return Promise.reject(error);
         });
     }

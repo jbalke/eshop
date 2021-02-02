@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from 'react-query';
-import { loginUser } from '../api/users.js';
-import { Link } from 'react-router-dom';
+import ApiService from '../api/ApiService.js';
+import { Link, useHistory } from 'react-router-dom';
 import Message from '../components/Message.js';
 import Loader from '../components/Loader.js';
 import { useQueryString } from '../hooks/url.js';
 import tokenStorage from '../tokenStorage.js';
 
-function Login({ history }) {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const searchParams = useQueryString();
   const redirect = searchParams.get('redirect');
+  const history = useHistory();
 
-  const {
-    mutateAsync,
-    isLoading,
-    isSuccess,
-    data,
-    isError,
-    error,
-  } = useMutation(loginUser);
+  const { mutate, isLoading, isSuccess, data, isError, error } = useMutation(
+    ApiService.users.loginUser
+  );
+
+  useEffect(() => {
+    if (isSuccess) {
+      tokenStorage.setToken(data.token);
+      history.replace(redirect || '/');
+    }
+  }, [isSuccess, data, history, redirect]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await mutateAsync({ email, password });
-
-    if (isSuccess) {
-      tokenStorage.setToken(data.token);
-      //TODO: cache user for app header?
-    }
+    mutate({ email, password });
   };
 
   return (
@@ -52,6 +50,7 @@ function Login({ history }) {
                   autoComplete='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </label>
             </div>
@@ -64,6 +63,7 @@ function Login({ history }) {
                   placeholder='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </label>
             </div>

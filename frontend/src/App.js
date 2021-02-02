@@ -1,9 +1,10 @@
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Product from './pages/Product.js';
+import Product from './pages/Product';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -25,10 +26,21 @@ function App() {
           <main className='flex-grow p-4 flex'>
             <div className='max-w-screen-lg mx-auto flex-grow'>
               <Switch>
-                <Route path='/login' component={Login} />
-                <Route path='/product/:id' component={Product} />
-                <Route path='/cart/:id?' component={Cart} />
-                <Route path='/' exact component={Home} />
+                <Route path='/login'>
+                  <Login />
+                </Route>
+                <Route path='/me'>
+                  <Profile />
+                </Route>
+                <Route path='/product/:id'>
+                  <Product />
+                </Route>
+                <Route path='/cart/:id?'>
+                  <Cart />
+                </Route>
+                <Route path='/' exact>
+                  <Home />
+                </Route>
               </Switch>
             </div>
           </main>

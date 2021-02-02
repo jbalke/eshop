@@ -1,17 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { getProduct } from '../api/products';
+import ApiService from '../api/ApiService';
 import { ScrollToTop } from '../utils/scroll';
 import ProductDetail from '../components/ProductDetail';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-function Product({ match }) {
-  const { id } = match.params;
+function Product() {
+  const { id } = useParams();
   const { isError, error, data, isLoading } = useQuery(
     ['product', id],
-    getProduct(id)
+    ApiService.products.getProduct(id)
   );
 
   return (
