@@ -1,6 +1,6 @@
 import React from 'react';
 import Product from '../components/Product';
-import { useQueryClient, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -10,14 +10,14 @@ const Home = () => {
     'products',
     ApiService.products.getProducts
   );
-  const queryClient = useQueryClient();
 
-  const prefetchProduct = async (id) => {
-    await queryClient.prefetchQuery(
-      ['product', id],
-      ApiService.products.getProduct(id)
-    );
-  };
+  // const queryClient = useQueryClient();
+  // const prefetchProduct = async (id) => {
+  //   await queryClient.prefetchQuery(
+  //     ['product', id],
+  //     ApiService.products.getProduct(id)
+  //   );
+  // };
 
   return (
     <>
