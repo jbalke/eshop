@@ -67,7 +67,7 @@ const Cart = () => {
                   <select
                     name='qty'
                     id='qty'
-                    className='border py-2 px-4'
+                    className='qty-select border py-2 px-4'
                     value={item.qty}
                     onChange={(e) =>
                       dispatch(
@@ -85,7 +85,7 @@ const Cart = () => {
                     ))}
                   </select>
                   <button
-                    className='btn border'
+                    className='remove-btn btn border'
                     type='button'
                     onClick={() => removeFromCartHandler(item.product)}
                     title='remove item'
