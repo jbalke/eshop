@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import ApiService from '../api/ApiService';
 import { ScrollToTop } from '../utils/scroll';
 import ProductDetail from '../components/ProductDetail';
@@ -9,9 +9,18 @@ import Message from '../components/Message';
 
 function Product() {
   const { id } = useParams();
+
+  const queryClient = useQueryClient();
+
   const { isError, error, data, isLoading } = useQuery(
     ['product', id],
-    ApiService.products.getProduct(id)
+    ApiService.products.getProduct(id),
+    {
+      initialData: () =>
+        queryClient
+          .getQueryData('products')
+          ?.find((product) => product._id === id),
+    }
   );
 
   return (
