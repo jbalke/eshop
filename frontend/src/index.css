@@ -34,8 +34,13 @@ a {
   @apply font-semibold;
 }
 
+label {
+  display: block;
+  margin-bottom: 1em;
+}
+
 input {
-  @apply border p-2 block;
+  @apply border p-2 block bg-gray-100;
 }
 
 .sr-only {
@@ -50,7 +55,7 @@ input {
 }
 
 .btn {
-  @apply px-4 py-3 inline-block transition-all font-semibold tracking-wide uppercase;
+  @apply text-sm px-4 py-3 inline-block transition-all font-semibold tracking-widest uppercase;
 }
 
 .card {
