@@ -18,9 +18,14 @@ Authorization: Bearer {{authToken}}
 ###
 
 // Refresh tokens
-POST {{URL}}/api/auth/token_refresh
+POST {{URL}}/api/auth/token/refresh
 
 ###
 
 // Logout - clear refresh token
 POST {{URL}}/api/users/logout
+
+###
+# @authToken = {{login.response.body.token}}
+GET {{URL}}/api/users/me
+# Authorization: Bearer {{authToken}}

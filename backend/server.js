@@ -21,7 +21,7 @@ app.use(cookieParser());
 //* PUBLIC ROUTES
 app.use('/api/products', productsRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/auth/token_refresh', tokenRoutes);
+app.use('/api/auth/token', tokenRoutes);
 
 //* ERROR HANDLERS
 app.use(notFound);
