@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import { useQueryString } from '../hooks/url.js';
+import { useUserProfile } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
 
 function Login() {
@@ -14,7 +15,7 @@ function Login() {
   const redirect = searchParams.get('redirect') || '/';
   const history = useHistory();
 
-  const { data: userInfo } = useQuery('user', ApiService.users.userProfile);
+  const { data: userInfo } = useUserProfile();
 
   const queryClient = useQueryClient();
   const { mutate, isSuccess, data, isError, error } = useMutation(
@@ -22,20 +23,20 @@ function Login() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('user', data.user);
+        queryClient.setQueryData('user', { user: data.user });
       },
     }
   );
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo?.user) {
       history.push(redirect);
     }
   }, [userInfo, history, redirect]);
 
   useEffect(() => {
     if (isSuccess) {
-      history.replace(redirect);
+      history.push(redirect);
     }
   }, [isSuccess, history, redirect]);
 
@@ -59,6 +60,7 @@ function Login() {
               autoComplete='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoFocus
               required
             />
           </label>
