@@ -1,14 +1,13 @@
-import axios from './api/customAxios.js';
+import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
 let token = null;
 
 const tokenStorage = {
   isTokenExpired() {
-    if (!this.getToken()) return false;
+    if (!this.getToken()) return true;
 
     const decoded = jwt_decode(this.getToken());
-
     return decoded.exp * 1000 <= Date.now();
   },
 
@@ -16,24 +15,18 @@ const tokenStorage = {
     return token !== null;
   },
 
-  getAuthenticationHeader() {
-    return {
-      headers: { Authorization: `Bearer ${this.getToken()}` },
-    };
-  },
-
   refreshToken() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       axios
-        .post('/api/auth/token_refresh')
+        .post('/api/auth/token/refresh')
         .then((response) => {
           token = response.data.token;
           this.setToken(token);
           resolve(token);
         })
         .catch((error) => {
-          this.clear();
-          reject(error);
+          this.setToken(null);
+          resolve(null);
         });
     });
   },
@@ -44,10 +37,12 @@ const tokenStorage = {
 
   setToken(_token) {
     token = _token;
+    console.info(`token set to ${token}`);
   },
 
-  clear() {
+  clearToken() {
     token = null;
+    console.info(`token set to ${token}`);
   },
 };
 

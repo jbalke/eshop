@@ -1,8 +1,5 @@
 import axios from 'axios';
 import tokenStorage from '../tokenStorage.js';
-import { createBrowserHistory } from 'history';
-
-let history = createBrowserHistory();
 
 const customAxios = axios.create({
   // headers: {
@@ -12,7 +9,7 @@ const customAxios = axios.create({
 
 //request interceptor to add the auth token header to requests
 customAxios.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const accessToken = tokenStorage.getToken();
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -32,8 +29,7 @@ customAxios.interceptors.response.use(
   (error) => {
     const originalRequest = error.config;
 
-    if (originalRequest.url.endsWith('token_refresh')) {
-      history.push('/login');
+    if (originalRequest.url.endsWith('/token/refresh')) {
       return Promise.reject(error);
     }
 
