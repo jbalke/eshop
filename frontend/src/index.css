@@ -30,7 +30,8 @@ p {
   @apply my-3;
 }
 
-a {
+a,
+.link {
   @apply font-semibold;
 }
 
@@ -41,6 +42,18 @@ label {
 
 input {
   @apply border p-2 block bg-gray-100;
+}
+
+.dropdown::after {
+  content: '';
+  border: 4px solid transparent;
+  border-top-color: #98a1a1;
+  margin-left: 0.5em;
+  @apply transition-colors;
+}
+
+.dropdown:hover::after {
+  border-top-color: #fff;
 }
 
 .sr-only {
