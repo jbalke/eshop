@@ -16,7 +16,7 @@ export const loginUser = async ({ email, password }) => {
 
     return data;
   } catch (error) {
-    if (error?.response.data.message) {
+    if (error?.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
 
@@ -30,7 +30,21 @@ export const userProfile = async () => {
 
     return data;
   } catch (error) {
-    if (error?.response.data.message) {
+    if (error?.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw error;
+  }
+};
+
+export const authPing = async () => {
+  try {
+    const { data } = await axios.get('/api/users/me');
+
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
 
@@ -44,7 +58,7 @@ export const logoutUser = async () => {
 
     return data;
   } catch (error) {
-    if (error?.response.data.message) {
+    if (error?.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
 
