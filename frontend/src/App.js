@@ -1,15 +1,15 @@
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Product from './pages/Product';
-import Cart from './pages/Cart';
-import Login from './pages/Login';
-import Profile from './pages/Profile';
-import Logout from './pages/Logout';
-
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import { useGlobalContext } from './context';
+import Cart from './pages/Cart';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Logout from './pages/Logout';
+import Product from './pages/Product';
+import Profile from './pages/Profile';
 
 function App() {
   const queryClient = new QueryClient({
@@ -19,12 +19,15 @@ function App() {
       },
     },
   });
+
+  const { closeUserMenu } = useGlobalContext();
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <div className='flex flex-col h-screen'>
           <Header />
-          <main className='flex-grow p-4 flex'>
+          <main className='flex-grow p-4 flex' onClick={closeUserMenu}>
             <div className='max-w-screen-lg mx-auto flex-grow'>
               <Switch>
                 <Route path='/login'>
