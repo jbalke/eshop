@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import { useGlobalContext } from './context';
+import { useUIContext } from './ui-context';
 import Cart from './pages/Cart';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { closeUserMenu } = useGlobalContext();
+  const { closeUserMenu } = useUIContext();
 
   return (
     <QueryClientProvider client={queryClient}>

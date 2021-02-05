@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useGlobalContext } from '../context';
+import { useUIContext } from '../ui-context';
 import { useUserProfile, useAuthPing } from '../hooks/userQueries';
 
 const Header = () => {
-  const { toggleUserMenu, closeUserMenu, isUserMenuOpen } = useGlobalContext();
+  const { toggleUserMenu, closeUserMenu, isUserMenuOpen } = useUIContext();
 
   const [rect, setRect] = useState(null);
   const dropdownRef = useRef(null);

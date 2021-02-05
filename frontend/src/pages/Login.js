@@ -30,7 +30,7 @@ function Login() {
 
   useEffect(() => {
     if (userInfo?.user) {
-      history.push(redirect);
+      history.push(redirect || '/');
     }
   }, [userInfo, history, redirect]);
 
