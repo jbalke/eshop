@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useGlobalContext } from '../context';
@@ -14,7 +14,7 @@ const Header = () => {
 
   const handleUserMenuClick = (e) => {
     e.stopPropagation();
-    setRect(e.target.getBoundingClientRect());
+    setRect(dropdownRef.current.getBoundingClientRect());
     toggleUserMenu();
   };
 
@@ -24,15 +24,28 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    window.addEventListener('resize', closeUserMenu);
+    return () => {
+      window.removeEventListener('resize', closeUserMenu);
+    };
+  }, [closeUserMenu]);
+
   const SubMenu = ({ location }) => {
     return (
       <div
-        className='absolute bg-gray-100 text-black border shadow-md py-4 px-8 w-40'
-        style={{ left: location.left, top: location.bottom + 15, zIndex: 999 }}
+        className='sub-menu absolute bg-gray-100 text-black border shadow-md sm:w-32 md:w-48'
+        style={{
+          left: location.left,
+          top: location.bottom + 15,
+          zIndex: 999,
+        }}
         data-user-menu
       >
         <ul onClick={closeUserMenu}>
-          <li>Profile</li>
+          <li>
+            <Link to='/profile'>Profile</Link>
+          </li>
           <li>
             <Link to='/logout'>Logout</Link>
           </li>
@@ -59,7 +72,7 @@ const Header = () => {
             </NavLink>
             {authPing.data?.user?.name ? (
               <button
-                className='link dropdown uppercase hover:text-white transition-colors flex items-center ml-4'
+                className='link dropdown uppercase hover:text-white transition-colors flex items-center ml-4 p-1'
                 onClick={handleUserMenuClick}
                 ref={dropdownRef}
               >

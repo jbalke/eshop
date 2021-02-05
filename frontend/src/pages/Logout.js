@@ -35,7 +35,7 @@ const Logout = () => {
   }, [isSuccess, history]);
 
   return (
-    <div>
+    <div className='max-w-sm mx-auto'>
       {isLoading ? (
         <Loader />
       ) : isError ? (

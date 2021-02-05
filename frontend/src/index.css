@@ -56,6 +56,23 @@ input {
   border-top-color: #fff;
 }
 
+.sub-menu * {
+  display: block;
+  width: 100%;
+}
+
+.sub-menu {
+  padding: 0.5em 0;
+}
+
+.sub-menu a {
+  padding: 0.5em 1em;
+}
+
+.sub-menu a:hover {
+  @apply bg-gray-200;
+}
+
 .sr-only {
   width: 1px;
   height: 1px;
