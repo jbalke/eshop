@@ -10,8 +10,15 @@ const customAxios = axios.create({
 //request interceptor to add the auth token header to requests
 customAxios.interceptors.request.use(
   async (config) => {
-    const accessToken = tokenStorage.getToken();
+    let accessToken = tokenStorage.getToken();
     if (accessToken) {
+      if (tokenStorage.isTokenExpired()) {
+        try {
+          accessToken = await tokenStorage.refreshToken();
+        } catch {
+          return config;
+        }
+      }
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
