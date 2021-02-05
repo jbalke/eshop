@@ -35,13 +35,22 @@ export const authUser = asyncHandler(async (req, res) => {
 // @desc     Get user profile
 // @route    GET /api/users/profile
 // @access   Private
+export const authPing = asyncHandler(async (req, res) => {
+  res.json({ user: req.user });
+});
+
+// @desc     Get user profile
+// @route    GET /api/users/profile
+// @access   Private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const { _id, name, email, isAdmin } = await User.findById(req.user.id);
   res.json({
-    _id,
-    name,
-    email,
-    isAdmin,
+    user: {
+      _id,
+      name,
+      email,
+      isAdmin,
+    },
   });
 });
 
