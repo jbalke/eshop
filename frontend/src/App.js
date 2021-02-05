@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Product from './pages/Product';
 import Profile from './pages/Profile';
+import Register from './pages/Register';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,6 +31,9 @@ function App() {
           <main className='flex-grow p-4 flex' onClick={closeUserMenu}>
             <div className='max-w-screen-lg mx-auto flex-grow'>
               <Switch>
+                <Route path='/register'>
+                  <Register />
+                </Route>
                 <Route path='/login'>
                   <Login />
                 </Route>

@@ -68,6 +68,8 @@ export const newUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({ name, email, password });
   if (user) {
+    setRefreshCookie(res, user);
+
     res.status(201).json({
       user: {
         _id: user._id,

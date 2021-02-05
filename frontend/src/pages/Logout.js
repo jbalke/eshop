@@ -41,7 +41,7 @@ const Logout = () => {
       ) : isError ? (
         <Message type='danger'>{error.message}</Message>
       ) : isSuccess ? (
-        <Message type='success'>Successfully logged out.</Message>
+        <Message type='success'>Successfully logged out</Message>
       ) : (
         <div></div>
       )}

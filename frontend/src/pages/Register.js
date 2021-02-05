@@ -4,22 +4,22 @@ import { Link, useHistory } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import { useQueryString } from '../hooks/url.js';
-import { useAuthPing } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
   const searchParams = useQueryString();
-  const redirect = searchParams.get('redirect');
+  const redirect = searchParams.get('redirect') || '/';
   const history = useHistory();
-
-  const { data: userInfo } = useAuthPing();
 
   const queryClient = useQueryClient();
   const { mutate, isSuccess, data, isError, error } = useMutation(
-    ApiService.users.loginUser,
+    ApiService.users.registerUser,
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
@@ -29,26 +29,41 @@ function Login() {
   );
 
   useEffect(() => {
-    if (userInfo?.user) {
-      history.push(redirect);
-    }
-  }, [userInfo, history, redirect]);
-
-  useEffect(() => {
     if (isSuccess) {
-      history.push(redirect || '/');
+      history.push(redirect);
     }
   }, [isSuccess, history, redirect]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    mutate({ email, password });
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match');
+      return;
+    }
+    setMessage(null);
+    mutate({ name, email, password });
   };
 
   return (
     <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
-      <h1 className=''>Sign In</h1>
+      <h1 className=''>Register</h1>
       <form onSubmit={submitHandler}>
+        <div className='form-email'>
+          <label htmlFor='email'>
+            Name
+            <input
+              className='w-full'
+              type='text'
+              name='name'
+              placeholder='name'
+              autoComplete='name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoFocus
+              required
+            />
+          </label>
+        </div>
         <div className='form-email'>
           <label htmlFor='email'>
             Email Address
@@ -60,7 +75,6 @@ function Login() {
               autoComplete='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              autoFocus
               required
             />
           </label>
@@ -74,7 +88,22 @@ function Login() {
               name='password'
               placeholder='password'
               value={password}
+              minLength='8'
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className='form-password'>
+          <label htmlFor='password'>
+            Confirm Password
+            <input
+              className='w-full'
+              type='password'
+              name='confirm-password'
+              placeholder='confirm password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </label>
@@ -87,21 +116,22 @@ function Login() {
         </button>
       </form>
       <div className='my-3 text-center text-sm'>
-        New Customer?{' '}
+        Already have an account?{' '}
         <Link
-          to={redirect ? `/register?redirect=${redirect}` : '/register'}
+          to={redirect ? `/login?redirect=${redirect}` : '/login'}
           className=''
         >
-          Register
+          Sign In
         </Link>
       </div>
+      {message && <Message type='danger'>{message}</Message>}
       {isError ? (
         <Message type='danger'>{error.message}</Message>
       ) : isSuccess ? (
-        <Message type='success'>{`Welcome back ${data.name}!`}</Message>
+        <Message type='success'>{`Welcome ${data.user.name}!`}</Message>
       ) : null}
     </div>
   );
 }
 
-export default Login;
+export default Register;

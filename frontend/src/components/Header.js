@@ -70,7 +70,7 @@ const Header = () => {
               <FaShoppingCart className='inline mr-1' />
               cart
             </NavLink>
-            {authPing.data?.user?.name ? (
+            {authPing.data?.user ? (
               <button
                 className='link dropdown uppercase hover:text-white transition-colors flex items-center ml-4 p-1'
                 onClick={handleUserMenuClick}
