@@ -44,6 +44,7 @@ export const authPing = async () => {
 
     return data;
   } catch (error) {
+    // return { user: null };
     if (error?.response?.data?.message) {
       throw new Error(error.response.data.message);
     }

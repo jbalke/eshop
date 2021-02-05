@@ -11,15 +11,15 @@ import Logout from './pages/Logout';
 import Product from './pages/Product';
 import Profile from './pages/Profile';
 
-function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 30 * 1000,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30 * 1000,
     },
-  });
+  },
+});
 
+function App() {
   const { closeUserMenu } = useGlobalContext();
 
   return (

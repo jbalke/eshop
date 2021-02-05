@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useGlobalContext } from '../context';
-import { useUserProfile } from '../hooks/userQueries';
+import { useUserProfile, useAuthPing } from '../hooks/userQueries';
 
 const Header = () => {
   const { toggleUserMenu, closeUserMenu, isUserMenuOpen } = useGlobalContext();
@@ -10,8 +10,7 @@ const Header = () => {
   const [rect, setRect] = useState(null);
   const dropdownRef = useRef(null);
 
-  const userProfile = useUserProfile();
-  console.log({ userProfile });
+  const authPing = useAuthPing();
 
   const handleUserMenuClick = (e) => {
     e.stopPropagation();
@@ -58,13 +57,13 @@ const Header = () => {
               <FaShoppingCart className='inline mr-1' />
               cart
             </NavLink>
-            {userProfile.data?.user ? (
+            {authPing.data?.user?.name ? (
               <button
                 className='link dropdown uppercase hover:text-white transition-colors flex items-center ml-4'
                 onClick={handleUserMenuClick}
                 ref={dropdownRef}
               >
-                {userProfile.data.user.name}
+                {authPing.data.user.name}
               </button>
             ) : (
               <NavLink

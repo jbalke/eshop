@@ -11,14 +11,6 @@ const Home = () => {
     ApiService.products.getProducts
   );
 
-  // const queryClient = useQueryClient();
-  // const prefetchProduct = async (id) => {
-  //   await queryClient.prefetchQuery(
-  //     ['product', id],
-  //     ApiService.products.getProduct(id)
-  //   );
-  // };
-
   return (
     <>
       <h1>Latest Products</h1>
@@ -29,13 +21,7 @@ const Home = () => {
       ) : (
         <div className='products-grid'>
           {data.map((product) => {
-            return (
-              <Product
-                key={product._id}
-                {...product}
-                // prefetch={(e) => prefetchProduct(product._id)}
-              />
-            );
+            return <Product key={product._id} {...product} />;
           })}
         </div>
       )}

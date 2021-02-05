@@ -12,7 +12,7 @@ const tokenStorage = {
   },
 
   isAuthenticated() {
-    return token !== null;
+    return !!this.getToken();
   },
 
   refreshToken() {
@@ -25,7 +25,7 @@ const tokenStorage = {
           resolve(token);
         })
         .catch((error) => {
-          this.setToken(null);
+          this.clearToken();
           resolve(null);
         });
     });
@@ -37,12 +37,10 @@ const tokenStorage = {
 
   setToken(_token) {
     token = _token;
-    console.info(`token set to ${token}`);
   },
 
   clearToken() {
     token = null;
-    console.info(`token set to ${token}`);
   },
 };
 

@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import { useQueryString } from '../hooks/url.js';
-import { useUserProfile } from '../hooks/userQueries';
+import { useAuthPing } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
 
 function Login() {
@@ -15,7 +15,7 @@ function Login() {
   const redirect = searchParams.get('redirect') || '/';
   const history = useHistory();
 
-  const { data: userInfo } = useUserProfile();
+  const { data: userInfo } = useAuthPing();
 
   const queryClient = useQueryClient();
   const { mutate, isSuccess, data, isError, error } = useMutation(
@@ -23,7 +23,7 @@ function Login() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('user', { user: data.user });
+        queryClient.setQueryData('userPing', { user: data.user });
       },
     }
   );

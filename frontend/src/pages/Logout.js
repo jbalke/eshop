@@ -14,8 +14,8 @@ const Logout = () => {
     ApiService.users.logoutUser,
     {
       onSuccess: () => {
-        tokenStorage.clear();
-        queryClient.invalidateQueries('user', { exact: true });
+        tokenStorage.clearToken();
+        queryClient.setQueryData('userPing', { user: null });
       },
     }
   );
@@ -29,7 +29,7 @@ const Logout = () => {
   useEffect(() => {
     if (isSuccess) {
       sleep(2).then(() => {
-        history.replace('/');
+        history.push('/');
       });
     }
   }, [isSuccess, history]);
