@@ -23,7 +23,7 @@ function Register() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('userPing', { user: data.user });
+        queryClient.setQueryData('auth', { user: data.user });
       },
     }
   );
@@ -122,7 +122,7 @@ function Register() {
           to={redirect ? `/login?redirect=${redirect}` : '/login'}
           className=''
         >
-          Sign In
+          Register
         </Link>
       </div>
       {message && <Message type='danger'>{message}</Message>}

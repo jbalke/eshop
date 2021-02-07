@@ -23,7 +23,7 @@ function Login() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('userPing', { user: data.user });
+        queryClient.setQueryData('auth', { user: data.user });
       },
     }
   );

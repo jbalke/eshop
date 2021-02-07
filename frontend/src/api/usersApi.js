@@ -62,6 +62,29 @@ export const userProfile = async () => {
   }
 };
 
+export const updateUserProfile = async ({ name, email, password }) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const { data } = await axios.patch(
+      '/api/users/profile',
+      { name, email, password },
+      config
+    );
+
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw error;
+  }
+};
+
 export const authPing = async () => {
   try {
     const { data } = await axios.get('/api/users/me');
