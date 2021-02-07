@@ -24,7 +24,7 @@ export const auth = asyncHandler(async (req, res, next) => {
   next();
 });
 
-export const isAuthenticated = asyncHandler(async (req, res, next) => {
+export const requireAuth = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
     res.status(400);

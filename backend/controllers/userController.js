@@ -54,6 +54,45 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc     Update user profile
+// @route    PATCH /api/users/profile
+// @access   Private
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const emailExists = await User.findOne({ email })
+    .where('_id')
+    .ne(req.user._id);
+  if (emailExists) {
+    res.status(400);
+    throw new Error('Email already registered');
+  }
+
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.name = name || user.name;
+    user.email = email || user.email;
+    if (password) {
+      user.password = password;
+    }
+
+    const updatedUser = await user.save();
+
+    req.user = updatedUser;
+    res.json({
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      },
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 // @desc     Register a new user
 // @route    POST /api/users
 // @access   Public
@@ -66,7 +105,7 @@ export const newUser = asyncHandler(async (req, res) => {
     throw new Error('Email already registered');
   }
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, password });
   if (user) {
     setRefreshCookie(res, user);
 

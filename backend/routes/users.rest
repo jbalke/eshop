@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "email": "admin@example.com",
-  "password": "123456"
+  "password": "1234567"
 }
 
 ###
@@ -51,7 +51,6 @@ Authorization: Bearer {{authToken}}
 ###
 
 // Register user - new
-# @name register_new
 POST {{URL}}/api/users
 Content-Type: application/json
 
@@ -64,7 +63,6 @@ Content-Type: application/json
 ###
 
 // Register user - existing
-# @name register_existing
 POST {{URL}}/api/users
 Content-Type: application/json
 
@@ -72,4 +70,17 @@ Content-Type: application/json
   "name" : "admin",
   "password": "654321",
   "email": "admin@example.com"
+}
+
+###
+
+// Update profile
+PATCH {{URL}}/api/users/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name" : "Admin",
+  "email": "john.doe@example.com",
+  "password": "1234567"
 }
