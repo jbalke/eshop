@@ -60,13 +60,13 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const emailExists = await User.findOne({ email })
-    .where('_id')
-    .ne(req.user._id);
-  if (emailExists) {
-    res.status(400);
-    throw new Error('Email already registered');
-  }
+  // const emailExists = await User.findOne({ email })
+  //   .where('_id')
+  //   .ne(req.user._id);
+  // if (emailExists) {
+  //   res.status(400);
+  //   throw new Error('Email already registered');
+  // }
 
   const user = await User.findById(req.user._id);
   if (user) {
@@ -99,13 +99,13 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 export const newUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const existUser = await User.findOne({ email });
-  if (existUser) {
-    res.status(400);
-    throw new Error('Email already registered');
-  }
+  // const existUser = await User.findOne({ email });
+  // if (existUser) {
+  //   res.status(400);
+  //   throw new Error('Email already registered');
+  // }
 
-  const user = await User.create({ name, password });
+  const user = await User.create({ name, email, password });
   if (user) {
     setRefreshCookie(res, user);
 
