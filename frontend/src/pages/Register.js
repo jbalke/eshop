@@ -55,6 +55,7 @@ function Register() {
               className='w-full'
               type='text'
               name='name'
+              minLength='2'
               placeholder='name'
               autoComplete='name'
               value={name}
@@ -88,7 +89,7 @@ function Register() {
               name='password'
               placeholder='password'
               value={password}
-              minLength='8'
+              minLength='6'
               onChange={(e) => setPassword(e.target.value)}
               required
             />
