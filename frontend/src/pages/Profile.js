@@ -20,7 +20,7 @@ const Profile = () => {
   const queryClient = useQueryClient();
   const userProfileInfo = useQuery(
     'userProfile',
-    ApiService.users.userProfile,
+    ApiService.users.getUserProfile,
     {
       onSuccess: (data) => {
         setName(data.user.name);
@@ -30,11 +30,10 @@ const Profile = () => {
     }
   );
 
-  const { mutate, isError, error, isSuccess, mutateAsync } = useMutation(
+  const { isError, error, isSuccess, mutateAsync, reset } = useMutation(
     ApiService.users.updateUserProfile,
     {
       onSuccess: (data) => {
-        queryClient.setQueryData('auth', { user: data.user });
         queryClient.setQueryData('userProfile', { user: data.user });
       },
     }
@@ -65,12 +64,15 @@ const Profile = () => {
 
   const editHandler = () => {
     setPassword('');
+    reset();
     setIsEditing(true);
   };
 
   const cancelHandler = () => {
     setPassword('dummy password');
+    reset();
     setIsEditing(false);
+    userProfileInfo.refetch();
   };
 
   return (
@@ -146,15 +148,12 @@ const Profile = () => {
             )}
             {isEditing ? (
               <div className='my-6'>
-                <button
-                  type='submit'
-                  className='btn text-white bg-gray-600 hover:bg-gray-800 shadow-md'
-                >
+                <button type='submit' className='btn primary'>
                   Update
                 </button>
                 <button
                   type='button'
-                  className='btn text-white bg-gray-600 hover:bg-gray-800 shadow-md ml-3'
+                  className='btn primary ml-3'
                   onClick={cancelHandler}
                 >
                   Cancel
@@ -163,10 +162,10 @@ const Profile = () => {
             ) : (
               <button
                 type='button'
-                className='btn border text-white bg-gray-600 hover:bg-gray-800 shadow-md'
+                className='btn primary'
                 onClick={editHandler}
               >
-                Edit
+                Change
               </button>
             )}
           </form>
@@ -175,7 +174,7 @@ const Profile = () => {
         {isError ? (
           <Message type='danger'>{error.message}</Message>
         ) : isSuccess ? (
-          <Message type='success'>{`Updated!`}</Message>
+          <Message type='success'>{`Profile Updated`}</Message>
         ) : null}
       </div>
       <div className='w-full md:ml-10'>

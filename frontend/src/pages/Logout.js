@@ -15,7 +15,7 @@ const Logout = () => {
     {
       onSuccess: () => {
         tokenStorage.clearToken();
-        queryClient.setQueryData('userPing', { user: null });
+        queryClient.setQueryData('userProfile', { user: null });
       },
     }
   );

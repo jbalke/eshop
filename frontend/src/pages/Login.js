@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import { useQueryString } from '../hooks/url.js';
-import { useAuthPing } from '../hooks/userQueries';
+import { useUserProfile } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
 
 function Login() {
@@ -15,7 +15,7 @@ function Login() {
   const redirect = searchParams.get('redirect');
   const history = useHistory();
 
-  const { data: userInfo } = useAuthPing();
+  const { data: userInfo } = useUserProfile();
 
   const queryClient = useQueryClient();
   const { mutate, isSuccess, data, isError, error } = useMutation(
@@ -23,7 +23,7 @@ function Login() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('auth', { user: data.user });
+        queryClient.setQueryData('userProfile', { user: data.user });
       },
     }
   );
@@ -79,10 +79,7 @@ function Login() {
             />
           </label>
         </div>
-        <button
-          type='submit'
-          className='btn my-2 border border-black bg-gray-700 text-white'
-        >
+        <button type='submit' className='btn primary my-2'>
           Sign In
         </button>
       </form>

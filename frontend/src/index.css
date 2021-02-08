@@ -88,6 +88,10 @@ input {
   @apply text-sm px-4 py-3 inline-block transition-all font-semibold tracking-widest uppercase;
 }
 
+.btn.primary {
+  @apply shadow-md text-xs text-white bg-gray-700 hover:bg-gray-500 disabled:opacity-30 disabled:cursor-not-allowed;
+}
+
 .card {
   @apply rounded border p-3 shadow-md cursor-pointer flex flex-col;
 }

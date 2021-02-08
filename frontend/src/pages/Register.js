@@ -23,7 +23,7 @@ function Register() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('auth', { user: data.user });
+        queryClient.setQueryData('userProfile', { user: data.user });
       },
     }
   );
@@ -109,10 +109,7 @@ function Register() {
             />
           </label>
         </div>
-        <button
-          type='submit'
-          className='btn my-2 border border-black bg-gray-700 text-white'
-        >
+        <button type='submit' className='btn primary my-2'>
           Sign In
         </button>
       </form>
