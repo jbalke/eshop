@@ -60,11 +60,11 @@ const Header = () => {
         <Link to='/' className='uppercase text-xl font-bold tracking-wide'>
           E-Shop
         </Link>
-        <nav className='main-nav uppercase text-sm font-bold text-gray-400'>
-          <div className='flex text-sm bg-transparent uppercase'>
+        <nav className='main-nav uppercase text-sm'>
+          <div className='flex text-sm bg-transparent'>
             <NavLink
               to='/cart'
-              className='hover:text-white transition-colors flex items-center ml-4'
+              className='link link-light font-bold uppercase ml-4'
               activeClassName='text-white'
             >
               <FaShoppingCart className='inline mr-1' />
@@ -72,7 +72,7 @@ const Header = () => {
             </NavLink>
             {userProfile.data?.user ? (
               <button
-                className='link dropdown uppercase hover:text-white transition-colors flex items-center ml-4 p-1'
+                className='link link-light font-bold uppercase dropdown ml-4 p-1'
                 onClick={handleUserMenuClick}
                 ref={dropdownRef}
               >
@@ -81,7 +81,7 @@ const Header = () => {
             ) : (
               <NavLink
                 to='/login'
-                className='hover:text-white transition-colors flex items-center ml-4'
+                className='link link-light font-bold uppercase ml-4'
                 activeClassName='text-white'
               >
                 <FaUser className='inline mr-1' />

@@ -30,18 +30,34 @@ p {
   @apply my-3;
 }
 
-a,
+a {
+  @apply font-semibold tracking-wider;
+}
+
 .link {
-  @apply font-semibold;
+  @apply tracking-wider transition-colors flex items-center;
+}
+.link.link-dark {
+  @apply text-gray-700 hover:text-gray-900;
+}
+.link.link-light {
+  @apply text-gray-400 hover:text-white;
+}
+.link.link-dark.disabled {
+  @apply text-gray-500 hover:text-gray-500;
+}
+.link.link-light.disabled {
+  @apply text-gray-600 hover:text-gray-600;
 }
 
 label {
   display: block;
   margin-bottom: 1em;
+  @apply text-sm font-semibold;
 }
 
 input {
-  @apply border p-2 block bg-gray-100;
+  @apply border py-2 px-4 block bg-gray-100 text-sm;
 }
 
 .dropdown::after {
