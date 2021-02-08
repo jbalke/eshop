@@ -5,19 +5,17 @@ import {
   updateUserProfile,
   newUser,
   logoutUser,
-  authPing,
 } from '../controllers/userController.js';
 import { requireAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.route('/').post(newUser);
-router.post('/login', authUser);
-router.post('/logout', logoutUser);
 router
-  .route('/profile')
+  .route('/:id')
   .get(requireAuth, getUserProfile)
   .patch(requireAuth, updateUserProfile);
-router.route('/me').get(requireAuth, authPing);
+router.post('/login', authUser);
+router.post('/logout', logoutUser);
 
 export default router;

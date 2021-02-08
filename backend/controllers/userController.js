@@ -5,7 +5,7 @@ import {
   setRefreshCookie,
   clearRefreshCookie,
 } from '../utils/tokens.js';
-import argon2 from 'argon2';
+import { FriendlyError } from '../errors/errors.js';
 
 // @desc     Auth user & get token
 // @route    POST /api/users/login
@@ -29,7 +29,7 @@ export const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('Invalid email and/or password');
+    throw new FriendlyError('Invalid email and/or password');
   }
 });
 
@@ -41,10 +41,25 @@ export const authPing = asyncHandler(async (req, res) => {
 });
 
 // @desc     Get user profile
-// @route    GET /api/users/profile
+// @route    GET /api/users/:id
 // @access   Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const { _id, name, email, isAdmin } = await User.findById(req.user.id);
+  const { id } = req.params;
+
+  if (id !== 'profile' && !req.user.isAdmin) {
+    res.status(403);
+    throw new FriendlyError('Access denied');
+  }
+
+  const idToFind = id === 'profile' ? req.user.id : id;
+  const user = await User.findById(idToFind);
+
+  if (!user) {
+    res.status(404);
+    throw new FriendlyError(`User ${id} not found`);
+  }
+
+  const { _id, name, email, isAdmin } = user;
   res.json({
     user: {
       _id,
@@ -82,7 +97,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new FriendlyError('User not found');
   }
 });
 
@@ -107,7 +122,7 @@ export const newUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new FriendlyError('Invalid user data');
   }
 });
 

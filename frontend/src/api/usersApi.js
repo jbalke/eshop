@@ -48,9 +48,23 @@ export const registerUser = async ({ name, email, password }) => {
   }
 };
 
-export const userProfile = async () => {
+export const getUserProfile = async () => {
   try {
     const { data } = await axios.get('/api/users/profile');
+
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw error;
+  }
+};
+
+export const getUserDetails = (id) => async () => {
+  try {
+    const { data } = await axios.get(`/api/users/${id}`);
 
     return data;
   } catch (error) {
@@ -77,21 +91,6 @@ export const updateUserProfile = async ({ name, email, password }) => {
 
     return data;
   } catch (error) {
-    if (error?.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-
-    throw error;
-  }
-};
-
-export const authPing = async () => {
-  try {
-    const { data } = await axios.get('/api/users/me');
-
-    return data;
-  } catch (error) {
-    // return { user: null };
     if (error?.response?.data?.message) {
       throw new Error(error.response.data.message);
     }

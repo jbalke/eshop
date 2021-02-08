@@ -1,5 +1,6 @@
 import Product from '../models/productModel.js';
 import asyncHandler from 'express-async-handler';
+import { FriendlyError } from '../errors/errors.js';
 
 // @desc     Fetch all products
 // @route    GET /api/products
@@ -18,7 +19,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 
   if (!product) {
     res.status(404);
-    throw new Error(`product with id ${id} not found`);
+    throw new FriendlyError(`product with id ${id} not found`);
   }
   res.json(product);
 });

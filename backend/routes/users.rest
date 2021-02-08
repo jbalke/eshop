@@ -50,6 +50,13 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+// Auth User - protected route
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/users/601eddc08cbefc1e00fb6790
+Authorization: Bearer {{authToken}}
+
+###
+
 // Register user - new
 POST {{URL}}/api/users
 Content-Type: application/json
