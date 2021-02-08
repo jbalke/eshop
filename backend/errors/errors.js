@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
 
+function FriendlyError(message, stack) {
+  this.message = message;
+  this.stack = stack ?? new Error().stack;
+}
+FriendlyError.prototype.name = 'FriendlyError';
+FriendlyError.prototype = new Error();
+
 function InputError(message, stack) {
   this.message = message;
   this.stack = stack ?? new Error().stack;
@@ -22,6 +29,8 @@ DataConstraintError.prototype.name = 'DataConstraintError';
 DataConstraintError.prototype = new Error();
 
 function convertToFriendlyError(error) {
+  if (error instanceof FriendlyError) return error;
+
   if (error.message.startsWith('E11000')) {
     const [fieldName, fieldValue] = Object.entries(error.keyValue)[0];
     const formattedfieldValue = capitalise(fieldValue);
@@ -49,7 +58,10 @@ function convertToFriendlyError(error) {
     }
   }
 
-  if (process.env.NODE_ENV === 'production') {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    !(error instanceof FriendlyError)
+  ) {
     return new Error('Something went wrong, please try again later.');
   }
 
@@ -61,6 +73,7 @@ const capitalise = (string) => {
 };
 
 export {
+  FriendlyError,
   InputError,
   ValidationError,
   DataConstraintError,
