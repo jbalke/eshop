@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
-import { Link, useParams, useHistory } from 'react-router-dom';
-import { addToCart, removeFromCart } from '../actions/cartActions';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { useQueryString } from '../hooks/url';
-import { useQuery } from 'react-query';
-import Loader from '../components/Loader';
+import { useQuery, useQueryClient } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 import ApiService from '../api/ApiService';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import { useQueryString } from '../hooks/url';
 
 const Cart = () => {
   const { id: productId } = useParams();
@@ -27,6 +27,8 @@ const Cart = () => {
 
   const dispatch = useDispatch();
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (productId && data) {
       dispatch(addToCart({ ...data, qty: validQty }));
@@ -38,7 +40,12 @@ const Cart = () => {
   };
 
   const checkoutHandler = () => {
-    history.push(`/login?redirect=shipping`);
+    const data = queryClient.getQueryData('userProfile');
+    if (data.user) {
+      history.push(`/shipping`);
+    } else {
+      history.push(`/login?redirect=shipping`);
+    }
   };
 
   return (

@@ -12,7 +12,14 @@ const parsedCartItems = cartItemsFromStorage
   ? JSON.parse(cartItemsFromStorage)
   : [];
 
-const initialState = { cart: { cartItems: parsedCartItems } };
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress');
+const parsedShippingAddress = shippingAddressFromStorage
+  ? JSON.parse(shippingAddressFromStorage)
+  : {};
+
+const initialState = {
+  cart: { cartItems: parsedCartItems, shippingAddress: parsedShippingAddress },
+};
 const middleware = [reduxThunk];
 const store = createStore(
   reducer,

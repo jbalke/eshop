@@ -49,7 +49,7 @@ function Register() {
       <h1 className=''>Register</h1>
       <form onSubmit={submitHandler}>
         <div className='form-email'>
-          <label htmlFor='email'>
+          <label htmlFor='name'>
             Name
             <input
               className='w-full'

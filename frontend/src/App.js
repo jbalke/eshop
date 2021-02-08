@@ -11,6 +11,7 @@ import Logout from './pages/Logout';
 import Product from './pages/Product';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
+import Shipping from './pages/Shipping';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,9 @@ function App() {
                 </Route>
                 <Route path='/profile'>
                   <Profile />
+                </Route>
+                <Route path='/shipping'>
+                  <Shipping />
                 </Route>
                 <Route path='/logout'>
                   <Logout />

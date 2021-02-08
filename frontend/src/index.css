@@ -89,7 +89,7 @@ input {
 }
 
 .btn.primary {
-  @apply shadow-md text-xs text-white bg-gray-700 hover:bg-gray-500 disabled:opacity-30 disabled:cursor-not-allowed;
+  @apply shadow-md text-xs text-white bg-gray-700 hover:bg-gray-900 disabled:opacity-30 disabled:cursor-not-allowed;
 }
 
 .card {
