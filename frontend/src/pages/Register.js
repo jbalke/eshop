@@ -119,7 +119,7 @@ function Register() {
           to={redirect ? `/login?redirect=${redirect}` : '/login'}
           className=''
         >
-          Register
+          Sign In
         </Link>
       </div>
       {message && <Message type='danger'>{message}</Message>}
