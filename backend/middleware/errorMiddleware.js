@@ -14,10 +14,10 @@ export const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
 
-  const parsedError = convertToFriendlyError(err);
+  const friendlyError = convertToFriendlyError(err);
 
   res.json({
-    message: parsedError.message,
-    stack: process.env.NODE_ENV === 'production' ? null : parsedError.stack,
+    message: friendlyError.message,
+    stack: process.env.NODE_ENV === 'production' ? null : friendlyError.stack,
   });
 };

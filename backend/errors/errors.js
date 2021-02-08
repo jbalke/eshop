@@ -49,6 +49,10 @@ function convertToFriendlyError(error) {
     }
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    return new Error('Something went wrong, please try again later.');
+  }
+
   return error;
 }
 
