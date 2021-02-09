@@ -9,7 +9,7 @@ export const getProducts = async () => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -22,6 +22,6 @@ export const getProduct = (id) => async () => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };

@@ -20,7 +20,7 @@ export const loginUser = async ({ email, password }) => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -44,7 +44,7 @@ export const registerUser = async ({ name, email, password }) => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -58,7 +58,7 @@ export const getUserProfile = async () => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -72,7 +72,7 @@ export const getUserDetails = (id) => async () => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -95,7 +95,7 @@ export const updateUserProfile = async ({ name, email, password }) => {
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
 

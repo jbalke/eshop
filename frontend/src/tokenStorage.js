@@ -20,7 +20,7 @@ const tokenStorage = {
       axios
         .post('/api/auth/token/refresh')
         .then((response) => {
-          token = response.data.token;
+          const { token } = response.data;
           this.setToken(token);
           resolve(token);
         })
