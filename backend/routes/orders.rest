@@ -1,0 +1,33 @@
+// Auth User - Success
+# @name login
+POST {{URL}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "1234567"
+}
+
+###
+
+@authToken = {{login.response.body.token}}
+POST {{URL}}/api/orders
+Content-Type: 'application/json'
+Authorization: Bearer {{authToken}}
+
+{
+  
+}
+###
+// Get existing product
+GET {{URL}}/api/products/60102dd894ab0d3118f5a1bb
+
+###
+// Get missing product
+GET {{URL}}/api/products/60102dd894ab0d3118f5a1b0
+
+###
+// Get invalid product
+GET {{URL}}/api/products/1
+
+###

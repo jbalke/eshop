@@ -9,7 +9,7 @@
     "ignore": [
       "frontend/*"
     ],
-    "delay": "2500"
+    "delay": "3500"
   },
   "scripts": {
     "start": "node backend/server",

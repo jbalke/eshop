@@ -12,6 +12,8 @@ import Product from './pages/Product';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Shipping from './pages/Shipping';
+import Payment from './pages/Payment';
+import PlaceOrder from './pages/PlaceOrder';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +45,12 @@ function App() {
                 </Route>
                 <Route path='/shipping'>
                   <Shipping />
+                </Route>
+                <Route path='/payment'>
+                  <Payment />
+                </Route>
+                <Route path='/placeorder'>
+                  <PlaceOrder />
                 </Route>
                 <Route path='/logout'>
                   <Logout />

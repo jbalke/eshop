@@ -17,8 +17,17 @@ const parsedShippingAddress = shippingAddressFromStorage
   ? JSON.parse(shippingAddressFromStorage)
   : {};
 
+const paymentMethodFromStorage = localStorage.getItem('paymentMethod');
+const parsedPaymentMethod = paymentMethodFromStorage
+  ? JSON.parse(paymentMethodFromStorage)
+  : '';
+
 const initialState = {
-  cart: { cartItems: parsedCartItems, shippingAddress: parsedShippingAddress },
+  cart: {
+    cartItems: parsedCartItems,
+    shippingAddress: parsedShippingAddress,
+    paymentMethod: parsedPaymentMethod,
+  },
 };
 const middleware = [reduxThunk];
 const store = createStore(

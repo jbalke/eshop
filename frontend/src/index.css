@@ -56,6 +56,12 @@ label {
   @apply text-sm font-semibold;
 }
 
+input[type='radio'],
+input[type='radio'] + label {
+  display: inline;
+  margin-right: 0.75em;
+}
+
 input {
   @apply border py-2 px-4 block bg-gray-100 text-sm;
 }
@@ -196,6 +202,39 @@ input {
   .cart-item .remove-btn {
     grid-area: auto;
   }
+}
+
+.placeorder-layout {
+  display: grid;
+  grid-template-columns: 60% 1fr;
+  gap: 2rem;
+}
+.order-layout {
+  display: grid;
+  gap: 2rem;
+}
+.order-layout .cart-item {
+  grid-template-columns: auto 3fr 2fr;
+  align-items: center;
+  justify-items: start;
+  gap: 0.5em;
+}
+.order-layout .cart-item > img {
+  height: 50px;
+}
+
+.order-summary {
+  display: grid;
+  align-content: start;
+}
+.order-summary-items {
+  display: grid;
+  @apply divide-y;
+}
+.order-summary-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  @apply py-4;
 }
 
 .message-box {

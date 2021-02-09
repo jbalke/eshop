@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import colors from 'colors';
 import productsRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 import tokenRoutes from './routes/tokenRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import dotenv from 'dotenv';
@@ -21,6 +22,7 @@ app.use(cookieParser());
 //* PUBLIC ROUTES
 app.use('/api/products', productsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 app.use('/api/auth/token', tokenRoutes);
 
 //* ERROR HANDLERS

@@ -35,7 +35,6 @@ const Shipping = () => {
               className='w-full'
               type='text'
               name='name'
-              minLength='2'
               placeholder='your name'
               autoComplete='name'
               value={name}
@@ -51,7 +50,6 @@ const Shipping = () => {
               className='w-full'
               type='text'
               name='address'
-              minLength='2'
               placeholder='street address'
               autoComplete='address'
               value={address}
@@ -103,7 +101,7 @@ const Shipping = () => {
             />
           </label>
         </div>
-        <button type='submit' className='btn primary my-2'>
+        <button type='submit' className='btn primary mt-6'>
           Continue
         </button>
       </form>
