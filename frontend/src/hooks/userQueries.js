@@ -4,6 +4,7 @@ import ApiService from '../api/ApiService';
 export const useUserProfile = () => {
   return useQuery('userProfile', ApiService.users.getUserProfile, {
     staleTime: Infinity,
+    retry: false,
   });
 };
 

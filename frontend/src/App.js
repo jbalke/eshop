@@ -14,6 +14,7 @@ import Register from './pages/Register';
 import Shipping from './pages/Shipping';
 import Payment from './pages/Payment';
 import PlaceOrder from './pages/PlaceOrder';
+import Order from './pages/Order';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +52,9 @@ function App() {
                 </Route>
                 <Route path='/placeorder'>
                   <PlaceOrder />
+                </Route>
+                <Route path='/order/:id'>
+                  <Order />
                 </Route>
                 <Route path='/logout'>
                   <Logout />

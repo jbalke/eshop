@@ -19,11 +19,15 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-//* PUBLIC ROUTES
+//* ROUTES
 app.use('/api/products', productsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/auth/token', tokenRoutes);
+
+app.get('/api/config/paypal', (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+);
 
 //* ERROR HANDLERS
 app.use(notFound);

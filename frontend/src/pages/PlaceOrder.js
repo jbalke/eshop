@@ -23,14 +23,7 @@ const PlaceOrder = () => {
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
   const { data, isError, error, isSuccess, mutate } = useMutation(
-    ApiService.orders.createOrder({
-      orderItems: cart.cartItems,
-      shippingAddress: cart.shippingAddress,
-      paymentMethod: cart.paymentMethod,
-      itemsPrice: cart.itemsPrice,
-      taxPrice: cart.taxPrice,
-      shippingPrice: cart.shippingPrice,
-    }),
+    ApiService.orders.createOrder,
     {
       onSuccess: (data) => {
         dispatch(clearCart);
@@ -43,7 +36,14 @@ const PlaceOrder = () => {
 
   const placeOrderHandler = (e) => {
     setIsOrderSent(true);
-    mutate();
+    mutate({
+      orderItems: cart.cartItems,
+      shippingAddress: cart.shippingAddress,
+      paymentMethod: cart.paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      taxPrice: cart.taxPrice,
+      shippingPrice: cart.shippingPrice,
+    });
   };
 
   useEffect(() => {

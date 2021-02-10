@@ -33,6 +33,10 @@ const orderSchema = mongoose.Schema(
       },
     ],
     shippingAddress: {
+      name: {
+        type: String,
+        required: true,
+      },
       address: {
         type: String,
         required: true,
@@ -80,7 +84,7 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    payedAt: Date,
+    paidAt: Date,
     isDelivered: {
       type: Boolean,
       required: true,

@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "email": "admin@example.com",
-  "password": "1234567"
+  "password": "123456"
 }
 
 ###
@@ -16,18 +16,30 @@ Content-Type: 'application/json'
 Authorization: Bearer {{authToken}}
 
 {
-  
+  "orderItems": [
+    {
+      "_id": "60229723375d650950a523e7",
+      "product": "602295e8a1078c1b68defe47",
+      "name": "Logitech G-Series Gaming Mouse",
+      "image": "/images/mouse.jpg",
+      "price": 49.99,
+      "qty": 1
+    },]
+    "shippingAddress": {
+    "address": "39 Heron Close",
+    "city": "Blyth",
+    "postCode": "NE24 3QQ",
+    "country": "United Kingdom"
+  },
+  "taxPrice": 7.5,
+  "shippingPrice": 100,
+  "totalPrice": 157.49,
 }
 ###
-// Get existing product
-GET {{URL}}/api/products/60102dd894ab0d3118f5a1bb
 
-###
-// Get missing product
-GET {{URL}}/api/products/60102dd894ab0d3118f5a1b0
-
-###
-// Get invalid product
-GET {{URL}}/api/products/1
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/orders/60229723375d650950a523e6
+Content-Type: 'application/json'
+Authorization: Bearer {{authToken}}
 
 ###
