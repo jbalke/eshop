@@ -13,3 +13,15 @@ export const formatDataTime = (string) => {
 
   return new Intl.DateTimeFormat('default', options).format(date);
 };
+
+export const getDate = (string) => {
+  const date = new Date(string);
+
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  };
+
+  return new Intl.DateTimeFormat('default', options).format(date);
+};

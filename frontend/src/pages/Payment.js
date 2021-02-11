@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { savePaymentMethod } from '../actions/cartActions';
 import CheckoutSteps from '../components/CheckoutSteps';
+import { useLoginIfNotAuthenticated } from '../hooks/redirect';
 
 const Payment = () => {
+  useLoginIfNotAuthenticated();
+
   const history = useHistory();
 
   const cart = useSelector((state) => state.cart);

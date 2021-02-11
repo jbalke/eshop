@@ -107,11 +107,19 @@ input {
 }
 
 .btn {
-  @apply text-sm px-4 py-3 inline-block transition-all font-semibold tracking-widest uppercase;
+  @apply text-sm px-4 py-3 inline-block transition-colors font-semibold tracking-widest uppercase;
 }
 
 .btn.primary {
   @apply shadow-md text-xs text-white bg-gray-700 hover:bg-gray-900 disabled:opacity-30 disabled:cursor-not-allowed;
+}
+
+.btn.secondary {
+  @apply shadow-md text-xs text-black bg-gray-300 hover:bg-gray-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed;
+}
+
+.btn.small {
+  @apply text-xs px-2 py-1;
 }
 
 .card {
@@ -206,12 +214,12 @@ input {
 
 .placeorder-layout {
   display: grid;
-  grid-template-columns: 60% 1fr;
   gap: 2rem;
 }
+
 .order-layout {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
 }
 .order-layout .cart-item {
   grid-template-columns: auto 3fr 2fr;
@@ -231,8 +239,31 @@ input {
   display: grid;
   @apply divide-y;
 }
+
 .order-summary-item {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  @apply py-4;
+  @apply py-1;
+}
+
+@media (min-width: 700px) {
+  .placeorder-layout {
+    grid-template-columns: 60% 1fr;
+  }
+  .order-summary-item {
+    @apply py-4;
+  }
+  .order-layout {
+    gap: 2rem;
+  }
+}
+
+.my-orders {
+}
+
+.my-orders th {
+  @apply pr-3 pb-1;
+}
+.my-orders td {
+  @apply pr-3 py-2 text-center;
 }

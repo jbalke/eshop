@@ -15,6 +15,7 @@ const Logout = () => {
     {
       onSuccess: () => {
         tokenStorage.clearToken();
+        queryClient.removeQueries('userOrders');
         queryClient.setQueryData('userProfile', { user: null });
       },
     }

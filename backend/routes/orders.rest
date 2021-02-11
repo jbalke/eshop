@@ -43,3 +43,10 @@ Content-Type: 'application/json'
 Authorization: Bearer {{authToken}}
 
 ###
+
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/orders/myorders
+Content-Type: 'application/json'
+Authorization: Bearer {{authToken}}
+
+###

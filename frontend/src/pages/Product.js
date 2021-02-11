@@ -26,10 +26,7 @@ function Product() {
   return (
     <>
       <ScrollToTop />
-      <Link
-        className='btn text-xs my-3 text-black bg-gray-100 hover:bg-gray-400 hover:text-white'
-        to='/'
-      >
+      <Link className='btn secondary mb-2' to='/'>
         Go Back
       </Link>
       {isLoading ? (

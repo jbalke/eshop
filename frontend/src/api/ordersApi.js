@@ -55,3 +55,17 @@ export const updateOrderToPaid = async ({ id, paymentResult }) => {
     throw new Error(error);
   }
 };
+
+export const getMyOrders = async () => {
+  try {
+    const { data } = await axios.get(`/api/orders/myorders`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};

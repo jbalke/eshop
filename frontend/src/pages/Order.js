@@ -1,18 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { PayPalButton } from 'react-paypal-button-v2';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { PayPalButton } from 'react-paypal-button-v2';
 import { formatDataTime } from '../utils/dates';
 
 const Order = () => {
   const { id } = useParams();
-  const history = useHistory();
-  const dispatch = useDispatch();
 
   const [sdkReady, setSdkReady] = useState(false);
 
@@ -66,7 +63,7 @@ const Order = () => {
         <Message type='danger'>{error.message}</Message>
       ) : (
         <>
-          <h1 className=''>Order {id}</h1>
+          <h1 className='text-base'>Order {id}</h1>
           <div className='placeorder-layout'>
             <div className='order-layout'>
               <div className='order-address'>

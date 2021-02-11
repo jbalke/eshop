@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { saveShippingAddress } from '../actions/cartActions';
 import CheckoutSteps from '../components/CheckoutSteps';
+import { useLoginIfNotAuthenticated } from '../hooks/redirect';
 
 const Shipping = () => {
+  useLoginIfNotAuthenticated();
+
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
@@ -14,8 +17,8 @@ const Shipping = () => {
   const [postCode, setPostCode] = useState(shippingAddress.postCode);
   const [country, setCountry] = useState(shippingAddress.country);
 
-  const history = useHistory();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -30,7 +33,7 @@ const Shipping = () => {
       <form onSubmit={submitHandler}>
         <div className='form-address'>
           <label htmlFor='name'>
-            Address
+            Name
             <input
               className='w-full'
               type='text'

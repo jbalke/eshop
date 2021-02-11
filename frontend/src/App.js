@@ -32,8 +32,8 @@ function App() {
       <Router>
         <div className='flex flex-col h-screen'>
           <Header />
-          <main className='flex-grow p-4 flex' onClick={closeUserMenu}>
-            <div className='max-w-screen-lg mx-auto flex-grow'>
+          <main className='flex-grow flex flex-col' onClick={closeUserMenu}>
+            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2'>
               <Switch>
                 <Route path='/register'>
                   <Register />

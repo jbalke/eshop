@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
 import ApiService from '../api/ApiService';
-import { useMutation, useQueryClient, useQuery } from 'react-query';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useHistory, useLocation } from 'react-router-dom';
-import { sleep } from '../utils/sleep';
+import { useLoginIfNotAuthenticated } from '../hooks/redirect';
+import { useGetMyOrders } from '../hooks/userQueries';
+import { getDate } from '../utils/dates';
 
 const Profile = () => {
-  const history = useHistory();
-  const location = useLocation();
+  useLoginIfNotAuthenticated();
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -27,6 +29,7 @@ const Profile = () => {
         setEmail(data.user.email);
         setPassword('dummy password');
       },
+      staleTime: 0,
     }
   );
 
@@ -39,13 +42,7 @@ const Profile = () => {
     }
   );
 
-  useEffect(() => {
-    if (userProfileInfo.isError) {
-      sleep(2).then(() => {
-        history.replace(`/login?redirect=${location.pathname}`);
-      });
-    }
-  }, [userProfileInfo.isError, location, history]);
+  const myOrdersInfo = useGetMyOrders();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -76,8 +73,8 @@ const Profile = () => {
   };
 
   return (
-    <div className='flex sm:flex-col md:flex-row'>
-      <div className='w-2/5'>
+    <div className='flex flex-col md:flex-row'>
+      <section className='md:w-1/5'>
         <h1>Profile</h1>
         {userProfileInfo.isLoading ? (
           <Loader />
@@ -176,10 +173,64 @@ const Profile = () => {
         ) : isSuccess ? (
           <Message type='success'>{`Profile Updated`}</Message>
         ) : null}
-      </div>
-      <div className='w-full md:ml-10'>
+      </section>
+      <section className='md:ml-5'>
         <h1>My Orders</h1>
-      </div>
+        {myOrdersInfo.isLoading ? (
+          <Loader />
+        ) : myOrdersInfo.isError ? (
+          <Message type='danger'>{myOrdersInfo.error.message}</Message>
+        ) : myOrdersInfo.data?.length > 0 ? (
+          <div className='overflow-x-scroll md:overflow-x-auto'>
+            <table className='my-orders divide-y table-auto text-left'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                </tr>
+              </thead>
+              <tbody className='divide-y'>
+                {myOrdersInfo.data.map((order) => (
+                  <tr key={order._id}>
+                    <td>
+                      <Link to={`/order/${order._id}`}>{order._id}</Link>
+                    </td>
+                    <td>{getDate(order.createdAt)}</td>
+                    <td>${order.totalPrice}</td>
+                    <td>
+                      {order.isPaid ? (
+                        getDate(order.paidAt)
+                      ) : (
+                        <FaTimes fill='red' className='mx-auto' />
+                      )}
+                    </td>
+                    <td>
+                      {order.isDelivered ? (
+                        getDate(order.deliveredAt)
+                      ) : (
+                        <FaTimes fill='red' className='mx-auto' />
+                      )}
+                    </td>
+                    <td>
+                      <Link
+                        to={`/order/${order._id}`}
+                        className='btn secondary small'
+                      >
+                        Details
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <Message>No orders</Message>
+        )}
+      </section>
     </div>
   );
 };

@@ -122,6 +122,17 @@ export const getOrderByID = asyncHandler(async (req, res) => {
   res.json(order);
 });
 
+// @desc     Get orders for user
+// @route    GET /api/orders/myorders
+// @access   Private
+export const getMyOrders = asyncHandler(async (req, res) => {
+  const filter = { user: req.user._id };
+
+  const orders = await Order.find(filter);
+
+  res.json(orders);
+});
+
 // @desc     Update order to paid
 // @route    PATCH /api/orders/:id/pay
 // @access   Private
