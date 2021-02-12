@@ -2,7 +2,7 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 import { Redirect, Route } from 'react-router-dom';
 
-const PrivateRoute = ({ children, ...rest }) => {
+const AdminRoute = ({ children, ...rest }) => {
   const queryClient = useQueryClient();
   const profile = queryClient.getQueryData('myProfile');
 
@@ -10,12 +10,12 @@ const PrivateRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        profile?.user ? (
+        profile?.user?.isAdmin ? (
           children
         ) : (
           <Redirect
             to={{
-              pathname: `/login`,
+              pathname: `/`,
               state: { from: location },
             }}
           />
@@ -25,4 +25,4 @@ const PrivateRoute = ({ children, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+export default AdminRoute;

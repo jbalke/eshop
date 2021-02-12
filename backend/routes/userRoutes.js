@@ -5,16 +5,19 @@ import {
   updateUserProfile,
   newUser,
   logoutUser,
+  getUsers,
+  getUserOrders,
 } from '../controllers/userController.js';
-import { requireAuth } from '../middleware/authMiddleware.js';
+import { requireAuth, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').post(newUser);
+router.route('/').get(requireAuth, isAdmin, getUsers).post(newUser);
 router
   .route('/:id')
   .get(requireAuth, getUserProfile)
   .patch(requireAuth, updateUserProfile);
+router.route('/:id/orders').get(requireAuth, isAdmin, getUserOrders);
 router.post('/login', authUser);
 router.post('/logout', logoutUser);
 

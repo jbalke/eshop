@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useGetMyOrders } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage';
 import { getDate } from '../utils/dates';
 
-const Profile = () => {
+const UserProfile = () => {
+  const { id } = useParams();
+
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -19,8 +20,8 @@ const Profile = () => {
 
   const queryClient = useQueryClient();
   const userProfileInfo = useQuery(
-    'myProfile',
-    ApiService.users.getUserProfile,
+    ['userDetails', id],
+    ApiService.admin.getUserDetails(id),
     {
       onSuccess: (data) => {
         setName(data.user.name);
@@ -35,13 +36,16 @@ const Profile = () => {
     ApiService.users.updateUserProfile,
     {
       onSuccess: (data) => {
-        queryClient.setQueryData('userProfile', { user: data.user });
+        queryClient.setQueryData('myProfile', { user: data.user });
         tokenStorage.setToken(data.token);
       },
     }
   );
 
-  const myOrdersInfo = useGetMyOrders();
+  const ordersInfo = useQuery(
+    ['userOrders', id],
+    ApiService.admin.getUserOrders(id)
+  );
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -176,11 +180,11 @@ const Profile = () => {
       </section>
       <section className='md:ml-5'>
         <h1>My Orders</h1>
-        {myOrdersInfo.isLoading ? (
+        {ordersInfo.isLoading ? (
           <Loader />
-        ) : myOrdersInfo.isError ? (
-          <Message type='danger'>{myOrdersInfo.error.message}</Message>
-        ) : myOrdersInfo.data?.length > 0 ? (
+        ) : ordersInfo.isError ? (
+          <Message type='danger'>{ordersInfo.error.message}</Message>
+        ) : ordersInfo.data?.length > 0 ? (
           <div className='overflow-x-scroll md:overflow-x-auto'>
             <table className='my-orders divide-y table-auto text-left'>
               <thead>
@@ -193,7 +197,7 @@ const Profile = () => {
                 </tr>
               </thead>
               <tbody className='divide-y'>
-                {myOrdersInfo.data.map((order) => (
+                {ordersInfo.data.map((order) => (
                   <tr key={order._id}>
                     <td>
                       <Link to={`/order/${order._id}`}>{order._id}</Link>
@@ -204,14 +208,14 @@ const Profile = () => {
                       {order.isPaid ? (
                         getDate(order.paidAt)
                       ) : (
-                        <FaTimes fill='red' />
+                        <FaTimes fill='red' className='mx-auto' />
                       )}
                     </td>
                     <td>
                       {order.isDelivered ? (
                         getDate(order.deliveredAt)
                       ) : (
-                        <FaTimes fill='red' />
+                        <FaTimes fill='red' className='mx-auto' />
                       )}
                     </td>
                     <td>
@@ -235,4 +239,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserProfile;

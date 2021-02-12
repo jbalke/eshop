@@ -165,7 +165,7 @@ input {
 
 .cart-items {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .cart-item {
@@ -196,7 +196,7 @@ input {
 @media (min-width: 700px) {
   .cart-layout {
     grid-template-columns: 60% 1fr;
-    gap: 8vw;
+    gap: 7vw;
   }
   .cart-item {
     grid-template-columns: 1fr 2fr auto auto auto;
@@ -258,7 +258,8 @@ input {
   }
 }
 
-.my-orders {
+.my-orders svg {
+  @apply mx-auto;
 }
 
 .my-orders th {
@@ -266,4 +267,13 @@ input {
 }
 .my-orders td {
   @apply pr-3 py-2 text-center;
+}
+
+.user-table th,
+.user-table td {
+  @apply p-2;
+}
+
+.user-table svg {
+  @apply mx-auto;
 }

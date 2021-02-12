@@ -46,6 +46,19 @@ const Header = () => {
           <li>
             <Link to='/profile'>Profile</Link>
           </li>
+          {userProfile?.data?.user?.isAdmin && (
+            <>
+              <li>
+                <Link to='/admin/user-list'>Users</Link>
+              </li>
+              <li>
+                <Link to='/admin/order-list'>Orders</Link>
+              </li>
+              <li>
+                <Link to='/admin/product-list'>Products</Link>
+              </li>
+            </>
+          )}
           <li>
             <Link to='/logout'>Logout</Link>
           </li>

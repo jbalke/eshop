@@ -23,7 +23,7 @@ function Login() {
     {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
-        queryClient.setQueryData('userProfile', { user: data.user });
+        queryClient.setQueryData('myProfile', { user: data.user });
         history.replace(from);
       },
     }

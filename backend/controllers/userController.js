@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import Order from '../models/orderModel.js';
 import asyncHandler from 'express-async-handler';
 import {
   createAccessToken,
@@ -137,6 +138,16 @@ export const newUser = asyncHandler(async (req, res) => {
 export const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select('-password');
   res.json(users);
+});
+
+// @desc     Get orders for a user
+// @route    GET /api/users/:id/orders
+// @access   Admin
+export const getUserOrders = asyncHandler(async (req, res) => {
+  const filter = { user: req.params.id };
+  const orders = await Order.find(filter);
+
+  res.json(orders);
 });
 
 // @desc     Logout user

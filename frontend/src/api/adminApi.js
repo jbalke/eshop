@@ -1,6 +1,6 @@
 import axios from './customAxios.js';
 
-export const loginUser = async ({ email, password }) => {
+const loginUser = async ({ email, password }) => {
   try {
     const config = {
       headers: {
@@ -24,7 +24,7 @@ export const loginUser = async ({ email, password }) => {
   }
 };
 
-export const registerUser = async ({ name, email, password }) => {
+const registerUser = async ({ name, email, password }) => {
   try {
     const config = {
       headers: {
@@ -48,9 +48,9 @@ export const registerUser = async ({ name, email, password }) => {
   }
 };
 
-export const getUserProfile = async () => {
+export const getUsers = async () => {
   try {
-    const { data } = await axios.get('/api/users/profile');
+    const { data } = await axios.get('/api/users');
 
     return data;
   } catch (error) {
@@ -62,18 +62,9 @@ export const getUserProfile = async () => {
   }
 };
 
-export const updateUserProfile = async ({ name, email, password }) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+export const getUserDetails = (id) => async () => {
   try {
-    const { data } = await axios.patch(
-      '/api/users/profile',
-      { name, email, password },
-      config
-    );
+    const { data } = await axios.get(`/api/users/${id}`);
 
     return data;
   } catch (error) {
@@ -85,16 +76,16 @@ export const updateUserProfile = async ({ name, email, password }) => {
   }
 };
 
-export const logoutUser = async () => {
+export const getUserOrders = (id) => async () => {
   try {
-    const { data } = await axios.post('/api/users/logout');
-
+    const { data } = await axios.get(`/api/users/${id}/orders`);
     return data;
   } catch (error) {
     if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
       throw new Error(error.response.data.message);
     }
 
-    throw error;
+    throw new Error(error);
   }
 };
