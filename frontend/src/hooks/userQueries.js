@@ -3,7 +3,7 @@ import ApiService from '../api/ApiService';
 
 export const useUserProfile = () => {
   return useQuery('userProfile', ApiService.users.getUserProfile, {
-    staleTime: 15 * 60 * 1000,
+    staleTime: 0,
     retry: false,
   });
 };

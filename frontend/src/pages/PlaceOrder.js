@@ -6,12 +6,9 @@ import { clearCart } from '../actions/cartActions';
 import ApiService from '../api/ApiService';
 import CheckoutSteps from '../components/CheckoutSteps';
 import Message from '../components/Message';
-import { useLoginIfNotAuthenticated } from '../hooks/redirect';
 import { sleep } from '../utils/sleep';
 
 const PlaceOrder = () => {
-  useLoginIfNotAuthenticated();
-
   const [isOrderSent, setIsOrderSent] = useState(false);
   const cart = useSelector((state) => state.cart);
   const history = useHistory();

@@ -30,7 +30,7 @@ const Logout = () => {
   useEffect(() => {
     if (isSuccess) {
       sleep(2).then(() => {
-        history.push('/');
+        history.replace('/');
       });
     }
   }, [isSuccess, history]);

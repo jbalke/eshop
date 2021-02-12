@@ -5,13 +5,10 @@ import { Link } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useLoginIfNotAuthenticated } from '../hooks/redirect';
 import { useGetMyOrders } from '../hooks/userQueries';
 import { getDate } from '../utils/dates';
 
 const Profile = () => {
-  useLoginIfNotAuthenticated();
-
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');

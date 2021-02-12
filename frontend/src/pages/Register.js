@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
-import { useQueryString } from '../hooks/url.js';
 import tokenStorage from '../tokenStorage.js';
 
 function Register() {
@@ -13,9 +12,10 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState(null);
 
-  const searchParams = useQueryString();
-  const redirect = searchParams.get('redirect') || '/';
   const history = useHistory();
+
+  const location = useLocation();
+  let { from } = location.state || { from: { pathname: '/' } };
 
   const queryClient = useQueryClient();
   const { mutate, isSuccess, data, isError, error } = useMutation(
@@ -30,9 +30,9 @@ function Register() {
 
   useEffect(() => {
     if (isSuccess) {
-      history.push(redirect);
+      history.replace(from);
     }
-  }, [isSuccess, history, redirect]);
+  }, [isSuccess, history, from]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -115,12 +115,7 @@ function Register() {
       </form>
       <div className='my-3 text-center text-sm'>
         Already have an account?{' '}
-        <Link
-          to={redirect ? `/login?redirect=${redirect}` : '/login'}
-          className=''
-        >
-          Sign In
-        </Link>
+        <Link to={{ pathname: `/login`, state: { from } }}>Sign In</Link>
       </div>
       {message && <Message type='danger'>{message}</Message>}
       {isError ? (

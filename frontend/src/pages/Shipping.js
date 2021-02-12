@@ -3,11 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { saveShippingAddress } from '../actions/cartActions';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { useLoginIfNotAuthenticated } from '../hooks/redirect';
 
 const Shipping = () => {
-  useLoginIfNotAuthenticated();
-
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 

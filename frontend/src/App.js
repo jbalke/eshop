@@ -15,6 +15,8 @@ import Shipping from './pages/Shipping';
 import Payment from './pages/Payment';
 import PlaceOrder from './pages/PlaceOrder';
 import Order from './pages/Order';
+import PrivateRoute from './components/PrivateRoute';
+import NoMatch from './pages/NoMatch';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,41 +37,44 @@ function App() {
           <main className='flex-grow flex flex-col' onClick={closeUserMenu}>
             <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2'>
               <Switch>
+                <Route path='/' exact>
+                  <Home />
+                </Route>
                 <Route path='/register'>
                   <Register />
                 </Route>
                 <Route path='/login'>
                   <Login />
                 </Route>
-                <Route path='/profile'>
-                  <Profile />
-                </Route>
-                <Route path='/shipping'>
-                  <Shipping />
-                </Route>
-                <Route path='/payment'>
-                  <Payment />
-                </Route>
-                <Route path='/placeorder'>
-                  <PlaceOrder />
-                </Route>
-                <Route path='/order/:id'>
-                  <Order />
-                </Route>
                 <Route path='/logout'>
                   <Logout />
-                </Route>
-                <Route path='/me'>
-                  <Profile />
-                </Route>
-                <Route path='/product/:id'>
-                  <Product />
                 </Route>
                 <Route path='/cart/:id?'>
                   <Cart />
                 </Route>
-                <Route path='/' exact>
-                  <Home />
+                <PrivateRoute path='/profile'>
+                  <Profile />
+                </PrivateRoute>
+                <Route path='/product/:id'>
+                  <Product />
+                </Route>
+                <PrivateRoute path='/shipping'>
+                  <Shipping />
+                </PrivateRoute>
+                <PrivateRoute path='/payment'>
+                  <Payment />
+                </PrivateRoute>
+                <PrivateRoute path='/placeorder'>
+                  <PlaceOrder />
+                </PrivateRoute>
+                <PrivateRoute path='/order/:id'>
+                  <Order />
+                </PrivateRoute>
+                <PrivateRoute path='/me'>
+                  <Profile />
+                </PrivateRoute>
+                <Route path='*' exact>
+                  <NoMatch />
                 </Route>
               </Switch>
             </div>

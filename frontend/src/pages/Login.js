@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
-import { useQueryString } from '../hooks/url.js';
 import { useUserProfile } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
 
@@ -11,9 +10,10 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const searchParams = useQueryString();
-  const redirect = searchParams.get('redirect');
   const history = useHistory();
+  const location = useLocation();
+
+  let { from } = location.state || { from: { pathname: '/' } };
 
   const { data: userInfo } = useUserProfile();
 
@@ -24,21 +24,16 @@ function Login() {
       onSuccess: (data) => {
         tokenStorage.setToken(data.token);
         queryClient.setQueryData('userProfile', { user: data.user });
+        history.replace(from);
       },
     }
   );
 
   useEffect(() => {
     if (userInfo?.user) {
-      history.push(redirect || '/');
+      history.replace(from);
     }
-  }, [userInfo, history, redirect]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      history.push(redirect || '/');
-    }
-  }, [isSuccess, history, redirect]);
+  }, [userInfo, history, from]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -85,10 +80,7 @@ function Login() {
       </form>
       <div className='my-3 text-center text-sm'>
         New Customer?{' '}
-        <Link
-          to={redirect ? `/register?redirect=${redirect}` : '/register'}
-          className=''
-        >
+        <Link to={{ pathname: '/register', state: { from } }} className=''>
           Register
         </Link>
       </div>
