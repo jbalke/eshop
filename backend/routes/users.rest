@@ -5,17 +5,6 @@ Content-Type: application/json
 
 {
   "email": "admin@example.com",
-  "password": "1234567"
-}
-
-###
-
-// Auth User - Success
-POST {{URL}}/api/users/login
-Content-Type: application/json
-
-{
-  "email": "john.doe@example.com",
   "password": "123456"
 }
 
@@ -40,6 +29,13 @@ Content-Type: application/json
   "email": "admin@example.com",
   "password": "12345"
 }
+
+###
+
+// Get All Users - protected route
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/users
+Authorization: Bearer {{authToken}}
 
 ###
 

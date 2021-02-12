@@ -82,9 +82,13 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = email || user.email;
     if (password) {
       user.password = password;
+      // Increment token version to invalidate existing tokens
+      user.tokenVersion += 1;
     }
 
     const updatedUser = await user.save();
+    // set new refresh token due to token version change
+    setRefreshCookie(res, updatedUser);
 
     req.user = updatedUser;
     res.json({
@@ -94,6 +98,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
       },
+      token: createAccessToken(updatedUser),
     });
   } else {
     res.status(404);
@@ -124,6 +129,14 @@ export const newUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new FriendlyError('Invalid user data');
   }
+});
+
+// @desc     Get all users
+// @route    GET /api/users
+// @access   Admin
+export const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().select('-password');
+  res.json(users);
 });
 
 // @desc     Logout user

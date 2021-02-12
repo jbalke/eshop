@@ -2,28 +2,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
 
-export const auth = asyncHandler(async (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  if (authHeader && authHeader.startsWith('Bearer')) {
-    const token = authHeader.split(' ')[1];
-
-    try {
-      const { user, tokenVersion } = jwt.verify(
-        token,
-        process.env.ACCESS_TOKEN_SECRET
-      );
-
-      const existUser = await User.findOne({ _id: user, tokenVersion })
-        .select('-password')
-        .lean();
-
-      req.user = existUser;
-    } catch (error) {}
-  }
-
-  next();
-});
-
 export const requireAuth = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
@@ -67,5 +45,5 @@ export const isAdmin = (req, res, next) => {
   }
 
   res.status(403);
-  throw new Error('not authorised');
+  throw new Error('admin access only');
 };

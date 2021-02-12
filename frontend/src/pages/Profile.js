@@ -6,6 +6,7 @@ import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useGetMyOrders } from '../hooks/userQueries';
+import tokenStorage from '../tokenStorage';
 import { getDate } from '../utils/dates';
 
 const Profile = () => {
@@ -35,6 +36,7 @@ const Profile = () => {
     {
       onSuccess: (data) => {
         queryClient.setQueryData('userProfile', { user: data.user });
+        tokenStorage.setToken(data.token);
       },
     }
   );
@@ -58,6 +60,7 @@ const Profile = () => {
 
   const editHandler = () => {
     setPassword('');
+    setConfirmPassword('');
     reset();
     setIsEditing(true);
   };
