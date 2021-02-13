@@ -7,6 +7,7 @@ import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { formatDataTime } from '../utils/dates';
+import { toast } from 'react-toastify';
 
 const Order = () => {
   const { id } = useParams();
@@ -20,7 +21,13 @@ const Order = () => {
   );
   const payment = useMutation(ApiService.orders.updateOrderToPaid, {
     onSuccess: (data) => {
+      toast.success('Payment received, thank you!');
       queryClient.refetchQueries(['order', id]);
+    },
+    onError: (error) => {
+      console.error(
+        'Payment submitted via PayPal but was unable to update the order.'
+      );
     },
   });
 

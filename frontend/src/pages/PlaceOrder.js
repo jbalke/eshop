@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { clearCart } from '../actions/cartActions';
 import ApiService from '../api/ApiService';
 import CheckoutSteps from '../components/CheckoutSteps';
 import Message from '../components/Message';
-import { sleep } from '../utils/sleep';
 
 const PlaceOrder = () => {
   const [isOrderSent, setIsOrderSent] = useState(false);
@@ -26,9 +26,11 @@ const PlaceOrder = () => {
     ApiService.orders.createOrder,
     {
       onSuccess: (data) => {
+        toast.success('Order recieved!');
         dispatch(clearCart);
       },
       onError: () => {
+        toast.error(`Order failed, please try again.`);
         setIsOrderSent(false);
       },
     }
@@ -48,7 +50,7 @@ const PlaceOrder = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      sleep(2).then(() => history.push(`/order/${data._id}`));
+      history.push(`/order/${data._id}`);
     }
   }, [history, isSuccess, data]);
 

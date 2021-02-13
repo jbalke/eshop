@@ -20,6 +20,9 @@ import Shipping from './pages/Shipping';
 import UserList from './pages/UserList';
 import UserProfile from './pages/UserProfile';
 import { useUIContext } from './ui-context';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +55,9 @@ function App() {
                 <Route path='/logout'>
                   <Logout />
                 </Route>
+                <Route path='/product/:id'>
+                  <Product />
+                </Route>
                 <Route path='/cart/:id?'>
                   <Cart />
                 </Route>
@@ -61,9 +67,6 @@ function App() {
                 <PrivateRoute path='/user/:id'>
                   <UserProfile />
                 </PrivateRoute>
-                <Route path='/product/:id'>
-                  <Product />
-                </Route>
                 <PrivateRoute path='/shipping'>
                   <Shipping />
                 </PrivateRoute>
@@ -82,7 +85,7 @@ function App() {
                 <AdminRoute path='/admin/user-list'>
                   <UserList />
                 </AdminRoute>
-                <Route path='*' exact>
+                <Route path='*'>
                   <NoMatch />
                 </Route>
               </Switch>
@@ -91,6 +94,17 @@ function App() {
           <Footer />
         </div>
       </Router>
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
     </QueryClientProvider>
   );
