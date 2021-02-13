@@ -1,53 +1,5 @@
 import axios from './customAxios.js';
 
-const loginUser = async ({ email, password }) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const { data } = await axios.post(
-      '/api/users/login',
-      { email, password },
-      config
-    );
-
-    return data;
-  } catch (error) {
-    if (error?.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-
-    throw new Error(error);
-  }
-};
-
-const registerUser = async ({ name, email, password }) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const { data } = await axios.post(
-      '/api/users',
-      { name, email, password },
-      config
-    );
-
-    return data;
-  } catch (error) {
-    if (error?.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-
-    throw new Error(error);
-  }
-};
-
 export const getUsers = async () => {
   try {
     const { data } = await axios.get('/api/users');

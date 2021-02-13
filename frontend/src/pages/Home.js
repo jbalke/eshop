@@ -1,9 +1,9 @@
 import React from 'react';
-import Product from '../components/Product';
 import { useQuery } from 'react-query';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Product from '../components/Product';
 
 const Home = () => {
   const { isLoading, isError, data, error } = useQuery(

@@ -220,6 +220,7 @@ input {
 .order-layout {
   display: grid;
   gap: 1rem;
+  align-content: start;
 }
 .order-layout .cart-item {
   grid-template-columns: auto 3fr 2fr;
@@ -276,4 +277,9 @@ input {
 
 .user-table svg {
   @apply mx-auto;
+}
+
+#modal-root {
+  position: relative;
+  z-index: 9999;
 }

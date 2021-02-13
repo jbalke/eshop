@@ -48,13 +48,13 @@ const Header = () => {
           </li>
           {userProfile?.data?.user?.isAdmin && (
             <>
-              <li>
+              <li className='border-t'>
                 <Link to='/admin/user-list'>Users</Link>
               </li>
               <li>
                 <Link to='/admin/order-list'>Orders</Link>
               </li>
-              <li>
+              <li className='border-b'>
                 <Link to='/admin/product-list'>Products</Link>
               </li>
             </>
