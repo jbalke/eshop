@@ -31,7 +31,9 @@ const Header = () => {
     };
   }, [closeUserMenu]);
 
-  const SubMenu = ({ location }) => {
+  const SubMenu = ({ location, isOpen }) => {
+    if (!isOpen) return null;
+
     return (
       <div
         className='sub-menu absolute bg-gray-100 text-black border shadow-md sm:w-32 md:w-48'
@@ -48,13 +50,13 @@ const Header = () => {
           </li>
           {userProfile?.data?.user?.isAdmin && (
             <>
-              <li className='border-t'>
+              <li className='admin-menu-item'>
                 <Link to='/admin/user-list'>Users</Link>
               </li>
-              <li>
+              <li className='admin-menu-item'>
                 <Link to='/admin/order-list'>Orders</Link>
               </li>
-              <li className='border-b'>
+              <li className='admin-menu-item'>
                 <Link to='/admin/product-list'>Products</Link>
               </li>
             </>
@@ -104,7 +106,7 @@ const Header = () => {
           </div>
         </nav>
       </div>
-      {isUserMenuOpen && <SubMenu location={rect} />}
+      <SubMenu location={rect} isOpen={isUserMenuOpen} />
     </header>
   );
 };

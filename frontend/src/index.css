@@ -89,10 +89,7 @@ input {
 
 .sub-menu a {
   padding: 0.5em 1em;
-}
-
-.sub-menu a:hover {
-  @apply bg-gray-200;
+  @apply hover:bg-gray-200;
 }
 
 .sr-only {
@@ -279,7 +276,6 @@ input {
   @apply mx-auto;
 }
 
-#modal-root {
-  position: relative;
-  z-index: 9999;
+.admin-menu-item a {
+  @apply bg-orange-300 hover:bg-orange-400;
 }

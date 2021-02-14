@@ -22,7 +22,7 @@ function Rating({ value, text, color = '#f8e825', maxRating = 5 }) {
     <div className='rating flex'>
       <div className='inline-flex'>
         {ratingStars.map((star, index) => (
-          <span key={index} style={{ color: color }} className='mr-0.5'>
+          <span key={index} style={{ color }} className='mr-0.5'>
             {star}
           </span>
         ))}
