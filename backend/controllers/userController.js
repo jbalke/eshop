@@ -150,6 +150,38 @@ export const getUserOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+// @desc     Delete user
+// @route    DELETE /api/users/:id
+// @access   Admin
+export const deleteUser = asyncHandler(async (req, res) => {
+  // const user = await User.findById(req.params.id);
+
+  // if (!user) {
+  //   res.status(404);
+  //   throw new FriendlyError('User not found');
+  // }
+
+  // if (user.isAdmin) {
+  //   res.status(403);
+  //   throw new FriendlyError('Unable to delete an Admin');
+  // }
+
+  // const deletedUser = await User.findByIdAndDelete(user._id);
+
+  const deletedUser = await User.findOneAndDelete({
+    _id: req.params.id,
+    isAdmin: false,
+  });
+
+  if (!deletedUser) {
+    res.status(400);
+    throw new FriendlyError('Either user not found or user is an Admin');
+  }
+
+  await Order.deleteMany({ user: deletedUser._id });
+  res.json(deletedUser);
+});
+
 // @desc     Logout user
 // @route    POST /api/users/logout
 // @access   Public

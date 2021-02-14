@@ -93,6 +93,7 @@ function App() {
           </main>
           <Footer />
         </div>
+        <div id='modal'></div>
       </Router>
       <ToastContainer
         position='top-right'

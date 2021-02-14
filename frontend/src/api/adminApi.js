@@ -41,3 +41,17 @@ export const getUserOrders = (id) => async () => {
     throw new Error(error);
   }
 };
+
+export const deleteUser = async ({ id }) => {
+  try {
+    const { data } = await axios.delete(`/api/users/${id}`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};

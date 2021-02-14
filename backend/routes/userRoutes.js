@@ -7,6 +7,7 @@ import {
   logoutUser,
   getUsers,
   getUserOrders,
+  deleteUser,
 } from '../controllers/userController.js';
 import { requireAuth, isAdmin } from '../middleware/authMiddleware.js';
 
@@ -16,7 +17,8 @@ router.route('/').get(requireAuth, isAdmin, getUsers).post(newUser);
 router
   .route('/:id')
   .get(requireAuth, getUserProfile)
-  .patch(requireAuth, updateUserProfile);
+  .patch(requireAuth, updateUserProfile)
+  .delete(requireAuth, isAdmin, deleteUser);
 router.route('/:id/orders').get(requireAuth, isAdmin, getUserOrders);
 router.post('/login', authUser);
 router.post('/logout', logoutUser);
