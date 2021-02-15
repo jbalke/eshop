@@ -8,7 +8,7 @@ const Modal = ({ children, onConfirm, onCancel, modalRoot, isShow }) => {
     <>
       <div className='fixed top-0 left-0 w-screen h-screen bg-black opacity-95'></div>
       <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center'>
-        <div className='bg-white p-4 border-2'>
+        <div className='bg-white p-4 border-2 text-center'>
           {children}
           <div className='flex justify-evenly items-center p-2 mt-4'>
             <button type='button' onClick={onConfirm} className='btn primary'>
