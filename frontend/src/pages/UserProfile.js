@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import tokenStorage from '../tokenStorage';
 import { getDate } from '../utils/dates';
 
 const UserProfile = () => {
@@ -13,12 +13,11 @@ const UserProfile = () => {
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const queryClient = useQueryClient();
+
   const userProfileInfo = useQuery(
     ['userDetails', id],
     ApiService.admin.getUserDetails(id),
@@ -26,21 +25,28 @@ const UserProfile = () => {
       onSuccess: (data) => {
         setName(data.user.name);
         setEmail(data.user.email);
-        setPassword('dummy password');
+        setIsAdmin(data.user.isAdmin);
       },
       staleTime: 0,
     }
   );
 
-  const { isError, error, isSuccess, mutateAsync, reset } = useMutation(
-    ApiService.users.updateUserProfile,
-    {
-      onSuccess: (data) => {
-        queryClient.setQueryData('myProfile', { user: data.user });
-        tokenStorage.setToken(data.token);
-      },
-    }
-  );
+  const { mutateAsync } = useMutation(ApiService.admin.updateUser(id), {
+    onSuccess: (data) => {
+      toast.success('User updated');
+      queryClient.setQueryData(['userDetails', id], { user: data.user });
+      queryClient.setQueryData('users', (oldData) => {
+        return oldData.map((user) => {
+          if (user._id === data.user._id) return data.user;
+
+          return user;
+        });
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const ordersInfo = useQuery(
     ['userOrders', id],
@@ -49,193 +55,167 @@ const UserProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-      return;
-    }
-    setMessage(null);
 
     try {
-      await mutateAsync({ name, email, password });
-      userProfileInfo.refetch();
+      await mutateAsync({ name, email, isAdmin });
       setIsEditing(false);
     } catch (error) {}
   };
 
-  const editHandler = () => {
-    setPassword('');
-    setConfirmPassword('');
-    reset();
+  const editHandler = (e) => {
+    e.preventDefault();
+
     setIsEditing(true);
   };
 
   const cancelHandler = () => {
-    setPassword('dummy password');
-    reset();
     setIsEditing(false);
     userProfileInfo.refetch();
   };
 
   return (
-    <div className='flex flex-col md:flex-row'>
-      <section className='md:w-1/5'>
-        <h1>Profile</h1>
-        {userProfileInfo.isLoading ? (
-          <Loader />
-        ) : userProfileInfo.isError ? (
-          <Message type='danger'>{userProfileInfo.error.message}</Message>
-        ) : (
-          <form onSubmit={submitHandler}>
-            <div className='form-email'>
-              <label htmlFor='email'>
-                Name
-                <input
-                  className='w-full'
-                  type='text'
-                  name='name'
-                  minLength='2'
-                  placeholder='name'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={!isEditing}
-                  required
-                />
-              </label>
-            </div>
-            <div className='form-email'>
-              <label htmlFor='email'>
-                Email Address
-                <input
-                  className='w-full'
-                  type='email'
-                  name='email'
-                  placeholder='email address'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={!isEditing}
-                  required
-                />
-              </label>
-            </div>
-            <div className='form-password'>
-              <label htmlFor='password'>
-                Password
-                <input
-                  className='w-full'
-                  type='password'
-                  name='password'
-                  placeholder='password'
-                  value={password}
-                  minLength='6'
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={!isEditing}
-                />
-              </label>
-            </div>
-            {isEditing && (
-              <div className='form-password'>
-                <label htmlFor='password'>
-                  Confirm Password
+    <>
+      <Link to={`/admin/user-list`} className='btn secondary'>
+        &larr; Go Back
+      </Link>
+      <div className='flex flex-col md:flex-row'>
+        <section className='md:w-1/5'>
+          <h1>User</h1>
+          {userProfileInfo.isLoading ? (
+            <Loader />
+          ) : userProfileInfo.isError ? (
+            <Message type='danger'>{userProfileInfo.error.message}</Message>
+          ) : (
+            <form onSubmit={submitHandler}>
+              <section className='form-name'>
+                <label htmlFor='name'>
+                  Name
                   <input
                     className='w-full'
-                    type='password'
-                    name='confirm-password'
-                    placeholder='confirm password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    type='text'
+                    name='name'
+                    minLength='2'
+                    placeholder='name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={!isEditing}
+                    required
                   />
                 </label>
-              </div>
-            )}
-            {isEditing ? (
-              <div className='my-6'>
-                <button type='submit' className='btn primary'>
-                  Update
-                </button>
-                <button
-                  type='button'
-                  className='btn primary ml-3'
-                  onClick={cancelHandler}
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <button
-                type='button'
-                className='btn primary'
-                onClick={editHandler}
-              >
-                Change
-              </button>
-            )}
-          </form>
-        )}
-        {message && <Message type='danger'>{message}</Message>}
-        {isError ? (
-          <Message type='danger'>{error.message}</Message>
-        ) : isSuccess ? (
-          <Message type='success'>{`Profile Updated`}</Message>
-        ) : null}
-      </section>
-      <section className='md:ml-5'>
-        <h1>My Orders</h1>
-        {ordersInfo.isLoading ? (
-          <Loader />
-        ) : ordersInfo.isError ? (
-          <Message type='danger'>{ordersInfo.error.message}</Message>
-        ) : ordersInfo.data?.length > 0 ? (
-          <div className='overflow-x-scroll md:overflow-x-auto'>
-            <table className='my-orders divide-y table-auto text-left'>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>DATE</th>
-                  <th>TOTAL</th>
-                  <th>PAID</th>
-                  <th>DELIVERED</th>
-                </tr>
-              </thead>
-              <tbody className='divide-y'>
-                {ordersInfo.data.map((order) => (
-                  <tr key={order._id}>
-                    <td>
-                      <Link to={`/order/${order._id}`}>{order._id}</Link>
-                    </td>
-                    <td>{getDate(order.createdAt)}</td>
-                    <td>${order.totalPrice}</td>
-                    <td>
-                      {order.isPaid ? (
-                        getDate(order.paidAt)
-                      ) : (
-                        <FaTimes fill='red' className='mx-auto' />
-                      )}
-                    </td>
-                    <td>
-                      {order.isDelivered ? (
-                        getDate(order.deliveredAt)
-                      ) : (
-                        <FaTimes fill='red' className='mx-auto' />
-                      )}
-                    </td>
-                    <td>
-                      <Link
-                        to={`/order/${order._id}`}
-                        className='btn secondary small'
-                      >
-                        Details
-                      </Link>
-                    </td>
+              </section>
+              <section className='form-email'>
+                <label htmlFor='email'>
+                  Email Address
+                  <input
+                    className='w-full'
+                    type='email'
+                    name='email'
+                    placeholder='email address'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={!isEditing}
+                    required
+                  />
+                </label>
+              </section>
+              <section className='form-is-admin flex justify-between items-center'>
+                <label htmlFor='isAdmin'>Admin</label>
+                <input
+                  type='checkbox'
+                  name='isAdmin'
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                  disabled={!isEditing}
+                />
+              </section>
+              {isEditing ? (
+                <section>
+                  <button type='submit' className='btn primary'>
+                    Update
+                  </button>
+                  <button
+                    type='button'
+                    className='btn primary ml-3'
+                    onClick={cancelHandler}
+                  >
+                    Cancel
+                  </button>
+                </section>
+              ) : (
+                <section>
+                  <button
+                    type='button'
+                    className='btn primary'
+                    onClick={editHandler}
+                  >
+                    Change
+                  </button>
+                </section>
+              )}
+            </form>
+          )}
+        </section>
+        <section className='md:ml-5'>
+          <h1>Orders</h1>
+          {ordersInfo.isLoading ? (
+            <Loader />
+          ) : ordersInfo.isError ? (
+            <Message type='danger'>{ordersInfo.error.message}</Message>
+          ) : ordersInfo.data?.length > 0 ? (
+            <div className='overflow-x-scroll md:overflow-x-auto'>
+              <table className='my-orders'>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>DATE</th>
+                    <th>TOTAL</th>
+                    <th>PAID</th>
+                    <th>DELIVERED</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <Message>No orders</Message>
-        )}
-      </section>
-    </div>
+                </thead>
+                <tbody>
+                  {ordersInfo.data.map((order) => (
+                    <tr key={order._id}>
+                      <td>
+                        <Link to={`/admin/order/${order._id}`}>
+                          {order._id}
+                        </Link>
+                      </td>
+                      <td>{getDate(order.createdAt)}</td>
+                      <td>${order.totalPrice}</td>
+                      <td>
+                        {order.isPaid ? (
+                          getDate(order.paidAt)
+                        ) : (
+                          <FaTimes fill='red' className='mx-auto' />
+                        )}
+                      </td>
+                      <td>
+                        {order.isDelivered ? (
+                          getDate(order.deliveredAt)
+                        ) : (
+                          <FaTimes fill='red' className='mx-auto' />
+                        )}
+                      </td>
+                      <td>
+                        <Link
+                          to={`/admin/order/${order._id}`}
+                          className='btn secondary small'
+                        >
+                          Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <Message>No orders</Message>
+          )}
+        </section>
+      </div>
+    </>
   );
 };
 

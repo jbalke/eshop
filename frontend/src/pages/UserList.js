@@ -68,7 +68,6 @@ const UserList = () => {
                   <th>NAME</th>
                   <th>EMAIL</th>
                   <th>ADMIN</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>

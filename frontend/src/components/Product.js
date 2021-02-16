@@ -6,9 +6,9 @@ const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
   return (
     <article className='card' onMouseEnter={prefetch}>
       <Link to={`/product/${_id}`}>
-        <img src={image} alt={name} />
+        <img src={image} alt={name} className='object-cover object-center' />
       </Link>
-      <div>
+      <div className=''>
         <Link to={`/product/${_id}`}>
           <h1 className='text-base font-semibold tracking-wide capitalize'>
             {name}

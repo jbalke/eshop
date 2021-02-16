@@ -18,6 +18,8 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Shipping from './pages/Shipping';
 import UserList from './pages/UserList';
+import ProductList from './pages/ProductList';
+import ProductEdit from './pages/ProductEdit';
 import UserProfile from './pages/UserProfile';
 import { useUIContext } from './ui-context';
 import { ToastContainer } from 'react-toastify';
@@ -64,9 +66,6 @@ function App() {
                 <PrivateRoute path='/profile'>
                   <Profile />
                 </PrivateRoute>
-                <PrivateRoute path='/user/:id'>
-                  <UserProfile />
-                </PrivateRoute>
                 <PrivateRoute path='/shipping'>
                   <Shipping />
                 </PrivateRoute>
@@ -82,8 +81,20 @@ function App() {
                 <PrivateRoute path='/me'>
                   <Profile />
                 </PrivateRoute>
+                <AdminRoute path='/admin/product-list'>
+                  <ProductList />
+                </AdminRoute>
+                <AdminRoute path='/admin/product/:id/edit'>
+                  <ProductEdit />
+                </AdminRoute>
+                <AdminRoute path='/admin/order/:id'>
+                  <Order />
+                </AdminRoute>
                 <AdminRoute path='/admin/user-list'>
                   <UserList />
+                </AdminRoute>
+                <AdminRoute path='/admin/user/:id'>
+                  <UserProfile />
                 </AdminRoute>
                 <Route path='*'>
                   <NoMatch />

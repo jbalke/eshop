@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -31,43 +32,45 @@ const Profile = () => {
     }
   );
 
-  const { isError, error, isSuccess, mutateAsync, reset } = useMutation(
-    ApiService.users.updateUserProfile,
-    {
-      onSuccess: (data) => {
-        queryClient.setQueryData('userProfile', { user: data.user });
-        tokenStorage.setToken(data.token);
-      },
-    }
-  );
+  const { mutateAsync } = useMutation(ApiService.users.updateUserProfile, {
+    onSuccess: (data) => {
+      toast.success('Profile updated');
+      queryClient.setQueryData('userProfile', { user: data.user });
+      tokenStorage.setToken(data.token);
+    },
+    onError: (error) => {
+      toast.success(error.message);
+    },
+  });
 
   const myOrdersInfo = useGetMyOrders();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
       return;
     }
+
     setMessage(null);
 
     try {
       await mutateAsync({ name, email, password });
-      userProfileInfo.refetch();
       setIsEditing(false);
     } catch (error) {}
   };
 
-  const editHandler = () => {
+  const editHandler = (e) => {
+    e.preventDefault();
+
     setPassword('');
     setConfirmPassword('');
-    reset();
     setIsEditing(true);
   };
 
   const cancelHandler = () => {
     setPassword('dummy password');
-    reset();
     setIsEditing(false);
     userProfileInfo.refetch();
   };
@@ -82,8 +85,8 @@ const Profile = () => {
           <Message type='danger'>{userProfileInfo.error.message}</Message>
         ) : (
           <form onSubmit={submitHandler}>
-            <div className='form-email'>
-              <label htmlFor='email'>
+            <section className='form-name'>
+              <label htmlFor='name'>
                 Name
                 <input
                   className='w-full'
@@ -97,8 +100,8 @@ const Profile = () => {
                   required
                 />
               </label>
-            </div>
-            <div className='form-email'>
+            </section>
+            <section className='form-email'>
               <label htmlFor='email'>
                 Email Address
                 <input
@@ -112,8 +115,8 @@ const Profile = () => {
                   required
                 />
               </label>
-            </div>
-            <div className='form-password'>
+            </section>
+            <section className='form-password'>
               <label htmlFor='password'>
                 Password
                 <input
@@ -127,9 +130,9 @@ const Profile = () => {
                   disabled={!isEditing}
                 />
               </label>
-            </div>
+            </section>
             {isEditing && (
-              <div className='form-password'>
+              <section className='form-password'>
                 <label htmlFor='password'>
                   Confirm Password
                   <input
@@ -141,10 +144,10 @@ const Profile = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </label>
-              </div>
+              </section>
             )}
             {isEditing ? (
-              <div className='my-6'>
+              <section>
                 <button type='submit' className='btn primary'>
                   Update
                 </button>
@@ -155,24 +158,21 @@ const Profile = () => {
                 >
                   Cancel
                 </button>
-              </div>
+              </section>
             ) : (
-              <button
-                type='button'
-                className='btn primary'
-                onClick={editHandler}
-              >
-                Change
-              </button>
+              <section>
+                <button
+                  type='button'
+                  className='btn primary'
+                  onClick={editHandler}
+                >
+                  Change
+                </button>
+              </section>
             )}
           </form>
         )}
         {message && <Message type='danger'>{message}</Message>}
-        {isError ? (
-          <Message type='danger'>{error.message}</Message>
-        ) : isSuccess ? (
-          <Message type='success'>{`Profile Updated`}</Message>
-        ) : null}
       </section>
       <section className='md:ml-5'>
         <h1>My Orders</h1>
@@ -182,7 +182,7 @@ const Profile = () => {
           <Message type='danger'>{myOrdersInfo.error.message}</Message>
         ) : myOrdersInfo.data?.length > 0 ? (
           <div className='overflow-x-scroll md:overflow-x-auto'>
-            <table className='my-orders divide-y table-auto text-left'>
+            <table className='my-orders'>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -192,7 +192,7 @@ const Profile = () => {
                   <th>DELIVERED</th>
                 </tr>
               </thead>
-              <tbody className='divide-y'>
+              <tbody>
                 {myOrdersInfo.data.map((order) => (
                   <tr key={order._id}>
                     <td>
