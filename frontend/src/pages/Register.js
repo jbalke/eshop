@@ -48,7 +48,7 @@ function Register() {
     <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
       <h1 className=''>Register</h1>
       <form onSubmit={submitHandler}>
-        <div className='form-email'>
+        <section className='form-email'>
           <label htmlFor='name'>
             Name
             <input
@@ -64,8 +64,8 @@ function Register() {
               required
             />
           </label>
-        </div>
-        <div className='form-email'>
+        </section>
+        <section className='form-email'>
           <label htmlFor='email'>
             Email Address
             <input
@@ -79,8 +79,8 @@ function Register() {
               required
             />
           </label>
-        </div>
-        <div className='form-password'>
+        </section>
+        <section className='form-password'>
           <label htmlFor='password'>
             Password
             <input
@@ -94,8 +94,8 @@ function Register() {
               required
             />
           </label>
-        </div>
-        <div className='form-password'>
+        </section>
+        <section className='form-password'>
           <label htmlFor='password'>
             Confirm Password
             <input
@@ -108,10 +108,12 @@ function Register() {
               required
             />
           </label>
-        </div>
-        <button type='submit' className='btn primary my-2'>
-          Sign In
-        </button>
+        </section>
+        <section>
+          <button type='submit' className='btn primary my-2'>
+            Sign In
+          </button>
+        </section>
       </form>
       <div className='my-3 text-center text-sm'>
         Already have an account?{' '}

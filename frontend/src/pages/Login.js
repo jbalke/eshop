@@ -44,7 +44,7 @@ function Login() {
     <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
       <h1 className=''>Sign In</h1>
       <form onSubmit={submitHandler}>
-        <div className='form-email'>
+        <section className='form-email'>
           <label htmlFor='email'>
             Email Address
             <input
@@ -59,8 +59,8 @@ function Login() {
               required
             />
           </label>
-        </div>
-        <div className='form-password'>
+        </section>
+        <section className='form-password'>
           <label htmlFor='password'>
             Password
             <input
@@ -73,10 +73,12 @@ function Login() {
               required
             />
           </label>
-        </div>
-        <button type='submit' className='btn primary my-2'>
-          Sign In
-        </button>
+        </section>
+        <section>
+          <button type='submit' className='btn primary my-2'>
+            Sign In
+          </button>
+        </section>
       </form>
       <div className='my-3 text-center text-sm'>
         New Customer?{' '}
