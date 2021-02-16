@@ -42,20 +42,22 @@ const buildOrder = async (clientOrder) => {
   return orderedItems;
 };
 
-const updateStockQty = async (order) => {
-  for (let i = 0; i < order.length; i++) {
-    const item = order[i];
-    const updatedProduct = await Product.findByIdAndUpdate(
-      item._id,
-      { $inc: { countInStock: -item.qty } },
-      { new: true }
-    );
-    if (!updatedProduct) {
-      throw new Error(
-        `unable to update qty of product: ${item.name} (${item._id})`
+const updateStockQty = async (orderItems) => {
+  const results = await Promise.allSettled(
+    orderItems.map((item) => {
+      return Product.findByIdAndUpdate(
+        item.product,
+        { $inc: { countInStock: -item.qty } },
+        { new: true, rawResult: true }
       );
-    }
-  }
+    })
+  );
+
+  results.forEach(
+    (result) =>
+      result.status === 'rejected' &&
+      console.error(`Stock Update Rejected: ${result.reason}`)
+  );
 };
 
 // @desc     Create new order
@@ -143,7 +145,6 @@ export const updatedOrderToPaid = asyncHandler(async (req, res) => {
     update_time,
     payer: { email_address },
   } = req.body;
-  const filter = { _id: req.params.id };
 
   const update = {
     isPaid: true,
@@ -160,6 +161,8 @@ export const updatedOrderToPaid = asyncHandler(async (req, res) => {
     res.status(404);
     throw new FriendlyError('Order not found');
   }
+
+  updateStockQty(updatedOrder.orderItems);
 
   res.json(updatedOrder);
 });
