@@ -124,7 +124,6 @@ const PlaceOrder = () => {
             place order
           </button>
           {isError && <Message type='danger'>{error.message}</Message>}
-          {isSuccess && <Message type='success'>Order ref: {data._id}</Message>}
         </div>
       </div>
     </>
