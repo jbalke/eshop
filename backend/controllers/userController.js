@@ -37,37 +37,34 @@ export const authUser = asyncHandler(async (req, res) => {
 // @desc     Get user profile
 // @route    GET /api/users/profile
 // @access   Private
-export const authPing = asyncHandler(async (req, res) => {
-  res.json({ user: req.user });
-});
-
-// @desc     Get user profile
-// @route    GET /api/users/:id
-// @access   Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  if (id !== 'profile' && !req.user.isAdmin) {
-    res.status(403);
-    throw new FriendlyError('Access denied');
-  }
-
-  const idToFind = id === 'profile' ? req.user.id : id;
-  const user = await User.findById(idToFind);
+  const user = await User.findById(req.user.id).select('-password').lean();
 
   if (!user) {
     res.status(404);
     throw new FriendlyError(`User ${id} not found`);
   }
 
-  const { _id, name, email, isAdmin } = user;
   res.json({
-    user: {
-      _id,
-      name,
-      email,
-      isAdmin,
-    },
+    user,
+  });
+});
+
+// @desc     Get user by ID
+// @route    GET /api/users/:id
+// @access   Admin
+export const getUserById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id).select('-password').lean();
+
+  if (!user) {
+    res.status(404);
+    throw new FriendlyError(`User ${id} not found`);
+  }
+
+  res.json({
+    user,
   });
 });
 
@@ -107,6 +104,39 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc     Update user by ID
+// @route    PATCH /api/users/:id
+// @access   Admin
+export const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (id === req.user.id) {
+    res.status(403);
+    throw new FriendlyError('Changes to self must be made via Profile page');
+  }
+
+  const { name, email, isAdmin } = req.body;
+
+  const user = await User.findById(id).select('-password');
+  if (user) {
+    user.name = name || user.name;
+    user.email = email || user.email;
+
+    if (typeof isAdmin === 'boolean') {
+      user.isAdmin = isAdmin;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      user: updatedUser,
+    });
+  } else {
+    res.status(404);
+    throw new FriendlyError('User not found');
+  }
+});
+
 // @desc     Register a new user
 // @route    POST /api/users
 // @access   Public
@@ -136,7 +166,7 @@ export const newUser = asyncHandler(async (req, res) => {
 // @route    GET /api/users
 // @access   Admin
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select('-password');
+  const users = await User.find().select('-password').lean();
   res.json(users);
 });
 
@@ -145,7 +175,7 @@ export const getUsers = asyncHandler(async (req, res) => {
 // @access   Admin
 export const getUserOrders = asyncHandler(async (req, res) => {
   const filter = { user: req.params.id };
-  const orders = await Order.find(filter);
+  const orders = await Order.find(filter).lean();
 
   res.json(orders);
 });
@@ -154,29 +184,29 @@ export const getUserOrders = asyncHandler(async (req, res) => {
 // @route    DELETE /api/users/:id
 // @access   Admin
 export const deleteUser = asyncHandler(async (req, res) => {
-  // const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
 
-  // if (!user) {
-  //   res.status(404);
-  //   throw new FriendlyError('User not found');
-  // }
-
-  // if (user.isAdmin) {
-  //   res.status(403);
-  //   throw new FriendlyError('Unable to delete an Admin');
-  // }
-
-  // const deletedUser = await User.findByIdAndDelete(user._id);
-
-  const deletedUser = await User.findOneAndDelete({
-    _id: req.params.id,
-    isAdmin: false,
-  });
-
-  if (!deletedUser) {
-    res.status(400);
-    throw new FriendlyError('Either user not found or user is an Admin');
+  if (!user) {
+    res.status(404);
+    throw new FriendlyError('User not found');
   }
+
+  if (user.isAdmin) {
+    res.status(403);
+    throw new FriendlyError('Unable to delete an Admin');
+  }
+
+  const deletedUser = await User.findByIdAndDelete(user._id).lean();
+
+  // const deletedUser = await User.findOneAndDelete({
+  //   _id: req.params.id,
+  //   isAdmin: false,
+  // });
+
+  // if (!deletedUser) {
+  //   res.status(400);
+  //   throw new FriendlyError('Either user not found or user is an Admin');
+  // }
 
   await Order.deleteMany({ user: deletedUser._id });
   res.json(deletedUser);
