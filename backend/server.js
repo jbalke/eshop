@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 import connectDatabase from './config/db.js';
 import helmet from 'helmet';
 import colors from 'colors';
@@ -20,6 +21,10 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 //* ROUTES
 app.use('/api/products', productsRoutes);
