@@ -135,10 +135,28 @@ export const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+// @desc     Get all orders
+// @route    GET /api/orders
+// @access   Admin
+export const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find().populate('user');
+
+  res.json(orders);
+});
+
+// @desc     Get undelivered orders
+// @route    GET /api/orders/undelivered
+// @access   Admin
+export const getUndeliveredOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ isDelivered: false }).populate('user');
+
+  res.json(orders);
+});
+
 // @desc     Update order to paid
 // @route    PATCH /api/orders/:id/pay
 // @access   Private
-export const updatedOrderToPaid = asyncHandler(async (req, res) => {
+export const updateOrderToPaid = asyncHandler(async (req, res) => {
   const {
     id,
     status,
@@ -163,6 +181,38 @@ export const updatedOrderToPaid = asyncHandler(async (req, res) => {
   }
 
   updateStockQty(updatedOrder.orderItems);
+
+  res.json(updatedOrder);
+});
+
+// @desc     Update order to delivered
+// @route    PATCH /api/orders/:id/deliver
+// @access   Admin
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { deliverDate = Date.now() } = req.body;
+
+  if (deliverDate > Date.now()) {
+    res.status(400);
+    throw new FriendlyError('Deliver date can not be in the future');
+  }
+
+  const order = await Order.findById(id);
+
+  if (!order) {
+    res.status(404);
+    throw new FriendlyError('Order not found');
+  }
+
+  if (deliverDate < order.paidAt) {
+    res.status(400);
+    throw new FriendlyError('Deliver date can not be before paid date');
+  }
+
+  order.isDelivered = true;
+  order.deliveredAt = deliverDate;
+
+  const updatedOrder = await order.save();
 
   res.json(updatedOrder);
 });

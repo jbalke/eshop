@@ -147,3 +147,54 @@ export const updateProduct = (id) => async ({
     throw new Error(error);
   }
 };
+
+export const getOrders = async () => {
+  try {
+    const { data } = await axios.get(`/api/orders`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};
+
+export const getUndeliveredOrders = async () => {
+  try {
+    const { data } = await axios.get(`/api/orders/undelivered`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};
+
+export const upDateOrderToDelivered = async ({ id, deliverDate }) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const { data } = await axios.patch(
+      `/api/orders/${id}/deliver`,
+      { deliverDate },
+      config
+    );
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};

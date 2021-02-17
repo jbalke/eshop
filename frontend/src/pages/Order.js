@@ -6,19 +6,26 @@ import { Link, useParams } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { formatDataTime } from '../utils/dates';
+import { formatDataTime, toHTMLDateTime } from '../utils/dates';
+import { useUserProfile } from '../hooks/userQueries';
 import { toast } from 'react-toastify';
 
 const Order = () => {
   const { id } = useParams();
 
   const [sdkReady, setSdkReady] = useState(false);
+  const [confirmDeliverDate, setConfirmDeliverDate] = useState(false);
+  const [deliverDate, setDeliverDate] = useState(toHTMLDateTime(Date.now()));
 
   const queryClient = useQueryClient();
+
+  const userProfile = useUserProfile();
+
   const { data, isError, error, isSuccess, isLoading } = useQuery(
     ['order', id],
     ApiService.orders.getOrderDetails(id)
   );
+
   const payment = useMutation(ApiService.orders.updateOrderToPaid, {
     onSuccess: (data) => {
       toast.success('Payment received, thank you!');
@@ -28,6 +35,34 @@ const Order = () => {
       console.error(
         'Payment submitted via PayPal but was unable to update the order.'
       );
+    },
+  });
+
+  // optimistic update
+  const deliver = useMutation(ApiService.admin.upDateOrderToDelivered, {
+    onMutate: async (update) => {
+      toast.dismiss();
+      await queryClient.cancelQueries(['order', update.id]);
+
+      const previousData = queryClient.getQueryData(['order', update.id]);
+
+      queryClient.setQueryData(['order', update.id], (oldData) => ({
+        ...oldData,
+        delivered: true,
+        deliveredAt: update.deliverDate,
+      }));
+
+      return { previousData };
+    },
+    onSuccess: () => {
+      toast.success('Order updated');
+    },
+    onError: (error, update, context) => {
+      toast.error(error.message, { autoClose: false });
+      queryClient.setQueryData(['order', id], context.previousData);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['order', id]);
     },
   });
 
@@ -62,6 +97,21 @@ const Order = () => {
     payment.mutate({ id, paymentResult });
   };
 
+  const deliveredHandler = (e) => {
+    if (confirmDeliverDate) {
+      setConfirmDeliverDate(false);
+      deliver.mutate({ id, deliverDate: new Date(deliverDate).getTime() });
+    } else {
+      setConfirmDeliverDate(true);
+    }
+  };
+
+  const confirmDeliverDateHandler = (e) => {
+    e.preventDefault();
+
+    deliveredHandler();
+  };
+
   return (
     <div className=''>
       {isLoading ? (
@@ -88,7 +138,7 @@ const Order = () => {
                 </div>
                 {data.isDelivered ? (
                   <Message type='success'>
-                    Delivered on {formatDataTime(data.DeliveredAt)}.
+                    Delivered on {formatDataTime(data.deliveredAt)}.
                   </Message>
                 ) : (
                   <Message type='warning'>Not Delivered</Message>
@@ -123,7 +173,8 @@ const Order = () => {
                         />
                         <Link to={`/product/${item.product}`}>{item.name}</Link>
                         <div>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.price.toFixed(2)} = $
+                          {(item.qty * item.price).toFixed(2)}
                         </div>
                       </li>
                     ))}
@@ -151,7 +202,30 @@ const Order = () => {
                   <div>${data.totalPrice.toFixed(2)}</div>
                 </div>
               </div>
-
+              {userProfile.data?.user?.isAdmin &&
+                data.isPaid &&
+                !data.isDelivered && (
+                  <button
+                    className='btn primary w-full'
+                    onClick={deliveredHandler}
+                    disabled={deliver.isLoading}
+                  >
+                    {confirmDeliverDate ? 'confirm date' : 'mark as delivered'}
+                  </button>
+                )}
+              <form
+                className={`mt-1 transform transition-transform ${
+                  confirmDeliverDate ? 'scale-y-100' : 'scale-y-0'
+                }`}
+                onSubmit={confirmDeliverDateHandler}
+              >
+                <input
+                  type='datetime-local'
+                  className=''
+                  value={deliverDate}
+                  onChange={(e) => setDeliverDate(e.target.value)}
+                />
+              </form>
               {!data.isPaid && (
                 <div>
                   {payment.isLoading && <Loader />}

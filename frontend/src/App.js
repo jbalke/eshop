@@ -20,6 +20,8 @@ import Shipping from './pages/Shipping';
 import UserList from './pages/UserList';
 import ProductList from './pages/ProductList';
 import ProductEdit from './pages/ProductEdit';
+import OrderList from './pages/OrderList';
+import UndeliveredOrderList from './pages/UndeliveredOrderList';
 import UserProfile from './pages/UserProfile';
 import { useUIContext } from './ui-context';
 import { ToastContainer } from 'react-toastify';
@@ -81,14 +83,17 @@ function App() {
                 <PrivateRoute path='/me'>
                   <Profile />
                 </PrivateRoute>
+                <AdminRoute path='/admin/order-list'>
+                  <OrderList />
+                </AdminRoute>
+                <AdminRoute path='/admin/undelivered-order-list'>
+                  <UndeliveredOrderList />
+                </AdminRoute>
                 <AdminRoute path='/admin/product-list'>
                   <ProductList />
                 </AdminRoute>
                 <AdminRoute path='/admin/product/:id/edit'>
                   <ProductEdit />
-                </AdminRoute>
-                <AdminRoute path='/admin/order/:id'>
-                  <Order />
                 </AdminRoute>
                 <AdminRoute path='/admin/user-list'>
                   <UserList />
@@ -117,7 +122,9 @@ function App() {
         draggable
         pauseOnHover
       />
-      <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+      {process.env.NODE_ENV !== 'production' && (
+        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+      )}
     </QueryClientProvider>
   );
 }
