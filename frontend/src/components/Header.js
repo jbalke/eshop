@@ -54,7 +54,12 @@ const Header = () => {
                 <Link to='/admin/user-list'>Users</Link>
               </li>
               <li className='admin-menu-item'>
-                <Link to='/admin/order-list'>Orders</Link>
+                <Link to='/admin/order-list'>All Orders</Link>
+              </li>
+              <li className='admin-menu-item'>
+                <Link to='/admin/undelivered-order-list'>
+                  Undelivered Orders
+                </Link>
               </li>
               <li className='admin-menu-item'>
                 <Link to='/admin/product-list'>Products</Link>
