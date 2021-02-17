@@ -35,7 +35,7 @@ const ProductList = () => {
       );
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { autoClose: 5000 });
     },
   });
 
@@ -44,7 +44,7 @@ const ProductList = () => {
       queryClient.setQueryData('products', (oldData) => [...oldData, data]);
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { autoClose: 5000 });
     },
   });
 
@@ -89,7 +89,7 @@ const ProductList = () => {
         ) : isError ? (
           <Message type='danger'>{error.message}</Message>
         ) : (
-          <table>
+          <table className='product-list'>
             <thead>
               <tr>
                 <th>ID</th>
@@ -101,7 +101,7 @@ const ProductList = () => {
             </thead>
             <tbody>
               {data.map((product) => (
-                <tr>
+                <tr key={product._id}>
                   <td>
                     <Link to={`/admin/product/${product._id}`}>
                       {product._id}

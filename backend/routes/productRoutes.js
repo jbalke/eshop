@@ -5,6 +5,7 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  createProductReview,
 } from '../controllers/productController.js';
 import { requireAuth, isAdmin } from '../middleware/authMiddleware.js';
 
@@ -16,5 +17,6 @@ router
   .get(getProductById)
   .patch(requireAuth, isAdmin, updateProduct)
   .delete(requireAuth, isAdmin, deleteProduct);
+router.route('/:id/reviews').post(requireAuth, createProductReview);
 
 export default router;

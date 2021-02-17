@@ -9,6 +9,8 @@ export const formatDataTime = (string) => {
     minute: 'numeric',
     second: 'numeric',
     hour12: false,
+    timeZone: 'UTC',
+    timeZoneName: 'short',
   };
 
   return new Intl.DateTimeFormat('default', options).format(date);
@@ -24,4 +26,9 @@ export const getDate = (string) => {
   };
 
   return new Intl.DateTimeFormat('default', options).format(date);
+};
+
+export const toHTMLDateTime = (time) => {
+  const isoTime = new Date(time).toISOString();
+  return isoTime.substring(0, isoTime.lastIndexOf(':'));
 };

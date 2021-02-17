@@ -47,7 +47,7 @@ const ProductEdit = () => {
       );
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { autoClose: 5000 });
     },
   });
 
@@ -72,6 +72,7 @@ const ProductEdit = () => {
   }, [updateProductInfo, history]);
 
   const uploadFileHandler = async (e) => {
+    //TODO: switch to useMutation?
     const file = e.target.files[0];
     const formData = new FormData();
 
@@ -129,6 +130,7 @@ const ProductEdit = () => {
               <label>
                 Description
                 <textarea
+                  rows='5'
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required

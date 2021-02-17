@@ -1,12 +1,17 @@
 import Product from '../models/productModel.js';
+import Order from '../models/orderModel.js';
 import asyncHandler from 'express-async-handler';
 import { FriendlyError } from '../errors/errors.js';
+
+const MAX_REVIEW_RATING = 5;
 
 // @desc     Fetch all products
 // @route    GET /api/products
 // @access   Public
 export const getProducts = asyncHandler(async (req, res) => {
-  const allProducts = await Product.find({}, null, { lean: true });
+  const allProducts = await Product.find({}, null, {
+    lean: true,
+  }).populate('reviews.user', 'name');
   res.json(allProducts);
 });
 
@@ -15,7 +20,9 @@ export const getProducts = asyncHandler(async (req, res) => {
 // @access   Public
 export const getProductById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id, null, { lean: true });
+  const product = await Product.findById(id, null, {
+    lean: true,
+  }).populate('reviews.user', 'name');
 
   if (!product) {
     res.status(404);
@@ -93,4 +100,64 @@ export const updateProduct = asyncHandler(async (req, res) => {
   const updatedProduct = await product.save();
 
   res.json(updatedProduct);
+});
+
+// @desc     Create a new product review
+// @route    POST /api/product/:id/reviews
+// @access   Private
+export const createProductReview = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const { comment, rating } = req.body;
+
+  const product = await Product.findById(id);
+
+  if (!product) {
+    res.status(404);
+    throw new FriendlyError('Product not found');
+  }
+
+  const alreadyReviewed = product.reviews.find(
+    (review) => review.user.toString() === req.user.id.toString()
+  );
+
+  if (alreadyReviewed) {
+    res.status(400);
+    throw new FriendlyError('Product already reviewed');
+  }
+
+  if (rating > MAX_REVIEW_RATING || rating <= 0) {
+    res.status(400);
+    throw new FriendlyError(
+      `Rating must be between 0 and ${MAX_REVIEW_RATING}`
+    );
+  }
+
+  const existingOrder = await Order.findOne({
+    user: req.user.id,
+    isPaid: true,
+    isDelivered: true,
+    'orderItems.product': id,
+  });
+
+  if (!existingOrder) {
+    res.status(400);
+    throw new FriendlyError('Can only review bought items');
+  }
+
+  const review = {
+    rating: Number(rating),
+    comment,
+    user: req.user.id,
+  };
+
+  product.reviews.push(review);
+  product.numReviews = product.reviews.length;
+  product.rating =
+    product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+    product.numReviews;
+
+  await product.save();
+
+  res.status(201).json({ message: 'Review added' });
 });
