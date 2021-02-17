@@ -61,7 +61,7 @@ const UserList = () => {
           <Message type='danger'>{error.message}</Message>
         ) : (
           <div className='overflow-x-scroll md:overflow-hidden'>
-            <table className='user-table'>
+            <table className='user-list'>
               <thead>
                 <tr>
                   <th>ID</th>

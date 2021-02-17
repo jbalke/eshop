@@ -49,12 +49,11 @@ function Register() {
       <h1 className=''>Register</h1>
       <form onSubmit={submitHandler}>
         <section className='form-email'>
-          <label htmlFor='name'>
+          <label>
             Name
             <input
               className='w-full'
               type='text'
-              name='name'
               minLength='2'
               placeholder='name'
               autoComplete='name'
@@ -66,12 +65,11 @@ function Register() {
           </label>
         </section>
         <section className='form-email'>
-          <label htmlFor='email'>
+          <label>
             Email Address
             <input
               className='w-full'
               type='email'
-              name='email'
               placeholder='email address'
               autoComplete='email'
               value={email}
@@ -81,12 +79,11 @@ function Register() {
           </label>
         </section>
         <section className='form-password'>
-          <label htmlFor='password'>
+          <label>
             Password
             <input
               className='w-full'
               type='password'
-              name='password'
               placeholder='password'
               value={password}
               minLength='6'
@@ -96,12 +93,11 @@ function Register() {
           </label>
         </section>
         <section className='form-password'>
-          <label htmlFor='password'>
+          <label>
             Confirm Password
             <input
               className='w-full'
               type='password'
-              name='confirm-password'
               placeholder='confirm password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

@@ -28,13 +28,11 @@ const Shipping = () => {
       <CheckoutSteps step1 step2 />
       <h1>Shipping</h1>
       <form onSubmit={submitHandler}>
-        <div className='form-address'>
-          <label htmlFor='name'>
+        <section className='form-address'>
+          <label>
             Name
             <input
-              className='w-full'
               type='text'
-              name='name'
               placeholder='your name'
               autoComplete='name'
               value={name}
@@ -42,14 +40,12 @@ const Shipping = () => {
               required
             />
           </label>
-        </div>
-        <div className='form-address'>
-          <label htmlFor='address'>
+        </section>
+        <section className='form-address'>
+          <label>
             Address
             <input
-              className='w-full'
               type='text'
-              name='address'
               placeholder='street address'
               autoComplete='address'
               value={address}
@@ -57,14 +53,12 @@ const Shipping = () => {
               required
             />
           </label>
-        </div>
-        <div className='form-address'>
-          <label htmlFor='city'>
+        </section>
+        <section className='form-address'>
+          <label>
             Town / City
             <input
-              className='w-full'
               type='text'
-              name='city'
               placeholder='town or city'
               autoComplete='city'
               value={city}
@@ -72,35 +66,31 @@ const Shipping = () => {
               required
             />
           </label>
-        </div>
-        <div className='form-address'>
-          <label htmlFor='postCode'>
+        </section>
+        <section className='form-address'>
+          <label>
             Post Code
             <input
-              className='w-full'
               type='text'
-              name='postCode'
               placeholder='post code'
               value={postCode}
               onChange={(e) => setPostCode(e.target.value)}
               required
             />
           </label>
-        </div>
-        <div className='form-address'>
-          <label htmlFor='country'>
+        </section>
+        <section className='form-address'>
+          <label>
             Country
             <input
-              className='w-full'
               type='text'
-              name='country'
               placeholder='country'
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               required
             />
           </label>
-        </div>
+        </section>
         <button type='submit' className='btn primary mt-6'>
           Continue
         </button>

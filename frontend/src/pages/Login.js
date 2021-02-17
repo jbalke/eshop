@@ -45,10 +45,9 @@ function Login() {
       <h1 className=''>Sign In</h1>
       <form onSubmit={submitHandler}>
         <section className='form-email'>
-          <label htmlFor='email'>
+          <label>
             Email Address
             <input
-              className='w-full'
               type='email'
               name='email'
               placeholder='email address'
@@ -61,10 +60,9 @@ function Login() {
           </label>
         </section>
         <section className='form-password'>
-          <label htmlFor='password'>
+          <label>
             Password
             <input
-              className='w-full'
               type='password'
               name='password'
               placeholder='password'

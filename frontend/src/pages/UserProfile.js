@@ -44,7 +44,7 @@ const UserProfile = () => {
       });
     },
     onError: (error) => {
-      toast.error(error.message);
+      toast.error(error.message, { autoClose: 5000 });
     },
   });
 
@@ -88,12 +88,10 @@ const UserProfile = () => {
           ) : (
             <form onSubmit={submitHandler}>
               <section className='form-name'>
-                <label htmlFor='name'>
+                <label>
                   Name
                   <input
-                    className='w-full'
                     type='text'
-                    name='name'
                     minLength='2'
                     placeholder='name'
                     value={name}
@@ -104,12 +102,10 @@ const UserProfile = () => {
                 </label>
               </section>
               <section className='form-email'>
-                <label htmlFor='email'>
+                <label>
                   Email Address
                   <input
-                    className='w-full'
                     type='email'
-                    name='email'
                     placeholder='email address'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -122,7 +118,7 @@ const UserProfile = () => {
                 <label htmlFor='isAdmin'>Admin</label>
                 <input
                   type='checkbox'
-                  name='isAdmin'
+                  id='isAdmin'
                   checked={isAdmin}
                   onChange={(e) => setIsAdmin(e.target.checked)}
                   disabled={!isEditing}
@@ -177,9 +173,7 @@ const UserProfile = () => {
                   {ordersInfo.data.map((order) => (
                     <tr key={order._id}>
                       <td>
-                        <Link to={`/admin/order/${order._id}`}>
-                          {order._id}
-                        </Link>
+                        <Link to={`/order/${order._id}`}>{order._id}</Link>
                       </td>
                       <td>{getDate(order.createdAt)}</td>
                       <td>${order.totalPrice}</td>
@@ -199,7 +193,7 @@ const UserProfile = () => {
                       </td>
                       <td>
                         <Link
-                          to={`/admin/order/${order._id}`}
+                          to={`/order/${order._id}`}
                           className='btn secondary small'
                         >
                           Details

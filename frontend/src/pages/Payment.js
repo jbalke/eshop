@@ -34,17 +34,16 @@ const Payment = () => {
         <h2 className='text-xl text-gray-600 font-semibold capitalize'>
           Select Method
         </h2>
-        <div className='form-payment'>
+        <section className='form-payment'>
           <input
             type='radio'
-            name='paymentMethod'
             id='PayPal'
             value='PayPal'
             onChange={(e) => setPaymentMethod(e.target.value)}
             checked={paymentMethod === 'PayPal'}
           />
           <label htmlFor='Paypal'>PayPal or Credit Card</label>
-        </div>
+        </section>
         {/* <div className='form-payment'>
           <input
             type='radio'

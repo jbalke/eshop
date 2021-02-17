@@ -25,9 +25,14 @@ h2 {
   margin: 0.5em 0;
   @apply tracking-widest font-bold uppercase;
 }
+h3 {
+  font-size: calc(1.2rem + 0.3vmin);
+  margin: 0.5em 0;
+  @apply tracking-widest font-bold uppercase;
+}
 
 p {
-  @apply my-3;
+  @apply my-2;
 }
 
 a {
@@ -54,15 +59,15 @@ label {
   @apply text-sm font-semibold inline-block w-full;
 }
 
+input:not([type='checkbox']):not([type='radio']),
+textarea {
+  @apply border py-2 px-4 block bg-gray-100 text-sm w-full;
+}
+
 input[type='radio'],
 input[type='radio'] + label {
   display: inline;
   margin-right: 0.75em;
-}
-
-input:not([type='checkbox']),
-textarea {
-  @apply border py-2 px-4 block bg-gray-100 text-sm w-full;
 }
 
 form > section + section {
@@ -272,16 +277,17 @@ table td {
   }
 }
 
-.my-orders svg {
+.my-orders svg,
+.order-list svg,
+.user-list svg {
   @apply mx-auto;
 }
 
-.my-orders td {
+.my-orders,
+.order-list,
+.user-list,
+.product-list {
   @apply text-center;
-}
-
-.user-table svg {
-  @apply mx-auto;
 }
 
 .admin-menu-item a {

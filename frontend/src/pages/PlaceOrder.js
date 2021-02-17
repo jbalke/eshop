@@ -30,7 +30,7 @@ const PlaceOrder = () => {
         dispatch(clearCart);
       },
       onError: () => {
-        toast.error(`Order failed, please try again.`);
+        toast.error(`Order failed, please try again.`, { autoClose: 5000 });
         setIsOrderSent(false);
       },
     }

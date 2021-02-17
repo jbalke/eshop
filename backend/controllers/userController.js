@@ -198,17 +198,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   const deletedUser = await User.findByIdAndDelete(user._id).lean();
 
-  // const deletedUser = await User.findOneAndDelete({
-  //   _id: req.params.id,
-  //   isAdmin: false,
-  // });
-
-  // if (!deletedUser) {
-  //   res.status(400);
-  //   throw new FriendlyError('Either user not found or user is an Admin');
-  // }
-
-  await Order.deleteMany({ user: deletedUser._id });
+  // await Order.deleteMany({ user: deletedUser._id });
   res.json(deletedUser);
 });
 

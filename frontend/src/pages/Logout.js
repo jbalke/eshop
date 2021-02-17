@@ -22,7 +22,9 @@ const Logout = () => {
       queryClient.removeQueries('order');
     },
     onError: () => {
-      toast.error('Oops, unable to log you out. Please try again.');
+      toast.error('Oops, unable to log you out. Please try again.', {
+        autoClose: 5000,
+      });
     },
   });
 

@@ -86,12 +86,11 @@ const Profile = () => {
         ) : (
           <form onSubmit={submitHandler}>
             <section className='form-name'>
-              <label htmlFor='name'>
+              <label>
                 Name
                 <input
                   className='w-full'
                   type='text'
-                  name='name'
                   minLength='2'
                   placeholder='name'
                   value={name}
@@ -102,7 +101,7 @@ const Profile = () => {
               </label>
             </section>
             <section className='form-email'>
-              <label htmlFor='email'>
+              <label>
                 Email Address
                 <input
                   className='w-full'
@@ -117,7 +116,7 @@ const Profile = () => {
               </label>
             </section>
             <section className='form-password'>
-              <label htmlFor='password'>
+              <label>
                 Password
                 <input
                   className='w-full'
@@ -133,7 +132,7 @@ const Profile = () => {
             </section>
             {isEditing && (
               <section className='form-password'>
-                <label htmlFor='password'>
+                <label>
                   Confirm Password
                   <input
                     className='w-full'
