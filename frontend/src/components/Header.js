@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useUIContext } from '../ui-context';
 import { useUserProfile } from '../hooks/userQueries';
+import SearchBox from './SearchBox';
 
 const Header = () => {
   const { toggleUserMenu, closeUserMenu, isUserMenuOpen } = useUIContext();
@@ -80,6 +81,7 @@ const Header = () => {
         <Link to='/' className='uppercase text-xl font-bold tracking-wide'>
           E-Shop
         </Link>
+        <SearchBox />
         <nav className='main-nav uppercase text-sm'>
           <div className='flex text-sm bg-transparent'>
             <NavLink

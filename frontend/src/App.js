@@ -50,6 +50,9 @@ function App() {
                 <Route path='/' exact>
                   <Home />
                 </Route>
+                <Route path='/search/:keyword'>
+                  <Home />
+                </Route>
                 <Route path='/register'>
                   <Register />
                 </Route>

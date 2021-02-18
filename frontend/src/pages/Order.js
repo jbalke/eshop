@@ -84,14 +84,18 @@ const Order = () => {
       document.body.appendChild(script);
     };
 
-    if (isSuccess && !data.isPaid) {
+    if (
+      isSuccess &&
+      !data.isPaid &&
+      userProfile.data?.user?._id === data.user._id
+    ) {
       if (!window.paypal) {
         addPayPalScript();
       } else {
         setSdkReady(true);
       }
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, userProfile]);
 
   const successPaymentHandler = (paymentResult) => {
     payment.mutate({ id, paymentResult });
@@ -226,7 +230,7 @@ const Order = () => {
                   onChange={(e) => setDeliverDate(e.target.value)}
                 />
               </form>
-              {!data.isPaid && (
+              {!data.isPaid && userProfile.data?.user?._id === data.user._id && (
                 <div>
                   {payment.isLoading && <Loader />}
                   {!sdkReady ? (

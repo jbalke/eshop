@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
-import { ScrollToTop } from '../utils/scroll';
-import ProductDetail from '../components/ProductDetail';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import ProductDetail from '../components/ProductDetail';
 import Rating from '../components/Rating';
-import { toast } from 'react-toastify';
+import { useUserProfile } from '../hooks/userQueries';
 import { getDate } from '../utils/dates';
+import { ScrollToTop } from '../utils/scroll';
 
 function Product() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function Product() {
 
   const queryClient = useQueryClient();
 
-  const userProfile = useQuery('myProfile', ApiService.users.getUserProfile);
+  const userProfile = useUserProfile();
 
   const reviewInfo = useMutation(ApiService.products.reviewProduct(id), {
     onSuccess: () => {
@@ -83,7 +84,7 @@ function Product() {
                 </ul>
               )}
             </section>
-            <section className='w-full md:w-1/2 mt-4 md:mt-0 md:ml-4'>
+            <section className='w-full md:w-1/2 mt-4 md:mt-2 md:ml-4'>
               <h3>Write a customer review</h3>
               {userProfile.data?.user ? (
                 <form onSubmit={submitHandler}>

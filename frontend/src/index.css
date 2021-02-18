@@ -59,15 +59,16 @@ label {
   @apply text-sm font-semibold inline-block w-full;
 }
 
-input:not([type='checkbox']):not([type='radio']),
+input:not([type='checkbox']):not([type='radio']):not(.searchinput),
 textarea {
-  @apply border py-2 px-4 block bg-gray-100 text-sm w-full;
+  @apply border py-2 px-4 bg-gray-100 text-sm;
 }
 
 input[type='radio'],
 input[type='radio'] + label {
-  display: inline;
+  display: inline-block;
   margin-right: 0.75em;
+  width: auto;
 }
 
 form > section + section {
@@ -141,13 +142,15 @@ table td {
 }
 
 .card {
+  max-width: 280px;
   @apply rounded border p-3 shadow-md cursor-pointer flex flex-col justify-between;
 }
 
 .products-grid {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-items: center;
 }
 
 .product-layout {

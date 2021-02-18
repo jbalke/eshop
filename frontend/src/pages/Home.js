@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Product from '../components/Product';
+import { useParams, useRouteMatch } from 'react-router-dom';
 
 const Home = () => {
-  const { isLoading, isError, data, error } = useQuery(
+  const { keyword } = useParams();
+  const { url } = useRouteMatch();
+
+  const { isLoading, isError, data, error, refetch } = useQuery(
     'products',
-    ApiService.products.getProducts
+    ApiService.products.getProducts(keyword),
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 0,
+    }
   );
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, url]);
 
   return (
     <>

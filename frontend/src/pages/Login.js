@@ -54,6 +54,7 @@ function Login() {
               autoComplete='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className='w-full'
               autoFocus
               required
             />
@@ -68,6 +69,7 @@ function Login() {
               placeholder='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className='w-full'
               required
             />
           </label>

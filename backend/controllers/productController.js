@@ -9,10 +9,15 @@ const MAX_REVIEW_RATING = 5;
 // @route    GET /api/products
 // @access   Public
 export const getProducts = asyncHandler(async (req, res) => {
-  const allProducts = await Product.find({}, null, {
+  const filter = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: 'i' } }
+    : {};
+
+  const products = await Product.find(filter, null, {
     lean: true,
   }).populate('reviews.user', 'name');
-  res.json(allProducts);
+
+  res.json(products);
 });
 
 // @desc     Fetch single product
@@ -129,7 +134,7 @@ export const createProductReview = asyncHandler(async (req, res) => {
   if (rating > MAX_REVIEW_RATING || rating <= 0) {
     res.status(400);
     throw new FriendlyError(
-      `Rating must be between 0 and ${MAX_REVIEW_RATING}`
+      `Rating must be between 1 and ${MAX_REVIEW_RATING}`
     );
   }
 

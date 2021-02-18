@@ -37,6 +37,7 @@ const Shipping = () => {
               autoComplete='name'
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className='w-full'
               required
             />
           </label>
@@ -50,6 +51,7 @@ const Shipping = () => {
               autoComplete='address'
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              className='w-full'
               required
             />
           </label>
@@ -63,6 +65,7 @@ const Shipping = () => {
               autoComplete='city'
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              className='w-full'
               required
             />
           </label>
@@ -75,6 +78,7 @@ const Shipping = () => {
               placeholder='post code'
               value={postCode}
               onChange={(e) => setPostCode(e.target.value)}
+              className='w-full'
               required
             />
           </label>
@@ -87,6 +91,7 @@ const Shipping = () => {
               placeholder='country'
               value={country}
               onChange={(e) => setCountry(e.target.value)}
+              className='w-full'
               required
             />
           </label>

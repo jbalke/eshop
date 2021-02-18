@@ -1,8 +1,8 @@
 import axios from './customAxios.js';
 
-export const getProducts = async () => {
+export const getProducts = (keyword = '') => async () => {
   try {
-    const { data } = await axios.get('/api/products');
+    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
     return data;
   } catch (error) {
     if (error?.response.data.message) {

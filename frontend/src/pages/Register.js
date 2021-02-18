@@ -107,7 +107,7 @@ function Register() {
         </section>
         <section>
           <button type='submit' className='btn primary my-2'>
-            Sign In
+            Register
           </button>
         </section>
       </form>
