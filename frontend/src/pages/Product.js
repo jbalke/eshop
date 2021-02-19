@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
@@ -16,6 +16,8 @@ function Product() {
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+
+  const history = useHistory();
 
   const queryClient = useQueryClient();
 
@@ -34,10 +36,10 @@ function Product() {
     ['product', id],
     ApiService.products.getProduct(id),
     {
-      initialData: () =>
-        queryClient
-          .getQueryData('products')
-          ?.find((product) => product._id === id),
+      // initialData: () =>
+      //   queryClient
+      //     .getQueryData('products')
+      //     ?.find((product) => product._id === id),
     }
   );
 
@@ -50,9 +52,9 @@ function Product() {
   return (
     <>
       <ScrollToTop />
-      <Link className='btn secondary mb-2' to='/'>
+      <button onClick={() => history.goBack()} className='btn secondary mb-2'>
         Go Back
-      </Link>
+      </button>
       {isLoading ? (
         <Loader />
       ) : isError ? (

@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 
 const SearchBox = () => {
   const [keyword, setKeyword] = useState('');
 
   const history = useHistory();
+  const location = useLocation();
 
   const onClearHandler = () => {
     setKeyword('');
-    history.push('/');
+    if (location.pathname.startsWith('/search/')) {
+      history.push('/');
+    }
   };
 
   const submitHandler = (e) => {
