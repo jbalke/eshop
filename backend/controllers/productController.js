@@ -13,11 +13,29 @@ export const getProducts = asyncHandler(async (req, res) => {
     ? { name: { $regex: req.query.keyword, $options: 'i' } }
     : {};
 
+  const totalProducts = await Product.estimatedDocumentCount();
+  const matchedProducts = await Product.countDocuments(filter);
+
+  const { cursor = '', limit = '10' } = req.query;
+
+  if (cursor) {
+    filter._id = { $gt: cursor };
+  }
+
   const products = await Product.find(filter, null, {
     lean: true,
+    limit: parseInt(limit) + 1,
   }).populate('reviews.user', 'name');
 
-  res.json(products);
+  const nextCursor =
+    products.length > limit ? products[products.length - 2]._id : '';
+
+  res.json({
+    products: products.slice(0, limit),
+    cursor: nextCursor,
+    totalProducts,
+    matchedProducts,
+  });
 });
 
 // @desc     Fetch single product
