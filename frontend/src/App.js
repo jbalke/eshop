@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -39,6 +40,8 @@ const queryClient = new QueryClient({
 function App() {
   const { closeUserMenu } = useUIContext();
 
+  const [itemsPerPage, setItemsPerPage] = useState('12');
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -48,10 +51,10 @@ function App() {
             <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2'>
               <Switch>
                 <Route path='/' exact>
-                  <Home />
+                  <Home limit={itemsPerPage} setLimit={setItemsPerPage} />
                 </Route>
                 <Route path='/search/:keyword'>
-                  <Home />
+                  <Home limit={itemsPerPage} setLimit={setItemsPerPage} />
                 </Route>
                 <Route path='/register'>
                   <Register />

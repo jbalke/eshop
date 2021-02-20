@@ -35,7 +35,7 @@ const SearchBox = () => {
           id='searchTerm'
           value={keyword}
           placeholder='Search products...'
-          className='searchinput mr-1 text-black bg-gray-100 p-2'
+          className='searchinput mr-1 text-black bg-gray-100 p-1'
           onChange={(e) => setKeyword(e.target.value)}
         />
         <button type='button' onClick={onClearHandler} className='p-1'>

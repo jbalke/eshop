@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Product from '../components/Product';
-import { useParams, useRouteMatch } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({ limit, setLimit }) => {
   const { keyword } = useParams();
-  const { url } = useRouteMatch();
 
   const [page, setPage] = useState(0);
   const [cursors, setCursors] = useState(['']);
-  const [limit, setLimit] = useState(2);
 
   const queryClient = useQueryClient();
 
@@ -25,24 +23,24 @@ const Home = () => {
     isFetching,
     isPreviousData,
   } = useQuery(
-    ['products', page],
+    ['products', { keyword, page }],
     ApiService.products.getProducts({
       keyword,
       cursor: cursors[page],
       limit,
     }),
     {
+      refetchOnWindowFocus: false,
       keepPreviousData: true,
       staleTime: 0,
       onSuccess: (data) => {
-        console.log('onSuccess');
         data.products.forEach((product) =>
           queryClient.setQueryData(['product', product._id], () => product)
         );
 
         if (data.cursor) {
           setCursors((old) => {
-            if (old.length <= page + 1) {
+            if (old.length === page + 1) {
               return [...old, data.cursor];
             }
             return old.map((cursor, index) =>
@@ -55,10 +53,9 @@ const Home = () => {
   );
 
   useEffect(() => {
-    queryClient.removeQueries('products');
     setCursors(['']);
     setPage(0);
-  }, [url, queryClient]);
+  }, [keyword, queryClient, limit]);
 
   useEffect(() => {
     if (data?.cursor) {
@@ -91,23 +88,45 @@ const Home = () => {
         <Message type='danger'>{error.message}</Message>
       ) : (
         <>
-          <div>
-            <button
-              onClick={prevPageHandler}
-              className='btn disabled:cursor-not-allowed'
-              disabled={page === 0}
-            >
-              &larr;
-            </button>
-            Page: {page + 1} / {Math.ceil(data.matchedProducts / limit) || 1}
-            <button
-              onClick={nextPageHandler}
-              className='btn disabled:cursor-not-allowed'
-              disabled={!data.cursor || isPreviousData}
-            >
-              &rarr;
-            </button>
-            {isFetching && <span>...</span>}
+          <div className='flex justify-between mb-2'>
+            <div>
+              <button
+                onClick={prevPageHandler}
+                className='btn small disabled:cursor-not-allowed'
+                disabled={page === 0}
+              >
+                &larr;
+              </button>
+              Page: {page + 1} / {Math.ceil(data.matchedProducts / limit) || 1}
+              <button
+                onClick={nextPageHandler}
+                className='btn small disabled:cursor-not-allowed'
+                disabled={!data.cursor || isPreviousData}
+              >
+                &rarr;
+              </button>
+              {isFetching && <span>...</span>}
+            </div>
+            <div className='flex items-center'>
+              <label htmlFor='displayLimit'>items / page</label>
+              <select
+                name='displayLimit'
+                id='displayLimit'
+                onChange={(e) => setLimit(e.target.value)}
+                value={limit}
+                className='ml-1 text-sm'
+              >
+                {Array.from(
+                  { length: 5 },
+                  (val, index) => (index + 1) * 12
+                ).map((val, i) => (
+                  <option key={i} value={val}>
+                    {val}
+                  </option>
+                ))}
+                <option value='999'>All</option>
+              </select>
+            </div>
           </div>
           {data?.products.length ? (
             <div className='products-grid'>
@@ -116,7 +135,7 @@ const Home = () => {
               })}
             </div>
           ) : (
-            <div className='max-w-sm mx-auto'>
+            <div className='max-w-sm'>
               <Message>No products found</Message>
             </div>
           )}

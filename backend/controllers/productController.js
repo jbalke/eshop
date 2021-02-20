@@ -16,7 +16,7 @@ export const getProducts = asyncHandler(async (req, res) => {
   const totalProducts = await Product.estimatedDocumentCount();
   const matchedProducts = await Product.countDocuments(filter);
 
-  const { cursor = '', limit = '10' } = req.query;
+  const { cursor = '', limit = '100' } = req.query;
 
   if (cursor) {
     filter._id = { $gt: cursor };
