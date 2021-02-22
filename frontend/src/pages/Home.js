@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Product from '../components/Product';
 
 const Home = ({ limit, setLimit }) => {
-  const { keyword } = useParams();
+  const history = useHistory();
+  const location = useLocation();
 
-  const [page, setPage] = useState(0);
-  const [cursors, setCursors] = useState(['']);
+  const queryString = new URLSearchParams(location.search);
+
+  const queryPage = Number(queryString.get('page')) || 1;
+  const pageNumber = Number.isNaN(queryPage) ? 1 : queryPage;
+
+  const queryKeyword = queryString.get('keyword') || '';
+  const queryLimit = queryString.get('limit') || limit;
+
+  const [page, setPage] = useState(pageNumber);
+  const [keyword, setKeyword] = useState(queryKeyword);
 
   const queryClient = useQueryClient();
 
@@ -23,12 +32,8 @@ const Home = ({ limit, setLimit }) => {
     isFetching,
     isPreviousData,
   } = useQuery(
-    ['products', { keyword, page }],
-    ApiService.products.getProducts({
-      keyword,
-      cursor: cursors[page],
-      limit,
-    }),
+    ['products', { keyword, page, limit }],
+    ApiService.products.getProducts,
     {
       refetchOnWindowFocus: false,
       keepPreviousData: true,
@@ -37,46 +42,46 @@ const Home = ({ limit, setLimit }) => {
         data.products.forEach((product) =>
           queryClient.setQueryData(['product', product._id], () => product)
         );
-
-        if (data.cursor) {
-          setCursors((old) => {
-            if (old.length === page + 1) {
-              return [...old, data.cursor];
-            }
-            return old.map((cursor, index) =>
-              index === page + 1 ? data.cursor : cursor
-            );
-          });
-        }
       },
     }
   );
 
   useEffect(() => {
-    setCursors(['']);
-    setPage(0);
-  }, [keyword, queryClient, limit]);
+    setPage(pageNumber);
+    setKeyword(queryKeyword);
+    setLimit(queryLimit);
+  }, [pageNumber, queryKeyword, queryLimit, setLimit]);
 
   useEffect(() => {
-    if (data?.cursor) {
+    if (pageNumber < data?.pages) {
       queryClient.prefetchQuery(
-        ['products', page + 1],
-        ApiService.products.getProducts({
-          keyword,
-          cursor: data.cursor,
-          limit,
-        }),
+        [
+          'products',
+          { keyword: queryKeyword, page: pageNumber + 1, limit: queryLimit },
+        ],
+        ApiService.products.getProducts,
         { staleTime: 0 }
       );
     }
-  }, [data, queryClient, keyword, page, limit]);
+  }, [data, queryClient, queryKeyword, pageNumber, queryLimit]);
 
   const prevPageHandler = () => {
-    setPage((old) => Math.max(0, old - 1));
+    history.push(
+      `${location.pathname}?keyword=${keyword}&limit=${limit}&page=${Math.max(
+        1,
+        page - 1
+      )}`
+    );
   };
 
   const nextPageHandler = () => {
-    setPage((old) => (data.cursor ? old + 1 : old));
+    if (page < data?.pages) {
+      history.push(
+        `${location.pathname}?keyword=${keyword}&limit=${limit}&page=${
+          page + 1
+        }`
+      );
+    }
   };
 
   return (
@@ -97,11 +102,11 @@ const Home = ({ limit, setLimit }) => {
               >
                 &larr;
               </button>
-              Page: {page + 1} / {Math.ceil(data.matchedProducts / limit) || 1}
+              Page: {page} / {data.pages || 1}
               <button
                 onClick={nextPageHandler}
                 className='btn small disabled:cursor-not-allowed'
-                disabled={!data.cursor || isPreviousData}
+                disabled={isPreviousData}
               >
                 &rarr;
               </button>
@@ -112,7 +117,13 @@ const Home = ({ limit, setLimit }) => {
               <select
                 name='displayLimit'
                 id='displayLimit'
-                onChange={(e) => setLimit(e.target.value)}
+                onChange={(e) =>
+                  history.push(
+                    `${location.pathname}?keyword=${keyword}&limit=${
+                      e.target.value
+                    }&page=${1}`
+                  )
+                }
                 value={limit}
                 className='ml-1 text-sm'
               >

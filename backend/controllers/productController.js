@@ -16,15 +16,12 @@ export const getProducts = asyncHandler(async (req, res) => {
   const totalProducts = await Product.estimatedDocumentCount();
   const matchedProducts = await Product.countDocuments(filter);
 
-  const { cursor = '', limit = '100' } = req.query;
-
-  if (cursor) {
-    filter._id = { $gt: cursor };
-  }
+  const { page = '1', limit = '100' } = req.query;
 
   const products = await Product.find(filter, null, {
     lean: true,
-    limit: parseInt(limit) + 1,
+    skip: parseInt(limit * (page - 1)),
+    limit: parseInt(limit),
   }).populate('reviews.user', 'name');
 
   const nextCursor =
@@ -32,7 +29,7 @@ export const getProducts = asyncHandler(async (req, res) => {
 
   res.json({
     products: products.slice(0, limit),
-    cursor: nextCursor,
+    pages: Math.ceil(matchedProducts / limit),
     totalProducts,
     matchedProducts,
   });
