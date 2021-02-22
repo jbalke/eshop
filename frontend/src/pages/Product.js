@@ -50,7 +50,7 @@ function Product() {
   };
 
   return (
-    <>
+    <div>
       <ScrollToTop />
       <button onClick={() => history.goBack()} className='btn secondary mb-2'>
         Go Back
@@ -139,7 +139,7 @@ function Product() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

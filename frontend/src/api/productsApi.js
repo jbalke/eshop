@@ -1,13 +1,10 @@
 import axios from './customAxios.js';
 
-export const getProducts = ({
-  keyword = '',
-  cursor = '',
-  limit = 5,
-}) => async () => {
+export const getProducts = async ({ queryKey }) => {
+  const [_key, { keyword = '', page = 1, limit = '12' }] = queryKey;
   try {
     const { data } = await axios.get(`/api/products`, {
-      params: { keyword, limit, cursor },
+      params: { keyword, limit, page },
     });
     return data;
   } catch (error) {

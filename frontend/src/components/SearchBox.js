@@ -10,8 +10,8 @@ const SearchBox = () => {
 
   const onClearHandler = () => {
     setKeyword('');
-    if (location.pathname.startsWith('/search/')) {
-      history.push('/');
+    if (location.search) {
+      history.push(`${location.pathname}`);
     }
   };
 
@@ -20,9 +20,9 @@ const SearchBox = () => {
 
     const search = keyword.trim();
     if (search) {
-      history.push(`/search/${search}`);
+      history.push(`${location.pathname}?keyword=${search}&page=1`);
     } else {
-      history.push('/');
+      history.push(`${location.pathname}`);
     }
   };
 

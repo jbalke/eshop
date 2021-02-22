@@ -40,7 +40,7 @@ const queryClient = new QueryClient({
 function App() {
   const { closeUserMenu } = useUIContext();
 
-  const [itemsPerPage, setItemsPerPage] = useState('12');
+  const [limit, setLimit] = useState('12');
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -48,13 +48,10 @@ function App() {
         <div className='flex flex-col h-screen'>
           <Header />
           <main className='flex-grow flex flex-col' onClick={closeUserMenu}>
-            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2'>
+            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2 flex flex-col'>
               <Switch>
                 <Route path='/' exact>
-                  <Home limit={itemsPerPage} setLimit={setItemsPerPage} />
-                </Route>
-                <Route path='/search/:keyword'>
-                  <Home limit={itemsPerPage} setLimit={setItemsPerPage} />
+                  <Home limit={limit} setLimit={setLimit} />
                 </Route>
                 <Route path='/register'>
                   <Register />

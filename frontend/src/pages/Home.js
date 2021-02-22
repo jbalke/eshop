@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ApiService from '../api/ApiService';
+import ItemLimit from '../components/ItemLimit';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import Product from '../components/Product';
 
 const Home = ({ limit, setLimit }) => {
-  const { keyword } = useParams();
+  const location = useLocation();
 
-  const [page, setPage] = useState(0);
-  const [cursors, setCursors] = useState(['']);
+  const queryString = new URLSearchParams(location.search);
+
+  const queryPage = Number(queryString.get('page')) || 1;
+  const pageNumber = Number.isNaN(queryPage) ? 1 : queryPage;
+
+  const queryKeyword = queryString.get('keyword') || '';
+  const queryLimit = queryString.get('limit') || limit;
+
+  const [page, setPage] = useState(pageNumber);
+  const [keyword, setKeyword] = useState(queryKeyword);
 
   const queryClient = useQueryClient();
 
@@ -23,12 +33,8 @@ const Home = ({ limit, setLimit }) => {
     isFetching,
     isPreviousData,
   } = useQuery(
-    ['products', { keyword, page }],
-    ApiService.products.getProducts({
-      keyword,
-      cursor: cursors[page],
-      limit,
-    }),
+    ['products', { keyword, page, limit }],
+    ApiService.products.getProducts,
     {
       refetchOnWindowFocus: false,
       keepPreviousData: true,
@@ -37,109 +43,61 @@ const Home = ({ limit, setLimit }) => {
         data.products.forEach((product) =>
           queryClient.setQueryData(['product', product._id], () => product)
         );
-
-        if (data.cursor) {
-          setCursors((old) => {
-            if (old.length === page + 1) {
-              return [...old, data.cursor];
-            }
-            return old.map((cursor, index) =>
-              index === page + 1 ? data.cursor : cursor
-            );
-          });
-        }
       },
     }
   );
 
   useEffect(() => {
-    setCursors(['']);
-    setPage(0);
-  }, [keyword, queryClient, limit]);
+    setPage(pageNumber);
+    setKeyword(queryKeyword);
+    setLimit(queryLimit);
+  }, [pageNumber, queryKeyword, queryLimit, setLimit]);
 
   useEffect(() => {
-    if (data?.cursor) {
+    if (pageNumber < data?.pages) {
       queryClient.prefetchQuery(
-        ['products', page + 1],
-        ApiService.products.getProducts({
-          keyword,
-          cursor: data.cursor,
-          limit,
-        }),
+        [
+          'products',
+          { keyword: queryKeyword, page: pageNumber + 1, limit: queryLimit },
+        ],
+        ApiService.products.getProducts,
         { staleTime: 0 }
       );
     }
-  }, [data, queryClient, keyword, page, limit]);
-
-  const prevPageHandler = () => {
-    setPage((old) => Math.max(0, old - 1));
-  };
-
-  const nextPageHandler = () => {
-    setPage((old) => (data.cursor ? old + 1 : old));
-  };
+  }, [data, queryClient, queryKeyword, pageNumber, queryLimit]);
 
   return (
     <>
-      <h1>Latest Products</h1>
+      <h1>Latest Products {isFetching && <span>...</span>}</h1>
       {isIdle ? null : isLoading ? (
         <Loader />
       ) : isError ? (
         <Message type='danger'>{error.message}</Message>
       ) : (
-        <>
-          <div className='flex justify-between mb-2'>
-            <div>
-              <button
-                onClick={prevPageHandler}
-                className='btn small disabled:cursor-not-allowed'
-                disabled={page === 0}
-              >
-                &larr;
-              </button>
-              Page: {page + 1} / {Math.ceil(data.matchedProducts / limit) || 1}
-              <button
-                onClick={nextPageHandler}
-                className='btn small disabled:cursor-not-allowed'
-                disabled={!data.cursor || isPreviousData}
-              >
-                &rarr;
-              </button>
-              {isFetching && <span>...</span>}
-            </div>
-            <div className='flex items-center'>
-              <label htmlFor='displayLimit'>items / page</label>
-              <select
-                name='displayLimit'
-                id='displayLimit'
-                onChange={(e) => setLimit(e.target.value)}
-                value={limit}
-                className='ml-1 text-sm'
-              >
-                {Array.from(
-                  { length: 5 },
-                  (val, index) => (index + 1) * 12
-                ).map((val, i) => (
-                  <option key={i} value={val}>
-                    {val}
-                  </option>
-                ))}
-                <option value='999'>All</option>
-              </select>
-            </div>
+        <div className='flex-grow flex flex-col justify-between'>
+          <div>
+            <ItemLimit limit={limit} keyword={keyword} />
+            {data?.products.length ? (
+              <div className='products-grid'>
+                {data.products.map((product) => {
+                  return <Product key={product._id} {...product} />;
+                })}
+              </div>
+            ) : (
+              <div className='max-w-sm'>
+                <Message>No products found</Message>
+              </div>
+            )}
           </div>
-          {data?.products.length ? (
-            <div className='products-grid'>
-              {data.products.map((product) => {
-                return <Product key={product._id} {...product} />;
-              })}
-            </div>
-          ) : (
-            <div className='max-w-sm'>
-              <Message>No products found</Message>
-            </div>
-          )}
-        </>
+          <div className='mt-4 w-1/2 mx-auto'>
+            <Paginate
+              page={page}
+              pages={data?.pages}
+              keyword={keyword}
+              isPreviousData={isPreviousData}
+            />
+          </div>
+        </div>
       )}
     </>
   );
