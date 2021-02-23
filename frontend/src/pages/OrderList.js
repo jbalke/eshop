@@ -6,6 +6,7 @@ import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { formatDataTime } from '../utils/dates';
+import Meta from '../components/Meta';
 
 const OrderList = () => {
   const [filterUndelivered, setFilterUndelivered] = useState(false);
@@ -27,6 +28,7 @@ const OrderList = () => {
 
   return (
     <div>
+      <Meta title='E-Shop | Order List' />
       <div className='flex justify-between items-center'>
         <h1>Orders</h1>
         <form className='flex items-center border p-2'>

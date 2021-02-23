@@ -74,7 +74,7 @@ const UserProfile = () => {
   };
 
   return (
-    <>
+    <div>
       <Link to={`/admin/user-list`} className='btn secondary'>
         &larr; Go Back
       </Link>
@@ -209,7 +209,7 @@ const UserProfile = () => {
           )}
         </section>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import tokenStorage from '../tokenStorage';
+import Meta from '../components/Meta';
 
 const Logout = () => {
   const queryClient = useQueryClient();
@@ -41,9 +42,12 @@ const Logout = () => {
   }, [isSuccess, history]);
 
   return (
-    <div className='max-w-sm mx-auto'>
-      <Loader />
-    </div>
+    <>
+      <Meta title='E-Shop | Logging Out' />
+      <div className='max-w-sm mx-auto'>
+        <Loader />
+      </div>
+    </>
   );
 };
 

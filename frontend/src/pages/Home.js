@@ -9,6 +9,7 @@ import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
 import ProductCarousel from '../components/ProductCarousel';
+import Meta from '../components/Meta';
 
 const Home = ({ limit, setLimit }) => {
   const location = useLocation();
@@ -71,6 +72,7 @@ const Home = ({ limit, setLimit }) => {
 
   return (
     <>
+      <Meta title='Welcome to E-Shop' />
       {!keyword && bodyWidth > 600 && <ProductCarousel />}
       <h1>Latest Products {isFetching && <span>...</span>}</h1>
       {isIdle ? null : isLoading ? (

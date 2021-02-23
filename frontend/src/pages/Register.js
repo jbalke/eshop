@@ -4,6 +4,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import tokenStorage from '../tokenStorage.js';
+import Meta from '../components/Meta';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -46,6 +47,7 @@ function Register() {
 
   return (
     <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
+      <Meta title='E-Shop | Register' />
       <h1 className=''>Register</h1>
       <form onSubmit={submitHandler}>
         <section className='form-email'>

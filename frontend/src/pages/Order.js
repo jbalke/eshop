@@ -9,6 +9,7 @@ import Message from '../components/Message';
 import { formatDataTime, toHTMLDateTime } from '../utils/dates';
 import { useUserProfile } from '../hooks/userQueries';
 import { toast } from 'react-toastify';
+import Meta from '../components/Meta';
 
 const Order = () => {
   const { id } = useParams();
@@ -118,6 +119,7 @@ const Order = () => {
 
   return (
     <div className=''>
+      <Meta title={`E-Shop | Order ${id}`} />
       {isLoading ? (
         <Loader />
       ) : isError ? (

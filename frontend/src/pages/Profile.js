@@ -9,6 +9,7 @@ import Message from '../components/Message';
 import { useGetMyOrders } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage';
 import { getDate } from '../utils/dates';
+import Meta from '../components/Meta';
 
 const Profile = () => {
   const [email, setEmail] = useState('');
@@ -77,6 +78,7 @@ const Profile = () => {
 
   return (
     <div className='flex flex-col md:flex-row'>
+      <Meta title='E-Shop | Profile' />
       <section className='md:w-1/5'>
         <h1>Profile</h1>
         {userProfileInfo.isLoading ? (

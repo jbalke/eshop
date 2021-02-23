@@ -5,6 +5,7 @@ import ApiService from '../api/ApiService.js';
 import Message from '../components/Message.js';
 import { useUserProfile } from '../hooks/userQueries';
 import tokenStorage from '../tokenStorage.js';
+import Meta from '../components/Meta';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -41,57 +42,60 @@ function Login() {
   };
 
   return (
-    <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
-      <h1 className=''>Sign In</h1>
-      <form onSubmit={submitHandler}>
-        <section className='form-email'>
-          <label>
-            Email Address
-            <input
-              type='email'
-              name='email'
-              placeholder='email address'
-              autoComplete='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className='w-full'
-              autoFocus
-              required
-            />
-          </label>
-        </section>
-        <section className='form-password'>
-          <label>
-            Password
-            <input
-              type='password'
-              name='password'
-              placeholder='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className='w-full'
-              required
-            />
-          </label>
-        </section>
-        <section>
-          <button type='submit' className='btn primary my-2'>
-            Sign In
-          </button>
-        </section>
-      </form>
-      <div className='my-3 text-center text-sm'>
-        New Customer?{' '}
-        <Link to={{ pathname: '/register', state: { from } }} className=''>
-          Register
-        </Link>
+    <>
+      <Meta title='E-Shop | Sign In' />
+      <div className='login-layout sm:w-full md:w-1/3 mx-auto'>
+        <h1 className=''>Sign In</h1>
+        <form onSubmit={submitHandler}>
+          <section className='form-email'>
+            <label>
+              Email Address
+              <input
+                type='email'
+                name='email'
+                placeholder='email address'
+                autoComplete='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className='w-full'
+                autoFocus
+                required
+              />
+            </label>
+          </section>
+          <section className='form-password'>
+            <label>
+              Password
+              <input
+                type='password'
+                name='password'
+                placeholder='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='w-full'
+                required
+              />
+            </label>
+          </section>
+          <section>
+            <button type='submit' className='btn primary my-2'>
+              Sign In
+            </button>
+          </section>
+        </form>
+        <div className='my-3 text-center text-sm'>
+          New Customer?{' '}
+          <Link to={{ pathname: '/register', state: { from } }} className=''>
+            Register
+          </Link>
+        </div>
+        {isError ? (
+          <Message type='danger'>{error.message}</Message>
+        ) : isSuccess ? (
+          <Message type='success'>{`Welcome back ${data.name}!`}</Message>
+        ) : null}
       </div>
-      {isError ? (
-        <Message type='danger'>{error.message}</Message>
-      ) : isSuccess ? (
-        <Message type='success'>{`Welcome back ${data.name}!`}</Message>
-      ) : null}
-    </div>
+    </>
   );
 }
 

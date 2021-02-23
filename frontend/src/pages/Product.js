@@ -10,6 +10,7 @@ import Rating from '../components/Rating';
 import { useUserProfile } from '../hooks/userQueries';
 import { getDate } from '../utils/dates';
 import { ScrollToTop } from '../utils/scroll';
+import Meta from '../components/Meta';
 
 function Product() {
   const { id } = useParams();
@@ -55,6 +56,7 @@ function Product() {
         <Message type='danger'>{error.message}</Message>
       ) : (
         <>
+          <Meta title={data.name} />
           <ProductDetail {...data} />
           <div className='flex flex-col md:flex-row mt-4'>
             <section className='w-full md:w-1/2'>

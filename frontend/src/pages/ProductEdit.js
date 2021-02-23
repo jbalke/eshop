@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 const ProductEdit = () => {
   const { id } = useParams();
@@ -93,6 +94,7 @@ const ProductEdit = () => {
 
   return (
     <div>
+      <Meta title='E-Shop | Edit Product' />
       <Link to={`/admin/product-list`} className='btn secondary'>
         &larr; Go Back
       </Link>

@@ -16,19 +16,19 @@ code {
 }
 
 h1 {
-  font-size: calc(1.5rem + 0.8vmin);
+  font-size: calc(1.3rem + 0.8vmin);
   margin: 0.5em 0;
-  @apply tracking-widest font-bold uppercase;
+  @apply tracking-widest font-bold uppercase leading-tight;
 }
 h2 {
-  font-size: calc(1.5rem + 0.3vmin);
+  font-size: calc(1.2rem + 0.5vmin);
   margin: 0.5em 0;
-  @apply tracking-widest font-bold uppercase;
+  @apply tracking-widest font-bold uppercase leading-tight;
 }
 h3 {
   font-size: calc(1.2rem + 0.3vmin);
   margin: 0.5em 0;
-  @apply tracking-widest font-bold uppercase;
+  @apply tracking-widest font-bold uppercase leading-tight;
 }
 
 p {

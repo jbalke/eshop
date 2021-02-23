@@ -9,6 +9,7 @@ import { useModal } from '../hooks/useModal';
 import { toast } from 'react-toastify';
 import Paginate from '../components/Paginate';
 import ItemLimit from '../components/ItemLimit';
+import Meta from '../components/Meta';
 
 const ProductList = () => {
   const [limit, setLimit] = useState(25);
@@ -116,6 +117,7 @@ const ProductList = () => {
 
   return (
     <div className='flex-grow flex flex-col justify-between'>
+      <Meta title='E-Shop | Product List' />
       <div>
         <Modal>
           <span>

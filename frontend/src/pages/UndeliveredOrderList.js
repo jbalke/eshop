@@ -6,6 +6,7 @@ import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { formatDataTime } from '../utils/dates';
+import Meta from '../components/Meta';
 
 const UndeliveredOrderList = () => {
   const { data, isLoading, isError, error } = useQuery(
@@ -15,6 +16,7 @@ const UndeliveredOrderList = () => {
 
   return (
     <div>
+      <Meta title='E-Shop | Undelivered Orders' />
       <h1>Undelivered Orders</h1>
       {isLoading ? (
         <Loader />

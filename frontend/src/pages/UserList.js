@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { FaCheckSquare, FaEdit, FaTrash } from 'react-icons/fa';
 import { useModal } from '../hooks/useModal';
 import { toast } from 'react-toastify';
+import Meta from '../components/Meta';
 
 const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -54,6 +55,7 @@ const UserList = () => {
         </span>
       </Modal>
       <div className=''>
+        <Meta title='E-Shop | User List' />
         <h1>Users</h1>
         {isLoading ? (
           <Loader />

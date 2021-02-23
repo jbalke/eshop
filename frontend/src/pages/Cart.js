@@ -8,6 +8,7 @@ import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useQueryString } from '../hooks/url';
+import Meta from '../components/Meta';
 
 const Cart = () => {
   const { id: productId } = useParams();
@@ -52,6 +53,7 @@ const Cart = () => {
         </Message>
       ) : (
         <>
+          <Meta title='E-Shop | Cart' />
           {isError && (
             <Message type='danger'>
               Unable to add item to your cart, please try again later.
