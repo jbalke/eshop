@@ -27,8 +27,6 @@ import UserProfile from './pages/UserProfile';
 import { useUIContext } from './ui-context';
 import { ToastContainer } from 'react-toastify';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -48,7 +46,7 @@ function App() {
         <div className='flex flex-col h-screen'>
           <Header />
           <main className='flex-grow flex flex-col' onClick={closeUserMenu}>
-            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow p-2'>
+            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-2 sm:px-4 flex flex-col'>
               <Switch>
                 <Route path='/' exact>
                   <Home limit={limit} setLimit={setLimit} />

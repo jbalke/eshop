@@ -11,7 +11,7 @@ const SearchBox = () => {
   const onClearHandler = () => {
     setKeyword('');
     if (location.search) {
-      history.push('/');
+      history.push(`${location.pathname}`);
     }
   };
 
@@ -22,12 +22,12 @@ const SearchBox = () => {
     if (search) {
       history.push(`${location.pathname}?keyword=${search}&page=1`);
     } else {
-      history.push('/');
+      history.push(`${location.pathname}`);
     }
   };
 
   return (
-    <form onSubmit={submitHandler} className='hidden md:inline-flex'>
+    <form onSubmit={submitHandler} className='hidden sm:inline-flex'>
       <div className='flex items-center bg-gray-100 px-2 mr-1 md:mr-2'>
         <input
           type='text'

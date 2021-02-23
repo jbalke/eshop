@@ -34,13 +34,7 @@ function Product() {
 
   const { isError, error, data, isLoading } = useQuery(
     ['product', id],
-    ApiService.products.getProduct(id),
-    {
-      // initialData: () =>
-      //   queryClient
-      //     .getQueryData('products')
-      //     ?.find((product) => product._id === id),
-    }
+    ApiService.products.getProduct(id)
   );
 
   const submitHandler = (e) => {
@@ -50,7 +44,7 @@ function Product() {
   };
 
   return (
-    <>
+    <div>
       <ScrollToTop />
       <button onClick={() => history.goBack()} className='btn secondary mb-2'>
         Go Back
@@ -111,9 +105,10 @@ function Product() {
                     <label>
                       Comment
                       <textarea
-                        row='3'
+                        row='4'
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
+                        className='w-full'
                       />
                     </label>
                   </section>
@@ -139,7 +134,7 @@ function Product() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

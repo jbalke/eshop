@@ -24,11 +24,8 @@ export const getProducts = asyncHandler(async (req, res) => {
     limit: parseInt(limit),
   }).populate('reviews.user', 'name');
 
-  const nextCursor =
-    products.length > limit ? products[products.length - 2]._id : '';
-
   res.json({
-    products: products.slice(0, limit),
+    products,
     pages: Math.ceil(matchedProducts / limit),
     totalProducts,
     matchedProducts,
@@ -180,4 +177,17 @@ export const createProductReview = asyncHandler(async (req, res) => {
   await product.save();
 
   res.status(201).json({ message: 'Review added' });
+});
+
+// @desc     Fetch top rated products
+// @route    GET /api/products/top
+// @access   Public
+export const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}, null, {
+    lean: true,
+    limit: 5,
+    sort: { rating: -1 },
+  });
+
+  res.json(products);
 });
