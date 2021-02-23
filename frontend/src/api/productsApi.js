@@ -29,6 +29,19 @@ export const getProduct = (id) => async () => {
   }
 };
 
+export const getTopProducts = async () => {
+  try {
+    const { data } = await axios.get(`/api/products/top`);
+    return data;
+  } catch (error) {
+    if (error?.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};
+
 export const reviewProduct = (id) => async ({ rating, comment }) => {
   const config = {
     headers: {

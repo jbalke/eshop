@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { useLocation } from 'react-router-dom';
+import useResizeObserver from 'use-resize-observer';
 import ApiService from '../api/ApiService';
 import ItemLimit from '../components/ItemLimit';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
+import ProductCarousel from '../components/ProductCarousel';
 
 const Home = ({ limit, setLimit }) => {
   const location = useLocation();
-
   const queryString = new URLSearchParams(location.search);
 
   const queryPage = Number(queryString.get('page')) || 1;
@@ -66,8 +67,11 @@ const Home = ({ limit, setLimit }) => {
     }
   }, [data, queryClient, queryKeyword, pageNumber, queryLimit]);
 
+  const { width: bodyWidth } = useResizeObserver({ ref: document.body });
+
   return (
     <>
+      {!keyword && bodyWidth > 600 && <ProductCarousel />}
       <h1>Latest Products {isFetching && <span>...</span>}</h1>
       {isIdle ? null : isLoading ? (
         <Loader />

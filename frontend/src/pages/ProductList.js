@@ -38,6 +38,18 @@ const ProductList = () => {
 
   const history = useHistory();
 
+  const createProductInfo = useMutation(ApiService.admin.createProduct, {
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        ['products', { keyword, page, limit }],
+        (oldData) => ({ ...oldData, products: [...oldData.products, data] })
+      );
+    },
+    onError: (error) => {
+      toast.error(error.message, { autoClose: 5000 });
+    },
+  });
+
   const {
     isLoading,
     data,
@@ -53,7 +65,7 @@ const ProductList = () => {
       keepPreviousData: true,
       staleTime: 0,
       onSuccess: (data) => {
-        data.products.forEach((product) =>
+        data.products?.forEach((product) =>
           queryClient.setQueryData(['product', product._id], () => product)
         );
       },
@@ -63,18 +75,15 @@ const ProductList = () => {
   const deleteProductInfo = useMutation(ApiService.admin.deleteProduct, {
     onSuccess: (data) => {
       toast.success(`${selectedProduct.name} deleted`);
-      queryClient.setQueryData('products', (oldData) =>
-        oldData.filter((product) => product._id !== data._id)
+      queryClient.setQueryData(
+        ['products', { keyword, page, limit }],
+        (oldData) => ({
+          ...oldData,
+          products: oldData.products.filter(
+            (product) => product._id !== data._id
+          ),
+        })
       );
-    },
-    onError: (error) => {
-      toast.error(error.message, { autoClose: 5000 });
-    },
-  });
-
-  const createProductInfo = useMutation(ApiService.admin.createProduct, {
-    onSuccess: (data) => {
-      queryClient.setQueryData('products', (oldData) => [...oldData, data]);
     },
     onError: (error) => {
       toast.error(error.message, { autoClose: 5000 });
@@ -117,19 +126,19 @@ const ProductList = () => {
         <div>
           <div className='flex justify-between items-center'>
             <h1>Products {isFetching && <span>...</span>}</h1>
-            <Link
+            <button
               className='btn primary'
               onClick={() => createProductInfo.mutate()}
             >
               New Product
-            </Link>
+            </button>
           </div>
           <ItemLimit limit={limit} step={25} />
           {isLoading ? (
             <Loader />
           ) : isError ? (
             <Message type='danger'>{error.message}</Message>
-          ) : data.products.length ? (
+          ) : data.products?.length ? (
             <table className='product-list'>
               <thead>
                 <tr>

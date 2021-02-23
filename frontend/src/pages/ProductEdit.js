@@ -92,7 +92,7 @@ const ProductEdit = () => {
   };
 
   return (
-    <>
+    <div>
       <Link to={`/admin/product-list`} className='btn secondary'>
         &larr; Go Back
       </Link>
@@ -205,7 +205,7 @@ const ProductEdit = () => {
           </form>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

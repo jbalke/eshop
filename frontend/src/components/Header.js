@@ -55,15 +55,12 @@ const Header = () => {
                 <Link to='/admin/user-list'>Users</Link>
               </li>
               <li className='admin-menu-item'>
-                <Link to='/admin/order-list'>All Orders</Link>
+                <Link to='/admin/product-list'>Products</Link>
               </li>
               <li className='admin-menu-item'>
                 <Link to='/admin/undelivered-order-list'>
                   Undelivered Orders
                 </Link>
-              </li>
-              <li className='admin-menu-item'>
-                <Link to='/admin/product-list'>Products</Link>
               </li>
             </>
           )}
@@ -77,7 +74,7 @@ const Header = () => {
 
   return (
     <header className='bg-gray-700 text-white' onClick={handleUserMenu}>
-      <div className='max-w-screen-lg mx-auto flex justify-between items-center px-2 my-6'>
+      <div className='max-w-screen-lg mx-auto flex justify-between items-center px-3 my-6'>
         <Link to='/' className='uppercase text-xl font-bold tracking-wide'>
           E-Shop
         </Link>

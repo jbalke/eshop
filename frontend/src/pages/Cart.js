@@ -118,6 +118,9 @@ const Cart = () => {
               >
                 Proceed to Checkout
               </button>
+              <Link to={'/'} className='btn secondary'>
+                continue shopping
+              </Link>
             </div>
           </div>
         </>
