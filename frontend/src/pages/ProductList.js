@@ -155,9 +155,7 @@ const ProductList = () => {
                 {data.products.map((product) => (
                   <tr key={product._id}>
                     <td>
-                      <Link to={`/admin/product/${product._id}`}>
-                        {product._id}
-                      </Link>
+                      <Link to={`/product/${product._id}`}>{product._id}</Link>
                     </td>
                     <td>{product.name}</td>
                     <td>${product.price.toFixed(2)}</td>

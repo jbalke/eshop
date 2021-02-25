@@ -1,6 +1,7 @@
 import axios from './customAxios.js';
 
 export const getProducts = async ({ queryKey }) => {
+  // eslint-disable-next-line
   const [_key, { keyword = '', page = 1, limit = '12' }] = queryKey;
   try {
     const { data } = await axios.get(`/api/products`, {

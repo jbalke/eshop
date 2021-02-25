@@ -113,6 +113,7 @@ const ProductEdit = () => {
                   type='text'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className='w-full'
                   required
                 />
               </label>
@@ -124,6 +125,7 @@ const ProductEdit = () => {
                   type='text'
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
+                  className='w-full'
                   required
                 />
               </label>
@@ -135,6 +137,7 @@ const ProductEdit = () => {
                   rows='5'
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  className='w-full'
                   required
                 />
               </label>
@@ -146,6 +149,7 @@ const ProductEdit = () => {
                   type='text'
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
+                  className='w-full'
                   required
                 />
               </label>
@@ -159,6 +163,7 @@ const ProductEdit = () => {
                   min='0'
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value))}
+                  className='w-full'
                   required
                 />
               </label>
@@ -171,6 +176,7 @@ const ProductEdit = () => {
                   min='0'
                   value={countInStock}
                   onChange={(e) => setCountInStock(Number(e.target.value))}
+                  className='w-full'
                   required
                 />
               </label>
@@ -182,6 +188,7 @@ const ProductEdit = () => {
                   type='text'
                   value={image}
                   onChange={(e) => setImage(e.target.value)}
+                  className='w-full'
                 />
                 <input
                   type='file'

@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import connectDatabase from './config/db.js';
 import helmet from 'helmet';
 import colors from 'colors';
+import crypto from 'crypto';
+import fs from 'fs';
 import productsRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
@@ -18,9 +20,34 @@ dotenv.config();
 connectDatabase();
 const app = express();
 
-app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString('hex');
+  next();
+});
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          'https://www.paypal.com',
+          'https://www.sandbox.paypal.com',
+        ],
+        scriptSrc: ["'self'", 'https://www.paypal.com'],
+        styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        imgSrc: ["'self'", 'data:'],
+        frameSrc: 'https://www.sandbox.paypal.com',
+        baseUri: ["'self'"],
+      },
+    },
+  })
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -43,6 +70,15 @@ const __dirname = (() => {
   let x = path.dirname(decodeURI(new URL(import.meta.url).pathname));
   return path.resolve(process.platform == 'win32' ? x.substr(1) : x);
 })();
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) => {
+    const indexFile = path.resolve(__dirname, '../frontend/build/index.html');
+    res.sendFile(indexFile);
+  });
+}
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
