@@ -23,57 +23,61 @@ const UndeliveredOrderList = () => {
       ) : isError ? (
         <Message type='danger'>{error.message}</Message>
       ) : data.length ? (
-        <table className='order-list text-sm w-full'>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>DATE</th>
-              <th>CUSTOMER</th>
-              <th>PRICE</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((order) => (
-              <tr key={order._id}>
-                <td>
-                  <Link to={`/order/${order._id}`}>{order._id}</Link>
-                </td>
-                <td>{formatDataTime(order.createdAt)}</td>
-                <td>
-                  {order.user?.name && (
-                    <a href={`mailto:${order.user.email}`}>{order.user.name}</a>
-                  )}
-                </td>
-                <td>${order.totalPrice.toFixed(2)}</td>
-                <td>
-                  {order.isPaid ? (
-                    formatDataTime(order.paidAt)
-                  ) : (
-                    <FaTimes fill='red' />
-                  )}
-                </td>
-                <td>
-                  {order.isDelivered ? (
-                    formatDataTime(order.deliveredAt)
-                  ) : (
-                    <FaTimes fill='red' />
-                  )}
-                </td>
-                <td>
-                  <Link
-                    to={`/order/${order._id}`}
-                    className='btn secondary small'
-                    title=''
-                  >
-                    Details
-                  </Link>
-                </td>
+        <div className='overflow-x-scroll md:overflow-x-auto'>
+          <table className='order-list text-sm w-full'>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>CUSTOMER</th>
+                <th>PRICE</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data?.map((order) => (
+                <tr key={order._id}>
+                  <td>
+                    <Link to={`/order/${order._id}`}>{order._id}</Link>
+                  </td>
+                  <td>{formatDataTime(order.createdAt)}</td>
+                  <td>
+                    {order.user?.name && (
+                      <a href={`mailto:${order.user.email}`}>
+                        {order.user.name}
+                      </a>
+                    )}
+                  </td>
+                  <td>${order.totalPrice.toFixed(2)}</td>
+                  <td>
+                    {order.isPaid ? (
+                      formatDataTime(order.paidAt)
+                    ) : (
+                      <FaTimes fill='red' />
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      formatDataTime(order.deliveredAt)
+                    ) : (
+                      <FaTimes fill='red' />
+                    )}
+                  </td>
+                  <td>
+                    <Link
+                      to={`/order/${order._id}`}
+                      className='btn secondary small'
+                      title=''
+                    >
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <Message type='info'>All orders delivered, yay!</Message>
       )}

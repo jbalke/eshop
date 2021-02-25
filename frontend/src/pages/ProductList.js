@@ -141,50 +141,54 @@ const ProductList = () => {
           ) : isError ? (
             <Message type='danger'>{error.message}</Message>
           ) : data.products?.length ? (
-            <table className='product-list'>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>NAME</th>
-                  <th>PRICE</th>
-                  <th>CATEGORY</th>
-                  <th>BRAND</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.products.map((product) => (
-                  <tr key={product._id}>
-                    <td>
-                      <Link to={`/product/${product._id}`}>{product._id}</Link>
-                    </td>
-                    <td>{product.name}</td>
-                    <td>${product.price.toFixed(2)}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
-                    <td className='flex items-center justify-around'>
-                      <Link
-                        to={`/admin/product/${product._id}/edit`}
-                        className='btn primary'
-                        title='Edit'
-                      >
-                        <FaEdit fill='white' />
-                      </Link>
-                      <button
-                        type='button'
-                        className='btn primary'
-                        title='Delete'
-                        onClick={() => {
-                          setSelectedProduct(product);
-                          setShowModal(true);
-                        }}
-                      >
-                        <FaTrash fill='white' />
-                      </button>
-                    </td>
+            <div className='overflow-x-scroll md:overflow-x-auto'>
+              <table className='product-list'>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>PRICE</th>
+                    <th>CATEGORY</th>
+                    <th>BRAND</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.products.map((product) => (
+                    <tr key={product._id}>
+                      <td>
+                        <Link to={`/product/${product._id}`}>
+                          {product._id}
+                        </Link>
+                      </td>
+                      <td>{product.name}</td>
+                      <td>${product.price.toFixed(2)}</td>
+                      <td>{product.category}</td>
+                      <td>{product.brand}</td>
+                      <td className='flex items-center justify-around'>
+                        <Link
+                          to={`/admin/product/${product._id}/edit`}
+                          className='btn primary'
+                          title='Edit'
+                        >
+                          <FaEdit fill='white' />
+                        </Link>
+                        <button
+                          type='button'
+                          className='btn primary'
+                          title='Delete'
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            setShowModal(true);
+                          }}
+                        >
+                          <FaTrash fill='white' />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <Message>No products found</Message>
           )}

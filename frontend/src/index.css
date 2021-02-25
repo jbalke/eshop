@@ -126,7 +126,7 @@ table td {
 }
 
 .btn {
-  @apply text-xs px-4 py-3 inline-block transition-colors font-semibold tracking-widest uppercase;
+  @apply text-xs px-4 py-3 inline-block transition-colors font-semibold tracking-widest uppercase text-center;
 }
 
 .btn.primary {
