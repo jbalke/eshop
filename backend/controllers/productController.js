@@ -191,3 +191,48 @@ export const getTopProducts = asyncHandler(async (req, res) => {
 
   res.json(products);
 });
+
+// @desc     Fetch product and order qty
+// @route    GET /api/products/stocklevel
+// @access   Public
+export const getStockLevels = asyncHandler(async (req, res) => {
+  const products = await Product.find({}, null, {
+    lean: true,
+  });
+
+  const orders = await Order.find({ isDelivered: false }, null, { lean: true });
+
+  const orderedItems = orders.flatMap((order) =>
+    order.orderItems.map((item) => ({ ...item, orderDate: order.createdAt }))
+  );
+
+  const stockLevels = products
+    .map((product) => {
+      return {
+        id: product._id,
+        name: product.name,
+        brand: product.brand,
+        category: product.category,
+        qtyToSell: product.countInStock,
+
+        ...(orderedItems
+          ?.filter((item) => item.product.toString() === product._id.toString())
+          .reduce(
+            (acc, item) => {
+              acc.qtyToDeliver += item.qty;
+              return acc;
+            },
+            {
+              qtyToDeliver: 0,
+            }
+          ) ?? {
+          qtyToDeliver: 0,
+        }),
+      };
+    })
+    .sort((a, b) => {
+      return a.qtyToSell - b.qtyToSell;
+    });
+
+  res.json(stockLevels);
+});

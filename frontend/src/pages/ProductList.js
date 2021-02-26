@@ -147,9 +147,9 @@ const ProductList = () => {
                   <tr>
                     <th>ID</th>
                     <th>NAME</th>
-                    <th>PRICE</th>
-                    <th>CATEGORY</th>
                     <th>BRAND</th>
+                    <th>CATEGORY</th>
+                    <th>PRICE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,9 +161,9 @@ const ProductList = () => {
                         </Link>
                       </td>
                       <td>{product.name}</td>
-                      <td>${product.price.toFixed(2)}</td>
-                      <td>{product.category}</td>
                       <td>{product.brand}</td>
+                      <td>{product.category}</td>
+                      <td>${product.price.toFixed(2)}</td>
                       <td className='flex items-center justify-around'>
                         <Link
                           to={`/admin/product/${product._id}/edit`}

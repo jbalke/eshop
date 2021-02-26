@@ -198,3 +198,17 @@ export const upDateOrderToDelivered = async ({ id, deliverDate }) => {
     throw new Error(error);
   }
 };
+
+export const getStockLevels = async () => {
+  try {
+    const { data } = await axios.get(`/api/products/stock`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};

@@ -22,6 +22,7 @@ import UserList from './pages/UserList';
 import ProductList from './pages/ProductList';
 import ProductEdit from './pages/ProductEdit';
 import OrderList from './pages/OrderList';
+import StockList from './pages/StockList';
 import UndeliveredOrderList from './pages/UndeliveredOrderList';
 import UserProfile from './pages/UserProfile';
 import { useUIContext } from './ui-context';
@@ -92,6 +93,9 @@ function App() {
                 </AdminRoute>
                 <AdminRoute path='/admin/product-list'>
                   <ProductList />
+                </AdminRoute>
+                <AdminRoute path='/admin/stock-list'>
+                  <StockList />
                 </AdminRoute>
                 <AdminRoute path='/admin/product/:id/edit'>
                   <ProductEdit />

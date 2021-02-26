@@ -95,9 +95,9 @@ const ProductEdit = () => {
   return (
     <div>
       <Meta title='E-Shop | Edit Product' />
-      <Link to={`/admin/product-list`} className='btn secondary'>
+      <button className='btn secondary' onClick={() => history.goBack()}>
         &larr; Go Back
-      </Link>
+      </button>
       <div className='w-screen md:max-w-md md:mx-auto'>
         <h1>Update Product</h1>
         {isLoading ? (

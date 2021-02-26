@@ -14,6 +14,12 @@ GET {{URL}}/api/products/60102dd894ab0d3118f5a1b0
 GET {{URL}}/api/products/1
 
 ###
+// Get stock levels
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/products/stock
+Authorization: Bearer {{authToken}}
+
+###
 
 // User Login
 # @name login
@@ -21,8 +27,8 @@ POST {{URL}}/api/users/login
 Content-Type: application/json
 
 {
-  "email": "john.doe@example.com",
-  "password": "123456"
+  "email": "admin@example.com",
+  "password": "sParhawk72"
 }
 
 ###

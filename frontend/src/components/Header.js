@@ -58,6 +58,9 @@ const Header = () => {
                 <Link to='/admin/product-list'>Products</Link>
               </li>
               <li className='admin-menu-item'>
+                <Link to='/admin/stock-list'>Stock</Link>
+              </li>
+              <li className='admin-menu-item'>
                 <Link to='/admin/undelivered-order-list'>
                   Undelivered Orders
                 </Link>
