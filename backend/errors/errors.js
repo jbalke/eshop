@@ -2,33 +2,33 @@ import mongoose from 'mongoose';
 
 function FriendlyError(message, stack) {
   this.message = message;
-  this.stack = stack ?? new Error().stack;
+  this.stack = stack ?? new Error(message).stack;
 }
+FriendlyError.prototype = Object.create(Error.prototype);
 FriendlyError.prototype.name = 'FriendlyError';
-FriendlyError.prototype = new Error();
 
 function InputError(message, stack) {
   this.message = message;
-  this.stack = stack ?? new Error().stack;
+  this.stack = stack ?? new Error(message).stack;
 }
+InputError.prototype = Object.create(FriendlyError.prototype);
 InputError.prototype.name = 'InputError';
-InputError.prototype = new Error();
 
 function ValidationError(message, stack) {
   this.message = message;
-  this.stack = stack ?? new Error().stack;
+  this.stack = stack ?? new Error(message).stack;
 }
+ValidationError.prototype = Object.create(FriendlyError.prototype);
 ValidationError.prototype.name = 'ValidationError';
-ValidationError.prototype = new Error();
 
 function DataConstraintError(message, stack) {
   this.message = message;
-  this.stack = stack ?? new Error().stack;
+  this.stack = stack ?? new Error(message).stack;
 }
+DataConstraintError.prototype = Object.create(FriendlyError.prototype);
 DataConstraintError.prototype.name = 'DataConstraintError';
-DataConstraintError.prototype = new Error();
 
-function convertToFriendlyError(error) {
+function sanitizeError(error) {
   if (error instanceof FriendlyError) return error;
 
   if (error.message.startsWith('E11000')) {
@@ -77,5 +77,5 @@ export {
   InputError,
   ValidationError,
   DataConstraintError,
-  convertToFriendlyError,
+  sanitizeError,
 };

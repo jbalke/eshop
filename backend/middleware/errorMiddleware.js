@@ -1,4 +1,8 @@
-import { convertToFriendlyError } from '../errors/errors.js';
+import {
+  sanitizeError,
+  DataConstraintError,
+  ValidationError,
+} from '../errors/errors.js';
 
 export const notFound = (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
@@ -11,13 +15,18 @@ export const errorHandler = (err, req, res, next) => {
     return next(err);
   }
 
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode);
+  const sanitizedError = sanitizeError(err);
 
-  const friendlyError = convertToFriendlyError(err);
+  const statusCode =
+    sanitizedError instanceof DataConstraintError ||
+    sanitizedError instanceof ValidationError
+      ? 400
+      : res.statusCode === 200
+      ? 500
+      : res.statusCode;
 
-  res.json({
-    message: friendlyError.message,
-    stack: process.env.NODE_ENV === 'production' ? null : friendlyError.stack,
+  res.status(statusCode).json({
+    message: sanitizedError.message,
+    stack: process.env.NODE_ENV === 'production' ? null : sanitizedError.stack,
   });
 };
