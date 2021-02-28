@@ -27,15 +27,14 @@ const calcOrderPrices = (items) => {
 const buildOrder = async (clientOrder) => {
   const orderedItems = [];
 
-  for (let i = 0; i < clientOrder.length; i++) {
-    const clientItem = clientOrder[i];
-    const item = await Product.findById(clientItem.product);
+  for (const orderItem of clientOrder) {
+    const item = await Product.findById(orderItem.product).lean();
 
     if (!item) {
       throw new FriendlyError('Unable to fulfill your order');
     }
 
-    item.qty = clientItem.qty;
+    item.qty = orderItem.qty;
     orderedItems.push(item);
   }
 
