@@ -29,7 +29,7 @@ export const authUser = asyncHandler(async (req, res) => {
       token: createAccessToken(user),
     });
   } else {
-    res.status(401);
+    res.status(400);
     throw new FriendlyError('Invalid email and/or password');
   }
 });

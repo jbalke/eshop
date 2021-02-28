@@ -42,9 +42,7 @@ customAxios.interceptors.response.use(
 // Check error reponses for access token related failures
 function isTokenError(error) {
   return (
-    ((error.response.status === 401 &&
-      error.response.data.message.includes('token')) ||
-      error.response.status === 400) &&
+    error.response.status === 401 &&
     !error.config.url.endsWith('/auth/token/refresh') &&
     !error.config._retry
   );

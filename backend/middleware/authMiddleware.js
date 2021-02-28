@@ -5,12 +5,12 @@ import asyncHandler from 'express-async-handler';
 export const requireAuth = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
-    res.status(400);
+    res.status(401);
     throw new Error('missing authorization header');
   }
 
   if (!authHeader.startsWith('Bearer')) {
-    res.status(400);
+    res.status(401);
     throw new Error('missing Bearer token');
   }
 
