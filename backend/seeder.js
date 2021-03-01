@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import colors from 'colors';
 import users from './data/users.js';
@@ -17,17 +16,16 @@ const importData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
 
-    const createdUsers = await User.insertMany(users);
-    const adminUser = createdUsers.find((user) => user.isAdmin);
+    const usersData = await users();
+    const createdUsers = await User.insertMany(usersData);
+    const adminUser = await createdUsers.find((user) => user.isAdmin);
 
     const newProducts = products.map((p) => ({ ...p, user: adminUser }));
     await Product.insertMany(newProducts);
 
     console.log(`Data Imported!`.green);
-    process.exit();
   } catch (error) {
     console.error(`Error: ${error.message}`.red.inverse);
-    process.exit(1);
   }
 };
 
@@ -38,10 +36,8 @@ const purgeData = async () => {
     await User.deleteMany();
 
     console.log(`Data Purged!`.red);
-    process.exit();
   } catch (error) {
     console.error(`Error: ${error.message}`.red.inverse);
-    process.exit(1);
   }
 };
 

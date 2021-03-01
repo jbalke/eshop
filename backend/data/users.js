@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 
-const users = [
+const users = async () => [
   {
     name: 'Admin User',
     email: 'admin@example.com',
