@@ -15,7 +15,8 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [message, setMessage] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -49,15 +50,20 @@ const Profile = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
+    if (!password) {
+      setMessage('Must enter current password');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setMessage('New passwords do not match');
       return;
     }
 
     setMessage(null);
 
     try {
-      await mutateAsync({ name, email, password });
+      await mutateAsync({ name, email, password, newPassword });
       setIsEditing(false);
     } catch (error) {}
   };
@@ -66,7 +72,8 @@ const Profile = () => {
     e.preventDefault();
 
     setPassword('');
-    setConfirmPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
     setIsEditing(true);
   };
 
@@ -119,12 +126,12 @@ const Profile = () => {
             </section>
             <section className='form-password'>
               <label>
-                Password
+                Current Password
                 <input
                   className='w-full'
                   type='password'
-                  name='password'
-                  placeholder='password'
+                  name='currentPassword'
+                  placeholder='current password'
                   value={password}
                   minLength='6'
                   onChange={(e) => setPassword(e.target.value)}
@@ -133,19 +140,36 @@ const Profile = () => {
               </label>
             </section>
             {isEditing && (
-              <section className='form-password'>
-                <label>
-                  Confirm Password
-                  <input
-                    className='w-full'
-                    type='password'
-                    name='confirm-password'
-                    placeholder='confirm password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </label>
-              </section>
+              <>
+                <section className='form-password'>
+                  <label>
+                    New Password
+                    <input
+                      className='w-full'
+                      type='password'
+                      name='newPassword'
+                      placeholder='new password'
+                      value={newPassword}
+                      minLength='6'
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </label>
+                </section>
+                <section className='form-password'>
+                  <label>
+                    Confirm New Password
+                    <input
+                      className='w-full'
+                      type='password'
+                      name='confirmPassword'
+                      placeholder='confirm new password'
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    />
+                  </label>
+                </section>
+              </>
             )}
             {isEditing ? (
               <section>

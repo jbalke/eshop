@@ -62,7 +62,12 @@ export const getUserProfile = async () => {
   }
 };
 
-export const updateUserProfile = async ({ name, email, password }) => {
+export const updateUserProfile = async ({
+  name,
+  email,
+  password,
+  newPassword,
+}) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -71,7 +76,7 @@ export const updateUserProfile = async ({ name, email, password }) => {
   try {
     const { data } = await axios.patch(
       '/api/users/profile',
-      { name, email, password },
+      { name, email, password, newPassword },
       config
     );
 

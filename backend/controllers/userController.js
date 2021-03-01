@@ -72,14 +72,19 @@ export const getUserById = asyncHandler(async (req, res) => {
 // @route    PATCH /api/users/profile
 // @access   Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, newPassword } = req.body;
 
   const user = await User.findById(req.user._id);
+  if (!(await user.matchPassword(password))) {
+    res.status(400);
+    throw new FriendlyError('Incorrect password');
+  }
+
   if (user) {
     user.name = name || user.name;
     user.email = email || user.email;
-    if (password) {
-      user.password = password;
+    if (newPassword) {
+      user.password = newPassword;
       // Increment token version to invalidate existing tokens
       user.tokenVersion += 1;
     }
