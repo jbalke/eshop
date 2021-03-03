@@ -7,12 +7,40 @@ import {
   clearRefreshCookie,
 } from '../utils/tokens.js';
 import { FriendlyError } from '../errors/errors.js';
+import axios from 'axios';
+
+const validateHuman = async (token) => {
+  const { data } = await axios.post(
+    'https://www.google.com/recaptcha/api/siteverify',
+    null,
+    {
+      params: {
+        secret: process.env.RECAPTCHA_KEY,
+        response: token,
+      },
+    }
+  );
+  return data.success;
+};
+
+const stringToBinary = (message) => {
+  let result = '';
+  for (let index = 0; index < message.length; index++) {
+    result += message[index].charCodeAt(0).toString(2) + ' ';
+  }
+  return result;
+};
 
 // @desc     Auth user & get token
 // @route    POST /api/users/login
 // @access   Public
 export const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, token } = req.body;
+
+  if (!(await validateHuman(token))) {
+    res.status(400);
+    throw new FriendlyError(stringToBinary('Nice try, bot.'));
+  }
 
   const user = await User.findOne({ email });
 
@@ -146,7 +174,12 @@ export const updateUser = asyncHandler(async (req, res) => {
 // @route    POST /api/users
 // @access   Public
 export const newUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, token } = req.body;
+
+  if (!(await validateHuman(token))) {
+    res.status(400);
+    throw new FriendlyError('reCaptcha failed, please try again.');
+  }
 
   const user = await User.create({ name, email, password });
   if (user) {

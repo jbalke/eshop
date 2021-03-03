@@ -117,14 +117,12 @@ function App() {
         <div id='modal'></div>
       </Router>
       <ToastContainer
-        position='top-right'
+        position='bottom-right'
         autoClose={3000}
-        hideProgressBar
         newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        draggable
         pauseOnHover
       />
       {process.env.NODE_ENV !== 'production' && (

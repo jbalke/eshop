@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { formatDataTime } from '../utils/dates';
 import Meta from '../components/Meta';
+import { formatDataTime } from '../utils/dates';
 
 const OrderList = () => {
-  const [filterUndelivered, setFilterUndelivered] = useState(false);
   const [orders, setOrders] = useState([]);
+
+  const { register, watch } = useForm({
+    defaultValues: { showUndeliveredOnly: false },
+  });
+  const watchShowUndeliveredOnly = watch('showUndeliveredOnly');
 
   const { data, isSuccess, isLoading, isError, error } = useQuery(
     'orders',
@@ -18,13 +23,13 @@ const OrderList = () => {
   );
 
   useEffect(() => {
-    if (isSuccess && filterUndelivered) {
+    if (isSuccess && watchShowUndeliveredOnly) {
       const filteredOrders = data.filter((order) => !order.isDelivered);
       setOrders(filteredOrders);
     } else {
       setOrders(data);
     }
-  }, [isSuccess, data, filterUndelivered]);
+  }, [isSuccess, data, watchShowUndeliveredOnly]);
 
   return (
     <div>
@@ -38,9 +43,8 @@ const OrderList = () => {
           <input
             type='checkbox'
             id='undelivered'
-            checked={filterUndelivered}
-            onChange={() => setFilterUndelivered(!filterUndelivered)}
             className='inline ml-2'
+            ref={register}
           />
         </form>
       </div>

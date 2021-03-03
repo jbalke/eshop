@@ -1,6 +1,6 @@
 import axios from './customAxios.js';
 
-export const loginUser = async ({ email, password }) => {
+export const loginUser = async ({ email, password, token }) => {
   try {
     const config = {
       headers: {
@@ -10,7 +10,7 @@ export const loginUser = async ({ email, password }) => {
 
     const { data } = await axios.post(
       '/api/users/login',
-      { email, password },
+      { email, password, token },
       config
     );
 
@@ -24,7 +24,7 @@ export const loginUser = async ({ email, password }) => {
   }
 };
 
-export const registerUser = async ({ name, email, password }) => {
+export const registerUser = async ({ name, email, password, token }) => {
   try {
     const config = {
       headers: {
@@ -34,7 +34,7 @@ export const registerUser = async ({ name, email, password }) => {
 
     const { data } = await axios.post(
       '/api/users',
-      { name, email, password },
+      { name, email, password, token },
       config
     );
 

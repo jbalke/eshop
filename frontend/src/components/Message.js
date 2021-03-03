@@ -18,7 +18,10 @@ const Message = ({ type = 'info', children }) => {
       break;
   }
   return (
-    <div className={`${classes} tracking-wider p-4 my-4 font-semibold`}>
+    <div
+      className={`${classes} tracking-wider p-4 my-4 font-semibold`}
+      role='alert'
+    >
       {children}
     </div>
   );

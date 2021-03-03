@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { savePaymentMethod } from '../actions/cartActions';
@@ -14,15 +15,14 @@ const Payment = () => {
     history.push('/shipping');
   }
 
-  const [paymentMethod, setPaymentMethod] = useState(
-    defaultPaymentMethod || 'PayPal'
-  );
+  const { register, handleSubmit } = useForm({
+    defaultValues: { paymentMethod: defaultPaymentMethod || 'PayPal' },
+  });
 
   const dispatch = useDispatch();
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(savePaymentMethod(paymentMethod));
+  const onSubmit = (data) => {
+    dispatch(savePaymentMethod(data.paymentMethod));
     history.push('/placeorder');
   };
 
@@ -30,17 +30,17 @@ const Payment = () => {
     <div className='sm:w-full md:max-w-md mx-auto'>
       <CheckoutSteps step1 step2 step3 />
       <h1>Payment Method</h1>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className='text-xl text-gray-600 font-semibold capitalize'>
           Select Method
         </h2>
         <section className='form-payment'>
           <input
+            name='paymentMethod'
             type='radio'
             id='PayPal'
             value='PayPal'
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            checked={paymentMethod === 'PayPal'}
+            ref={register}
           />
           <label htmlFor='Paypal'>PayPal or Credit Card</label>
         </section>

@@ -132,6 +132,7 @@ const Profile = () => {
                   type='password'
                   name='currentPassword'
                   placeholder='current password'
+                  autoComplete='current-password'
                   value={password}
                   minLength='6'
                   onChange={(e) => setPassword(e.target.value)}
@@ -149,6 +150,7 @@ const Profile = () => {
                       type='password'
                       name='newPassword'
                       placeholder='new password'
+                      autoComplete='new-password'
                       value={newPassword}
                       minLength='6'
                       onChange={(e) => setNewPassword(e.target.value)}
@@ -164,6 +166,7 @@ const Profile = () => {
                       type='password'
                       name='confirmPassword'
                       placeholder='confirm new password'
+                      autoComplete='new-password'
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
                     />

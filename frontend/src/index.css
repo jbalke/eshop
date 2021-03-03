@@ -75,6 +75,10 @@ form > section + section {
   margin-top: 1rem;
 }
 
+.inputError {
+  @apply text-red-700 text-sm mt-2 flex items-center;
+}
+
 table {
   @apply table-auto divide-y text-left w-full;
 }
@@ -112,17 +116,6 @@ table td {
 .sub-menu a {
   padding: 0.5em 1em;
   @apply hover:bg-gray-200;
-}
-
-.sr-only {
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
 }
 
 .btn {
@@ -349,4 +342,8 @@ table td {
 .slick-arrow.slick-next {
   transform: translateX(-40px);
   z-index: 5;
+}
+
+.subtext {
+  @apply text-xs text-gray-500 tracking-wide italic;
 }
