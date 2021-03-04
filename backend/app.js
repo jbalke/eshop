@@ -41,7 +41,7 @@ app.use(
         styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:'],
-        frameSrc: 'https://www.sandbox.paypal.com',
+        frameSrc: ['https://www.sandbox.paypal.com', 'https://www.google.com'],
         baseUri: ["'self'"],
       },
     },
