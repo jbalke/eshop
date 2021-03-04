@@ -36,6 +36,7 @@ app.use(
           "'self'",
           'https://www.paypal.com',
           'https://www.google.com',
+          'https://www.gstatic.com',
         ],
         styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
