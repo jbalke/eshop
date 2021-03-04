@@ -24,7 +24,7 @@ function Login() {
     errors,
     formState: { isValid },
   } = useForm({
-    mode: 'onTouched',
+    mode: 'onSubmit',
     defaultValues: {
       email: '',
       password: '',
@@ -101,11 +101,7 @@ function Login() {
             )}
           </section>
           <section>
-            <button
-              type='submit'
-              className='btn primary my-2'
-              disabled={!isValid}
-            >
+            <button type='submit' className='btn primary my-2'>
               Sign In
             </button>
           </section>
