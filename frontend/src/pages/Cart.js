@@ -7,8 +7,9 @@ import { addToCart, removeFromCart } from '../actions/cartActions';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useQueryString } from '../hooks/url';
 import Meta from '../components/Meta';
+import { GBP } from '../config/currency';
+import { useQueryString } from '../hooks/url';
 
 const Cart = () => {
   const { id: productId } = useParams();
@@ -65,7 +66,7 @@ const Cart = () => {
                 <div key={i} className='cart-item'>
                   <img src={item.image} alt={item.name} className='rounded' />
                   <Link to={`/product/${item.product}`}>{item.name}</Link>
-                  <div>${item.price}</div>
+                  <div>{`${GBP(item.price).format()}`}</div>
                   <select
                     name='qty'
                     id='qty'
@@ -106,10 +107,12 @@ const Cart = () => {
                   </span>
                 </h2>
                 <span className='border-0 border-b border-gray-800 text-lg font-semibold tracking-wider'>
-                  $
-                  {cartItems
-                    .reduce((acc, item) => acc + item.price * item.qty, 0)
-                    .toFixed(2)}
+                  {GBP(
+                    cartItems.reduce(
+                      (acc, item) => acc + item.price * item.qty,
+                      0
+                    )
+                  ).format()}
                 </span>
               </div>
               <button

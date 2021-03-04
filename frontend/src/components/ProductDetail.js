@@ -1,6 +1,8 @@
 import React from 'react';
-import Rating from './Rating';
 import { useHistory } from 'react-router-dom';
+import { GBP } from '../config/currency';
+import Rating from './Rating';
+
 const ProductDetail = ({
   _id,
   name,
@@ -20,6 +22,8 @@ const ProductDetail = ({
 
   const inStock = countInStock > 0;
 
+  const formattedPrice = GBP(price).format();
+
   return (
     <article className='product-layout'>
       <img src={image} alt={name} className='w-full cover object-center' />
@@ -32,7 +36,7 @@ const ProductDetail = ({
       <section className='stock-info-layout'>
         <h1 className='sr-only'>Stock Information</h1>
         <span className='font-bold'>Price:</span>
-        <span>${price}</span>
+        <span>{formattedPrice}</span>
         <span className='font-bold'>Status:</span>
         <span>{inStock ? 'In Stock' : 'Out of Stock'}</span>
         {inStock && (

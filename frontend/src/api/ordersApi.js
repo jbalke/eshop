@@ -19,6 +19,20 @@ export const createOrder = async (order) => {
   }
 };
 
+export const getRates = async () => {
+  try {
+    const { data } = await axios.get(`/api/config/rates`);
+    return data;
+  } catch (error) {
+    if (error?.response?.data?.message) {
+      console.log({ error: error.response.data });
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error(error);
+  }
+};
+
 export const getOrderDetails = (id) => async () => {
   try {
     const { data } = await axios.get(`/api/orders/${id}`);

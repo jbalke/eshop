@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import tokenRoutes from './routes/tokenRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import configRoutes from './routes/configRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import dotenv from 'dotenv';
 
@@ -52,10 +53,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/auth/token', tokenRoutes);
 app.use('/api/upload', uploadRoutes);
-
-app.get('/api/config/paypal', (req, res) =>
-  res.send(process.env.PAYPAL_CLIENT_ID)
-);
+app.use('/api/config', configRoutes);
 
 // __dirname is not defined when using es modules with nodejs
 // https://stackoverflow.com/questions/46745014/alternative-for-dirname-in-node-when-using-the-experimental-modules-flag/51118243#51118243

@@ -1,20 +1,21 @@
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
+import Config from '../models/configModel.js';
 import asyncHandler from 'express-async-handler';
 import { FriendlyError } from '../errors/errors.js';
+import currency from 'currency.js';
 
-const TAX_RATE = 15;
-const SHIPPING_COST = 100;
-const FREE_SHIPPING_THRESHOLD = 100;
+const SHIPPING_COST = 10000;
 
-const calcOrderPrices = (items) => {
+const calcOrderPrices = async (items) => {
+  const { taxRate, freeShippingThreshold } = await Config.getSingleton();
+
   const itemsPrice = items.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   );
-  const taxPrice = Math.round(itemsPrice * TAX_RATE) / 100;
-  const shippingPrice =
-    itemsPrice >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const taxPrice = (itemsPrice * taxRate) / 100;
+  const shippingPrice = itemsPrice >= freeShippingThreshold ? 0 : SHIPPING_COST;
 
   return {
     itemsPrice,
@@ -79,9 +80,15 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 
   // check client-side calculations
   const serverOrder = await buildOrder(orderItems);
-  const serverPrices = calcOrderPrices(serverOrder);
+  const serverPrices = await calcOrderPrices(serverOrder);
 
   if (serverPrices.totalPrice !== itemsPrice + taxPrice + shippingPrice) {
+    console.log({
+      serverTotal: serverPrices.totalPrice,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+    });
     throw new FriendlyError(
       'Order mismatch, unable to fulfill order. Please try again later.'
     );
@@ -95,7 +102,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     itemsPrice: serverPrices.itemsPrice,
     taxPrice: serverPrices.taxPrice,
     shippingPrice: serverPrices.shippingPrice,
-    totalPrice: serverPrices.totalPrice,
+    totalPrice: currency(serverPrices.totalPrice).intValue,
   });
 
   const newOrder = await order.save();

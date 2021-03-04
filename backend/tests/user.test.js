@@ -38,6 +38,7 @@ describe('a new user', () => {
         name: 'test user 1',
         password: '654321',
         email: 'user1@test.com',
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(201)
       .expect('Content-Type', /json/)
@@ -69,6 +70,7 @@ describe('a new user', () => {
         name: 'test user 2',
         password: '654321',
         email: 'user1@test.com',
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(400);
 
@@ -85,6 +87,7 @@ describe('a new user', () => {
       .send({
         name: 'test user 2',
         password: '654321',
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(400);
 
@@ -101,6 +104,7 @@ describe('a new user', () => {
       .send({
         name: 'test user 2',
         email: 'user2@test.com',
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(400);
 
@@ -119,6 +123,7 @@ describe('an existing user', () => {
       .send({
         email: userOne.email,
         password: userOne.password,
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(200)
       .expect('Content-Type', /json/)
@@ -145,6 +150,7 @@ describe('an existing user', () => {
       .send({
         email: userOne.email,
         password: 'bad password',
+        token: 'sgfsdfgsdfglkj',
       })
       .expect(400);
 
@@ -184,13 +190,13 @@ describe('an existing user', () => {
 
   test('should be able to place an order', async () => {
     const itemToOrder = await Product.findOne(
-      { countInStock: { $gt: 0 }, price: { $lt: 100 } },
+      { countInStock: { $gt: 0 }, price: { $lt: 10000 } },
       null,
       { lean: true }
     );
 
     const taxPrice = Math.round(itemToOrder.price * 15) / 100;
-    const shippingPrice = 100;
+    const shippingPrice = 10000;
 
     const order = {
       orderItems: [

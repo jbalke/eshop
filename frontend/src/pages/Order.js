@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axios from '../api/customAxios';
 import React, { useEffect, useState } from 'react';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { formatDataTime, toHTMLDateTime } from '../utils/dates';
-import { useUserProfile } from '../hooks/userQueries';
-import { toast } from 'react-toastify';
 import Meta from '../components/Meta';
+import { GBP } from '../config/currency';
+import { useUserProfile } from '../hooks/userQueries';
+import { formatDataTime, toHTMLDateTime } from '../utils/dates';
 
 const Order = () => {
   const { id } = useParams();
@@ -166,26 +167,22 @@ const Order = () => {
               </div>
               <div className='order-items text-sm'>
                 <h2 className='text-lg text-gray-600'>Order Items</h2>
-                {data.orderItems.length === 0 ? (
-                  <Message>Your cart is empty</Message>
-                ) : (
-                  <ol>
-                    {data.orderItems.map((item, index) => (
-                      <li key={index} className='cart-item'>
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className='rounded'
-                        />
-                        <Link to={`/product/${item.product}`}>{item.name}</Link>
-                        <div>
-                          {item.qty} x ${item.price.toFixed(2)} = $
-                          {(item.qty * item.price).toFixed(2)}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                )}
+                <ul>
+                  {data.orderItems?.map((item, index) => (
+                    <li key={index} className='cart-item'>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className='rounded'
+                      />
+                      <Link to={`/product/${item.product}`}>{item.name}</Link>
+                      <div>
+                        {item.qty} x {`${GBP(item.price).format()}`} ={' '}
+                        {`${GBP(item.qty * item.price).format()}`}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
             <div className='order-summary'>
@@ -193,19 +190,19 @@ const Order = () => {
               <div className='order-summary-items'>
                 <div className='order-summary-item'>
                   <div>Items</div>
-                  <div>${itemsPrice.toFixed(2)}</div>
+                  <div>{`${GBP(itemsPrice).format()}`}</div>
                 </div>
                 <div className='order-summary-item'>
                   <div>Shipping</div>
-                  <div>${data.shippingPrice.toFixed(2)}</div>
+                  <div>{`${GBP(data.shippingPrice).format()}`}</div>
                 </div>
                 <div className='order-summary-item'>
                   <div>Tax</div>
-                  <div>${data.taxPrice.toFixed(2)}</div>
+                  <div>{`${GBP(data.taxPrice).format()}`}</div>
                 </div>
                 <div className='order-summary-item'>
                   <div>Total</div>
-                  <div>${data.totalPrice.toFixed(2)}</div>
+                  <div>{`${GBP(data.totalPrice).format()}`}</div>
                 </div>
               </div>
               {userProfile.data?.user?.isAdmin &&
@@ -239,7 +236,7 @@ const Order = () => {
                     <Loader />
                   ) : (
                     <PayPalButton
-                      amount={data.totalPrice}
+                      amount={`${GBP(data.totalPrice)}`}
                       onSuccess={successPaymentHandler}
                     />
                   )}

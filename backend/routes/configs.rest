@@ -1,0 +1,16 @@
+// Admin User Login
+# @name login
+POST {{URL}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+###
+
+// Get All Users - protected route
+@authToken = {{login.response.body.token}}
+GET {{URL}}/api/config/rates
+Authorization: Bearer {{authToken}}

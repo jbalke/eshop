@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import ApiService from '../api/ApiService';
 import Loader from './Loader';
 import Message from './Message';
+import { GBP } from '../config/currency';
 
 const ProductCarousel = () => {
   const { isLoading, data, isError, error } = useQuery(
@@ -39,7 +40,7 @@ const ProductCarousel = () => {
           <h2>
             <span>{product.name}</span>
             <br />
-            <span>${product.price}</span>
+            <span>{`${GBP(product.price).format()}`}</span>
           </h2>
         </Link>
       ))}

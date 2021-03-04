@@ -1,8 +1,10 @@
 import React from 'react';
-import Rating from './Rating';
 import { Link } from 'react-router-dom';
+import { GBP } from '../config/currency';
+import Rating from './Rating';
 
 const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
+  const formattedPrice = GBP(price).format();
   return (
     <article className='card' onMouseEnter={prefetch}>
       <Link to={`/product/${_id}`}>
@@ -16,7 +18,9 @@ const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
         </Link>
         <div className=''>
           <Rating value={rating} text={`${numReviews} reviews`} />
-          <h2 className='text-2xl font-bold tracking-widest my-4'>${price}</h2>
+          <h2 className='text-2xl font-bold tracking-widest my-4'>
+            {formattedPrice}
+          </h2>
         </div>
       </div>
     </article>

@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Paginate from '../components/Paginate';
 import ItemLimit from '../components/ItemLimit';
 import Meta from '../components/Meta';
+import { GBP } from '../config/currency';
 
 const ProductList = () => {
   const [limit, setLimit] = useState(25);
@@ -163,7 +164,7 @@ const ProductList = () => {
                       <td>{product.name}</td>
                       <td>{product.brand}</td>
                       <td>{product.category}</td>
-                      <td>${product.price.toFixed(2)}</td>
+                      <td>{`${GBP(product.price).format()}`}</td>
                       <td className='flex items-center justify-around'>
                         <Link
                           to={`/admin/product/${product._id}/edit`}
