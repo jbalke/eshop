@@ -32,7 +32,11 @@ app.use(
           'https://www.paypal.com',
           'https://www.sandbox.paypal.com',
         ],
-        scriptSrc: ["'self'", 'https://www.paypal.com'],
+        scriptSrc: [
+          "'self'",
+          'https://www.paypal.com',
+          'https://www.google.com',
+        ],
         styleSrc: ["'self'", 'https://fonts.googleapis.com', "'unsafe-inline'"],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:'],
