@@ -62,6 +62,8 @@ const __dirname = (() => {
   return path.resolve(process.platform == 'win32' ? x.substr(1) : x);
 })();
 
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
@@ -69,9 +71,11 @@ if (process.env.NODE_ENV === 'production') {
     const indexFile = path.resolve(__dirname, '../frontend/build/index.html');
     res.sendFile(indexFile);
   });
+} else {
+  app.get('*', (req, res) => {
+    res.send('API is running...');
+  });
 }
-
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 //* ERROR HANDLERS
 app.use(notFound);

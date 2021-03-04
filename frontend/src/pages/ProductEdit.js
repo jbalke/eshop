@@ -1,70 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
+import InputWarning from '../components/InputWarning';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Meta from '../components/Meta';
+import { GBP } from '../config/currency';
 
 const ProductEdit = () => {
   const { id } = useParams();
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [brand, setBrand] = useState('');
-  const [countInStock, setCountInStock] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [image, setImage] = useState('');
-  const [category, setCategory] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [uploadErrorMessage, setUploadErrorMessage] = useState('');
 
   const history = useHistory();
 
-  const { isLoading, isError, error } = useQuery(
+  const { isLoading, isError, error, data } = useQuery(
     ['product', id],
     ApiService.products.getProduct(id),
     {
-      onSuccess: (data) => {
-        setName(data.name);
-        setDescription(data.description);
-        setBrand(data.brand);
-        setPrice(data.price);
-        setCategory(data.category);
-        setCountInStock(data.countInStock);
-        setImage(data.image);
-      },
       staleTime: 0,
     }
   );
+
+  const { register, errors, handleSubmit, setValue, getValues } = useForm({
+    mode: 'onTouched',
+    defaultValues: {
+      name: data.name,
+      brand: data.brand,
+      description: data.description,
+      category: data.category,
+      price: GBP(data.price),
+      image: data.image,
+      countInStock: data.countInStock,
+    },
+  });
 
   const queryClient = useQueryClient();
 
   const updateProductInfo = useMutation(ApiService.admin.updateProduct(id), {
     onSuccess: (data) => {
       toast.success('Product updated');
-      queryClient.setQueryData('products', (oldData) =>
-        oldData.map((product) => (product._id === data._id ? data : product))
-      );
+      queryClient.invalidateQueries(['products']);
     },
     onError: (error) => {
       toast.error(error.message, { autoClose: 5000 });
     },
   });
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    updateProductInfo.mutate({
-      name,
-      description,
-      brand,
-      price,
-      category,
-      countInStock,
-      image,
-    });
-  };
 
   useEffect(() => {
     if (updateProductInfo.isSuccess) {
@@ -72,24 +54,22 @@ const ProductEdit = () => {
     }
   }, [updateProductInfo, history]);
 
+  const uploadImageInfo = useMutation(ApiService.uploads.uploadImage, {
+    onSuccess: (data) => {
+      setValue('image', data);
+    },
+  });
+
   const uploadFileHandler = async (e) => {
-    //TODO: switch to useMutation?
     const file = e.target.files[0];
     const formData = new FormData();
-
     formData.append('image', file);
-    setUploadErrorMessage('');
-    setUploading(true);
 
-    try {
-      const data = await ApiService.uploads.uploadImage(formData);
+    uploadImageInfo.mutate(formData);
+  };
 
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      setUploading(false);
-      setUploadErrorMessage(error.message);
-    }
+  const onSubmit = (data) => {
+    updateProductInfo.mutate({ ...data, price: data.price * 100 });
   };
 
   return (
@@ -105,102 +85,134 @@ const ProductEdit = () => {
         ) : isError ? (
           <Message type='danger'>{error.message}</Message>
         ) : (
-          <form onSubmit={submitHandler}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <section>
               <label>
                 Name
                 <input
+                  name='name'
                   type='text'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
                   className='w-full'
-                  required
+                  ref={register({ required: 'Required' })}
+                  aria-required
                 />
               </label>
+              {errors.name && <InputWarning message={errors.name.message} />}
             </section>
             <section>
               <label>
                 Brand
                 <input
+                  name='brand'
                   type='text'
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
                   className='w-full'
-                  required
+                  ref={register({ required: 'Required' })}
+                  aria-required
                 />
               </label>
+              {errors.brand && <InputWarning message={errors.brand.message} />}
             </section>
             <section>
               <label>
                 Description
                 <textarea
+                  name='description'
                   rows='5'
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                   className='w-full'
-                  required
+                  ref={register({ required: 'Required' })}
+                  aria-required
                 />
               </label>
+              {errors.description && (
+                <InputWarning message={errors.description.message} />
+              )}
             </section>
             <section>
               <label>
                 Category
                 <input
+                  name='category'
                   type='text'
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
                   className='w-full'
-                  required
+                  ref={register({ required: 'Required' })}
+                  aria-required
                 />
               </label>
+              {errors.category && (
+                <InputWarning message={errors.category.message} />
+              )}
             </section>
             <section>
               <label>
                 Price
                 <input
+                  name='price'
                   type='number'
                   step='0.01'
                   min='0'
-                  value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
                   className='w-full'
-                  required
+                  ref={register({
+                    required: 'Required',
+                    min: { value: 0, message: 'Must be greater than zero' },
+                  })}
+                  aria-required
                 />
               </label>
+              {errors.price && <InputWarning message={errors.price.message} />}
             </section>
             <section>
               <label>
                 Qty
                 <input
+                  name='countInStock'
                   type='number'
                   min='0'
-                  value={countInStock}
-                  onChange={(e) => setCountInStock(Number(e.target.value))}
                   className='w-full'
-                  required
+                  ref={register({
+                    required: 'Required',
+                    min: { value: 0, message: 'Must be greater than zero' },
+                  })}
+                  aria-required
                 />
               </label>
+              {errors.countInStock && (
+                <InputWarning message={errors.countInStock.message} />
+              )}
             </section>
             <section>
               <label>
                 Image
                 <input
+                  name='image'
                   type='text'
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
                   className='w-full'
+                  ref={register({ required: 'Required' })}
+                  readOnly
+                  aria-required
                 />
+                {errors.image && (
+                  <InputWarning message={errors.image.message} />
+                )}
                 <input
                   type='file'
                   accept='.jpg,.jpeg,.png,image/jpeg,image/png'
+                  className='w-full mt-1'
                   onChange={uploadFileHandler}
                 />
               </label>
-              {uploading && <Loader />}
+              {uploadImageInfo.isLoading ? (
+                <Loader />
+              ) : (
+                <img
+                  src={getValues('image')}
+                  alt={getValues('image')}
+                  className='border shadow-md mt-1'
+                />
+              )}
             </section>
-            {uploadErrorMessage && (
+            {uploadImageInfo.isError && (
               <section>
-                <Message type='danger'>{uploadErrorMessage}</Message>
+                <Message type='danger'>{uploadImageInfo.error.message}</Message>
               </section>
             )}
             <section>

@@ -38,7 +38,9 @@ const ProductCarousel = () => {
         >
           <img src={product.image} alt={product.name} />
           <h2>
-            <span>{product.name}</span>
+            <span>
+              {product.brand} {product.name}
+            </span>
             <br />
             <span>{`${GBP(product.price).format()}`}</span>
           </h2>

@@ -3,7 +3,16 @@ import { Link } from 'react-router-dom';
 import { GBP } from '../config/currency';
 import Rating from './Rating';
 
-const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
+const Product = ({
+  _id,
+  image,
+  name,
+  brand,
+  rating,
+  numReviews,
+  price,
+  prefetch,
+}) => {
   const formattedPrice = GBP(price).format();
   return (
     <article className='card' onMouseEnter={prefetch}>
@@ -13,7 +22,7 @@ const Product = ({ _id, image, name, rating, numReviews, price, prefetch }) => {
       <div className=''>
         <Link to={`/product/${_id}`}>
           <h1 className='text-base font-semibold tracking-wide capitalize'>
-            {name}
+            {brand} {name}
           </h1>
         </Link>
         <div className=''>

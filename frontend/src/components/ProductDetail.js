@@ -6,6 +6,7 @@ import Rating from './Rating';
 const ProductDetail = ({
   _id,
   name,
+  brand,
   image,
   rating,
   numReviews,
@@ -27,8 +28,10 @@ const ProductDetail = ({
   return (
     <article className='product-layout'>
       <img src={image} alt={name} className='w-full cover object-center' />
-      <section className=''>
-        <h1 className=''>{name}</h1>
+      <section>
+        <h1>
+          {brand} {name}
+        </h1>
         <Rating value={rating} text={`${numReviews} reviews`} />
         <h2 className='sr-only'>Product Description</h2>
         <p>{description}</p>
