@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^12.1.10",
     "autoprefixer": "^9",
     "axios": "^0.21.1",
+    "cross-env": "^7.0.3",
     "currency.js": "^2.0.3",
     "jwt-decode": "^3.1.2",
     "postcss": "^7",
@@ -39,7 +40,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "build": "cross-env INLINE_RUNTIME_CHUNK=false craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
