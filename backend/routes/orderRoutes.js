@@ -8,20 +8,31 @@ import {
   updateOrderToDelivered,
   getUndeliveredOrders,
 } from '../controllers/orderController.js';
-import { isAdmin, requireAuth } from '../middleware/authMiddleware.js';
+import { authRoles, requireAuth } from '../middleware/authMiddleware.js';
+import { ROLE } from '../permissions/roles.js';
 
 const router = express.Router();
 
 router
   .route('/')
   .post(requireAuth, addOrderItems)
-  .get(requireAuth, isAdmin, getOrders);
-router.route('/undelivered').get(requireAuth, isAdmin, getUndeliveredOrders);
+  .get(requireAuth, authRoles([ROLE.ADMIN, ROLE.MANAGER]), getOrders);
+router
+  .route('/undelivered')
+  .get(
+    requireAuth,
+    authRoles([ROLE.ADMIN, ROLE.MANAGER]),
+    getUndeliveredOrders
+  );
 router.route('/myorders').get(requireAuth, getMyOrders);
 router.route('/:id').get(requireAuth, getOrderByID);
 router.route('/:id/pay').patch(requireAuth, updateOrderToPaid);
 router
   .route('/:id/deliver')
-  .patch(requireAuth, isAdmin, updateOrderToDelivered);
+  .patch(
+    requireAuth,
+    authRoles([ROLE.ADMIN, ROLE.MANAGER]),
+    updateOrderToDelivered
+  );
 
 export default router;

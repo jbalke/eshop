@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { Link } from 'react-router-dom';
-import { FaCheckSquare, FaEdit, FaTrash } from 'react-icons/fa';
-import { useModal } from '../hooks/useModal';
-import { toast } from 'react-toastify';
 import Meta from '../components/Meta';
+import { useModal } from '../hooks/useModal';
 
 const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -69,7 +69,7 @@ const UserList = () => {
                   <th>ID</th>
                   <th>NAME</th>
                   <th>EMAIL</th>
-                  <th>ADMIN</th>
+                  <th>ROLE</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,7 +82,7 @@ const UserList = () => {
                     <td>
                       <a href={`mailto:${user.email}`}>{user.email}</a>
                     </td>
-                    <td>{user.isAdmin && <FaCheckSquare fill='green' />}</td>
+                    <td>{user.role.toUpperCase()}</td>
                     <td className='flex items-center justify-around'>
                       <Link
                         to={`/admin/user/${user._id}`}

@@ -18,7 +18,7 @@ const importData = async () => {
 
     const usersData = await users();
     const createdUsers = await User.insertMany(usersData);
-    const adminUser = await createdUsers.find((user) => user.isAdmin);
+    const adminUser = await createdUsers.find((user) => user.role === 'admin');
 
     const newProducts = products.map((p) => ({ ...p, user: adminUser }));
     await Product.insertMany(newProducts);

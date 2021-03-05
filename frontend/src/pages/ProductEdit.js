@@ -50,7 +50,7 @@ const ProductEdit = () => {
 
   useEffect(() => {
     if (updateProductInfo.isSuccess) {
-      history.push(`/admin/product-list`);
+      history.goBack();
     }
   }, [updateProductInfo, history]);
 

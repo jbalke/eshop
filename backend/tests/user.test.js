@@ -16,7 +16,7 @@ const userOne = {
   password: '654321',
 };
 const userOneToken = jwt.sign(
-  { user: { _id: userOneId, isAdmin: false }, tokenVersion: 0 },
+  { sub: userOneId, tokenVersion: 0 },
   process.env.ACCESS_TOKEN_SECRET
 );
 

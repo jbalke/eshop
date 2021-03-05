@@ -56,7 +56,7 @@ export const deleteUser = async ({ id }) => {
   }
 };
 
-export const updateUser = (id) => async ({ name, email, isAdmin }) => {
+export const updateUser = (id) => async ({ name, email, role }) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export const updateUser = (id) => async ({ name, email, isAdmin }) => {
   try {
     const { data } = await axios.patch(
       `/api/users/${id}`,
-      { name, email, isAdmin },
+      { name, email, role },
       config
     );
 

@@ -1,7 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { requireAuth, isAdmin } from '../middleware/authMiddleware.js';
+import { requireAuth, authRoles } from '../middleware/authMiddleware.js';
+import { ROLE } from '../permissions/roles.js';
 
 const router = express.Router();
 
@@ -36,10 +37,16 @@ const upload = multer({
   },
 });
 
-router.post('/', requireAuth, isAdmin, upload.single('image'), (req, res) => {
-  // convert back slashes on windows
-  const path = req.file.path.replace(/\\/g, '/');
-  res.send(`/${path}`);
-});
+router.post(
+  '/',
+  requireAuth,
+  authRoles([ROLE.ADMIN, ROLE.MANAGER]),
+  upload.single('image'),
+  (req, res) => {
+    // convert back slashes on windows
+    const path = req.file.path.replace(/\\/g, '/');
+    res.send(`/${path}`);
+  }
+);
 
 export default router;

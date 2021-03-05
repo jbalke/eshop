@@ -13,7 +13,7 @@ const UserProfile = () => {
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   const queryClient = useQueryClient();
@@ -25,7 +25,7 @@ const UserProfile = () => {
       onSuccess: (data) => {
         setName(data.user.name);
         setEmail(data.user.email);
-        setIsAdmin(data.user.isAdmin);
+        setRole(data.user.role);
       },
       staleTime: 0,
     }
@@ -57,7 +57,7 @@ const UserProfile = () => {
     e.preventDefault();
 
     try {
-      await mutateAsync({ name, email, isAdmin });
+      await mutateAsync({ name, email, role });
       setIsEditing(false);
     } catch (error) {}
   };
@@ -115,14 +115,18 @@ const UserProfile = () => {
                 </label>
               </section>
               <section className='form-is-admin flex justify-between items-center'>
-                <label htmlFor='isAdmin'>Admin</label>
-                <input
-                  type='checkbox'
-                  id='isAdmin'
-                  checked={isAdmin}
-                  onChange={(e) => setIsAdmin(e.target.checked)}
+                <label htmlFor='role'>Role</label>
+                <select
+                  name='role'
+                  id='role'
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
                   disabled={!isEditing}
-                />
+                >
+                  <option value='admin'>admin</option>
+                  <option value='manager'>manager</option>
+                  <option value='user'>user</option>
+                </select>
               </section>
               {isEditing ? (
                 <section>

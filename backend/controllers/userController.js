@@ -8,6 +8,7 @@ import {
 } from '../utils/tokens.js';
 import { FriendlyError } from '../errors/errors.js';
 import axios from 'axios';
+import { ROLE } from '../permissions/roles.js';
 
 const validateHuman = async (token) => {
   const { data } = await axios.post(
@@ -52,7 +53,7 @@ export const authUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
+        role: user.role,
       },
       token: createAccessToken(user),
     });
@@ -127,7 +128,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
+        role: updatedUser.role,
       },
       token: createAccessToken(updatedUser),
     });
@@ -148,15 +149,15 @@ export const updateUser = asyncHandler(async (req, res) => {
     throw new FriendlyError('Changes to self must be made via Profile page');
   }
 
-  const { name, email, isAdmin } = req.body;
+  const { name, email, role } = req.body;
 
   const user = await User.findById(id).select('-password');
   if (user) {
     user.name = name || user.name;
     user.email = email || user.email;
 
-    if (typeof isAdmin === 'boolean') {
-      user.isAdmin = isAdmin;
+    if (role) {
+      user.role = role;
     }
 
     const updatedUser = await user.save();
@@ -190,7 +191,7 @@ export const newUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
+        role: user.role,
       },
       token: createAccessToken(user),
     });
@@ -229,7 +230,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
     throw new FriendlyError('User not found');
   }
 
-  if (user.isAdmin) {
+  if (user.role === ROLE.ADMIN) {
     res.status(403);
     throw new FriendlyError('Unable to delete an Admin');
   }

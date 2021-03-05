@@ -3,6 +3,7 @@ import Product from '../models/productModel.js';
 import Config from '../models/configModel.js';
 import asyncHandler from 'express-async-handler';
 import { FriendlyError } from '../errors/errors.js';
+import { ROLE, hasRoles } from '../permissions/roles.js';
 import currency from 'currency.js';
 
 const SHIPPING_COST = 10000;
@@ -116,7 +117,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
 export const getOrderByID = asyncHandler(async (req, res) => {
   const filter = { _id: req.params.id };
 
-  if (!req.user.isAdmin) {
+  if (!hasRoles(req.user, [ROLE.ADMIN, ROLE.MANAGER])) {
     filter.user = req.user._id;
   }
 

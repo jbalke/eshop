@@ -205,7 +205,9 @@ const Order = () => {
                   <div>{`${GBP(data.totalPrice).format()}`}</div>
                 </div>
               </div>
-              {userProfile.data?.user?.isAdmin &&
+              {['admin', 'manager'].some(
+                (role) => role === userProfile.data?.user?.role
+              ) &&
                 data.isPaid &&
                 !data.isDelivered && (
                   <button

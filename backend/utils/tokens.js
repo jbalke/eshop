@@ -10,19 +10,15 @@ const COOKIE_OPTIONS = {
 
 export const createAccessToken = (user) => {
   const { _id, tokenVersion } = user;
-  return jwt.sign(
-    { user: _id, tokenVersion },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: '15m',
-    }
-  );
+  return jwt.sign({ sub: _id, tokenVersion }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: '15m',
+  });
 };
 
 export const createRefreshToken = (user) => {
   const { _id, tokenVersion } = user;
   return jwt.sign(
-    { user: _id, tokenVersion },
+    { sub: _id, tokenVersion },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: '7d',
@@ -46,12 +42,12 @@ export const verifyRefeshToken = async (req) => {
   }
 
   try {
-    const { user, tokenVersion } = jwt.verify(
+    const { sub, tokenVersion } = jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    return await User.findOne({ _id: user, tokenVersion });
+    return await User.findOne({ _id: sub, tokenVersion });
   } catch (error) {
     return null;
   }

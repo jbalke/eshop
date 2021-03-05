@@ -10,7 +10,7 @@ const AdminRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        profile?.user?.isAdmin ? (
+        ['admin', 'manager'].some((role) => role === profile?.user?.role) ? (
           children
         ) : (
           <Redirect

@@ -49,7 +49,9 @@ const Header = () => {
           <li>
             <Link to='/profile'>Profile</Link>
           </li>
-          {userProfile?.data?.user?.isAdmin && (
+          {['admin', 'manager'].some(
+            (role) => role === userProfile.data?.user?.role
+          ) && (
             <>
               <li className='admin-menu-item'>
                 <Link to='/admin/user-list'>Users</Link>

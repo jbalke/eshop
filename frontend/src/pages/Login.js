@@ -18,12 +18,7 @@ function Login() {
 
   let { from } = location.state || { from: { pathname: '/' } };
 
-  const {
-    register,
-    handleSubmit,
-    errors,
-    formState: { isValid },
-  } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     mode: 'onSubmit',
     defaultValues: {
       email: '',
