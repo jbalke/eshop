@@ -8,26 +8,12 @@ const COOKIE_OPTIONS = {
   sameSite: 'strict',
 };
 
-export const createAccessToken = (user) => {
-  const { _id, tokenVersion } = user;
-  return jwt.sign({ sub: _id, tokenVersion }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '15m',
-  });
-};
-
-export const createRefreshToken = (user) => {
-  const { _id, tokenVersion } = user;
-  return jwt.sign(
-    { sub: _id, tokenVersion },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: '7d',
-    }
-  );
-};
-
 export const setRefreshCookie = (res, user) => {
-  res.cookie(process.env.COOKIE_NAME, createRefreshToken(user), COOKIE_OPTIONS);
+  res.cookie(
+    process.env.COOKIE_NAME,
+    user.createRefreshToken(),
+    COOKIE_OPTIONS
+  );
 };
 
 export const clearRefreshCookie = (res) => {

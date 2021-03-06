@@ -1,11 +1,7 @@
 import User from '../models/userModel.js';
 import Order from '../models/orderModel.js';
 import asyncHandler from 'express-async-handler';
-import {
-  createAccessToken,
-  setRefreshCookie,
-  clearRefreshCookie,
-} from '../utils/tokens.js';
+import { setRefreshCookie, clearRefreshCookie } from '../utils/tokens.js';
 import { FriendlyError } from '../errors/errors.js';
 import axios from 'axios';
 import { ROLE } from '../permissions/roles.js';
@@ -55,7 +51,7 @@ export const authUser = asyncHandler(async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      token: createAccessToken(user),
+      token: user.createAccessToken(),
     });
   } else {
     res.status(400);
@@ -130,7 +126,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         email: updatedUser.email,
         role: updatedUser.role,
       },
-      token: createAccessToken(updatedUser),
+      token: updateUser.createAccessToken(),
     });
   } else {
     res.status(404);
@@ -193,7 +189,7 @@ export const newUser = asyncHandler(async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      token: createAccessToken(user),
+      token: user.createAccessToken(),
     });
   } else {
     res.status(400);

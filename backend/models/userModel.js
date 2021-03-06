@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 
 const userSchema = mongoose.Schema(
   {
@@ -42,6 +43,26 @@ const userSchema = mongoose.Schema(
 
 userSchema.methods.matchPassword = async function (plainPassword) {
   return await argon2.verify(this.password, plainPassword);
+};
+
+userSchema.methods.createAccessToken = function () {
+  return jwt.sign(
+    { sub: this._id, tokenVersion: this.tokenVersion },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: '15m',
+    }
+  );
+};
+
+userSchema.methods.createRefreshToken = function () {
+  return jwt.sign(
+    { sub: this._id, tokenVersion: this.tokenVersion },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: '7d',
+    }
+  );
 };
 
 userSchema.pre('save', async function (next) {

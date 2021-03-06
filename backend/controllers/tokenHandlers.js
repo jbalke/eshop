@@ -1,8 +1,4 @@
-import {
-  createAccessToken,
-  verifyRefeshToken,
-  setRefreshCookie,
-} from '../utils/tokens.js';
+import { verifyRefeshToken, setRefreshCookie } from '../utils/tokens.js';
 import asyncHandler from 'express-async-handler';
 
 export const refreshTokenHandler = asyncHandler(async (req, res) => {
@@ -13,5 +9,5 @@ export const refreshTokenHandler = asyncHandler(async (req, res) => {
     throw new Error('invalid/expired refresh token');
   }
   setRefreshCookie(res, user);
-  res.status(201).json({ token: createAccessToken(user) });
+  res.status(201).json({ token: user.createAccessToken() });
 });
