@@ -1,30 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useUIContext } from '../../ui-context';
 import { useUserProfile } from '../../hooks/userQueries';
-import SearchBox from '../SearchBox';
 import SubMenu from './Submenu';
 import './header.css';
 
 const Header = () => {
-  const { toggleUserMenu, closeUserMenu, isUserMenuOpen } = useUIContext();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const closeUserMenu = useCallback(() => setIsUserMenuOpen(false), [
+    setIsUserMenuOpen,
+  ]);
+  const toggleUserMenu = () => setIsUserMenuOpen((isOpen) => !isOpen);
 
-  const [rect, setRect] = useState(null);
   const dropdownRef = useRef(null);
 
   const userProfile = useUserProfile();
 
   const handleUserMenuClick = (e) => {
     e.stopPropagation();
-    setRect(dropdownRef.current.getBoundingClientRect());
     toggleUserMenu();
-  };
-
-  const handleUserMenu = (e) => {
-    if (!e.target.dataset.userMenu) {
-      closeUserMenu();
-    }
   };
 
   useEffect(() => {
@@ -35,12 +29,11 @@ const Header = () => {
   }, [closeUserMenu]);
 
   return (
-    <header className='bg-gray-700 text-white' onClick={handleUserMenu}>
+    <header className='bg-gray-700 text-white'>
       <div className='max-w-screen-lg mx-auto flex justify-between items-center px-3 my-6'>
         <Link to='/' className='uppercase text-xl font-bold tracking-wide'>
           E-Shop
         </Link>
-        <SearchBox />
         <nav className='uppercase text-sm'>
           <div className='flex text-sm bg-transparent'>
             <NavLink
@@ -74,7 +67,11 @@ const Header = () => {
           </div>
         </nav>
       </div>
-      <SubMenu location={rect} isOpen={isUserMenuOpen}>
+      <SubMenu
+        isOpen={isUserMenuOpen}
+        closeSubMenu={closeUserMenu}
+        btnRef={dropdownRef}
+      >
         <li>
           <Link to='/profile' role='menuitem'>
             Profile
@@ -84,17 +81,25 @@ const Header = () => {
           (role) => role === userProfile.data?.user?.role
         ) && (
           <>
-            <li className='admin-menu-item' role='menuitem'>
-              <Link to='/admin/user-list'>Users</Link>
+            <li className='admin-menu-item'>
+              <Link to='/admin/user-list' role='menuitem'>
+                Users
+              </Link>
             </li>
-            <li className='admin-menu-item' role='menuitem'>
-              <Link to='/admin/product-list'>Products</Link>
+            <li className='admin-menu-item'>
+              <Link to='/admin/product-list' role='menuitem'>
+                Products
+              </Link>
             </li>
-            <li className='admin-menu-item' role='menuitem'>
-              <Link to='/admin/stock-list'>Stock</Link>
+            <li className='admin-menu-item'>
+              <Link to='/admin/stock-list' role='menuitem'>
+                Stock
+              </Link>
             </li>
-            <li className='admin-menu-item' role='menuitem'>
-              <Link to='/admin/undelivered-order-list'>Undelivered Orders</Link>
+            <li className='admin-menu-item'>
+              <Link to='/admin/undelivered-order-list' role='menuitem'>
+                Undelivered Orders
+              </Link>
             </li>
           </>
         )}

@@ -1,9 +1,26 @@
-import React from 'react';
-import { useUIContext } from '../../../ui-context';
+import React, { useEffect, useRef } from 'react';
 import './submenu.css';
 
-const SubMenu = ({ location, isOpen, children }) => {
-  const { closeUserMenu } = useUIContext();
+const SubMenu = ({ isOpen, closeSubMenu, children, btnRef }) => {
+  const dropDownRef = useRef(null);
+
+  const location = btnRef.current?.getBoundingClientRect();
+
+  const handleClickOutside = (e) => {
+    if (
+      e.target !== btnRef.current &&
+      !dropDownRef.current?.contains(e.target)
+    ) {
+      closeSubMenu();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   if (!isOpen) return null;
 
@@ -16,8 +33,9 @@ const SubMenu = ({ location, isOpen, children }) => {
         zIndex: 999,
       }}
       data-user-menu
+      ref={dropDownRef}
     >
-      <ul onClick={closeUserMenu} role='menu'>
+      <ul onClick={closeSubMenu} role='menu'>
         {children}
       </ul>
     </div>

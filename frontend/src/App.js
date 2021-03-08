@@ -25,7 +25,6 @@ import OrderList from './pages/OrderList';
 import StockList from './pages/StockList';
 import UndeliveredOrderList from './pages/UndeliveredOrderList';
 import UserProfile from './pages/UserProfile';
-import { useUIContext } from './ui-context';
 import { ToastContainer } from 'react-toastify';
 
 const queryClient = new QueryClient({
@@ -37,8 +36,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { closeUserMenu } = useUIContext();
-
   const [limit, setLimit] = useState('12');
 
   return (
@@ -46,7 +43,7 @@ function App() {
       <Router>
         <div className='flex flex-col h-screen'>
           <Header />
-          <main className='flex-grow flex flex-col' onClick={closeUserMenu}>
+          <main className='flex-grow flex flex-col'>
             <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-2 sm:px-4 flex flex-col'>
               <Switch>
                 <Route path='/' exact>

@@ -8,14 +8,11 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import store from './store';
-import { UIProvider } from './ui-context';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <UIProvider>
-        <App />
-      </UIProvider>
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
