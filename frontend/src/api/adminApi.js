@@ -199,9 +199,13 @@ export const upDateOrderToDelivered = async ({ id, deliverDate }) => {
   }
 };
 
-export const getStockLevels = async () => {
+export const getStockLevels = async ({ queryKey }) => {
+  // eslint-disable-next-line
+  const [_key, { keyword = '', page = 1, limit = '12' }] = queryKey;
   try {
-    const { data } = await axios.get(`/api/products/stock`);
+    const { data } = await axios.get(`/api/products/stock`, {
+      params: { keyword, page, limit },
+    });
     return data;
   } catch (error) {
     if (error?.response?.data?.message) {

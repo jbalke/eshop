@@ -19,7 +19,7 @@ const Message = ({ type = 'info', children }) => {
   }
   return (
     <div
-      className={`${classes} tracking-wider p-4 my-4 font-semibold`}
+      className={`${classes} tracking-wider p-4 my-4 font-semibold w-max`}
       role='alert'
     >
       {children}

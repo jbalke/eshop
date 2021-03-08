@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
-const Paginate = ({ page = 1, pages = 1, keyword = '', isPreviousData }) => {
+const Paginate = ({
+  page = 1,
+  pages = 1,
+  keyword = '',
+  limit,
+  isPreviousData,
+}) => {
   const history = useHistory();
   const location = useLocation();
 
@@ -9,13 +15,20 @@ const Paginate = ({ page = 1, pages = 1, keyword = '', isPreviousData }) => {
 
   const prevPageHandler = () => {
     history.push(
-      `${location.pathname}?keyword=${keyword}&page=${Math.max(1, page - 1)}`
+      `${location.pathname}?keyword=${keyword}&limit=${limit}&page=${Math.max(
+        1,
+        page - 1
+      )}`
     );
   };
 
   const nextPageHandler = () => {
     if (page < pages) {
-      history.push(`${location.pathname}?keyword=${keyword}&page=${page + 1}`);
+      history.push(
+        `${location.pathname}?keyword=${keyword}&limit=${limit}&page=${
+          page + 1
+        }`
+      );
     }
   };
 

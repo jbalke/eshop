@@ -1,12 +1,12 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-const ItemLimit = ({ keyword = '', limit, step = 12 }) => {
+const ItemLimit = ({ keyword = '', limit = 25, step = 12 }) => {
   const history = useHistory();
   const location = useLocation();
 
   return (
-    <div className='flex justify-end mb-2'>
+    <div className='flex items-end flex-row-reverse my-4'>
       <div className='flex items-center'>
         <label htmlFor='displayLimit'>items / page</label>
         <select

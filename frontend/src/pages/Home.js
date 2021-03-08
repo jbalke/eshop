@@ -1,28 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { useLocation } from 'react-router-dom';
 import useResizeObserver from 'use-resize-observer';
 import ApiService from '../api/ApiService';
 import ItemLimit from '../components/ItemLimit';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
 import ProductCarousel from '../components/ProductCarousel';
-import Meta from '../components/Meta';
+import SearchBox from '../components/SearchBox';
+import { useQuerySearchParams } from '../hooks/useQuerySearchParams';
 
-const Home = ({ limit, setLimit }) => {
-  const location = useLocation();
-  const queryString = new URLSearchParams(location.search);
-
-  const queryPage = Number(queryString.get('page')) || 1;
-  const pageNumber = Number.isNaN(queryPage) ? 1 : queryPage;
-
-  const queryKeyword = queryString.get('keyword') || '';
-  const queryLimit = queryString.get('limit') || limit;
-
-  const [page, setPage] = useState(pageNumber);
-  const [keyword, setKeyword] = useState(queryKeyword);
+const Home = ({ appLimit, setAppLimit }) => {
+  const { limit, keyword, page } = useQuerySearchParams(appLimit, setAppLimit);
 
   const queryClient = useQueryClient();
 
@@ -50,29 +41,21 @@ const Home = ({ limit, setLimit }) => {
   );
 
   useEffect(() => {
-    setPage(pageNumber);
-    setKeyword(queryKeyword);
-    setLimit(queryLimit);
-  }, [pageNumber, queryKeyword, queryLimit, setLimit]);
-
-  useEffect(() => {
-    if (pageNumber < data?.pages) {
+    if (page < data?.pages) {
       queryClient.prefetchQuery(
-        [
-          'products',
-          { keyword: queryKeyword, page: pageNumber + 1, limit: queryLimit },
-        ],
+        ['products', { keyword, page: page + 1, limit }],
         ApiService.products.getProducts,
         { staleTime: 0 }
       );
     }
-  }, [data, queryClient, queryKeyword, pageNumber, queryLimit]);
+  }, [data, queryClient, keyword, page, limit]);
 
   const { width: bodyWidth } = useResizeObserver({ ref: document.body });
 
   return (
     <>
       <Meta title='Welcome to E-Shop' />
+      <SearchBox />
       {!keyword && bodyWidth > 600 && <ProductCarousel />}
       <h1>Latest Products {isFetching && <span>...</span>}</h1>
       {isIdle ? null : isLoading ? (
@@ -83,20 +66,19 @@ const Home = ({ limit, setLimit }) => {
         <div className='flex-grow flex flex-col justify-between'>
           <div>
             <ItemLimit limit={limit} keyword={keyword} />
-            {data?.products.length ? (
+            {data?.products.length > 0 ? (
               <div className='products-grid'>
                 {data.products.map((product) => {
                   return <Product key={product._id} {...product} />;
                 })}
               </div>
             ) : (
-              <div className='max-w-sm'>
-                <Message>No products found</Message>
-              </div>
+              <Message>No products found</Message>
             )}
           </div>
           <div className='mt-4 w-1/2 mx-auto'>
             <Paginate
+              limit={limit}
               page={page}
               pages={data?.pages}
               keyword={keyword}

@@ -1,31 +1,31 @@
+import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import AdminRoute from './components/AdminRoute';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
-import AdminRoute from './components/AdminRoute';
 import Cart from './pages/Cart';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import NoMatch from './pages/NoMatch';
 import Order from './pages/Order';
+import OrderList from './pages/OrderList';
 import Payment from './pages/Payment';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
+import ProductEdit from './pages/ProductEdit';
+import ProductList from './pages/ProductList';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Shipping from './pages/Shipping';
-import UserList from './pages/UserList';
-import ProductList from './pages/ProductList';
-import ProductEdit from './pages/ProductEdit';
-import OrderList from './pages/OrderList';
 import StockList from './pages/StockList';
 import UndeliveredOrderList from './pages/UndeliveredOrderList';
+import UserList from './pages/UserList';
 import UserProfile from './pages/UserProfile';
-import { ToastContainer } from 'react-toastify';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,7 +36,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const [limit, setLimit] = useState('12');
+  const [appLimit, setAppLimit] = useState(12);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -44,10 +44,10 @@ function App() {
         <div className='flex flex-col h-screen'>
           <Header />
           <main className='flex-grow flex flex-col'>
-            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-2 sm:px-4 flex flex-col'>
+            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-4 flex flex-col'>
               <Switch>
                 <Route path='/' exact>
-                  <Home limit={limit} setLimit={setLimit} />
+                  <Home appLimit={appLimit} setAppLimit={setAppLimit} />
                 </Route>
                 <Route path='/register'>
                   <Register />

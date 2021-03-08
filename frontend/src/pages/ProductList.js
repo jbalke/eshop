@@ -1,35 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ApiService from '../api/ApiService';
+import ItemLimit from '../components/ItemLimit';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useModal } from '../hooks/useModal';
-import { toast } from 'react-toastify';
-import Paginate from '../components/Paginate';
-import ItemLimit from '../components/ItemLimit';
 import Meta from '../components/Meta';
+import Paginate from '../components/Paginate';
+import SearchBox from '../components/SearchBox';
 import { GBP } from '../config/currency';
+import { useModal } from '../hooks/useModal';
+import { useQuerySearchParams } from '../hooks/useQuerySearchParams';
 
 const ProductList = () => {
-  const [limit, setLimit] = useState(25);
+  const history = useHistory();
+
+  const { limit, keyword, page } = useQuerySearchParams();
+
   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const queryClient = useQueryClient();
-  const location = useLocation();
-
-  const queryString = new URLSearchParams(location.search);
-
-  const queryPage = Number(queryString.get('page')) || 1;
-  const pageNumber = Number.isNaN(queryPage) ? 1 : queryPage;
-
-  const queryKeyword = queryString.get('keyword') || '';
-  const queryLimit = queryString.get('limit') || limit;
-
-  const [page, setPage] = useState(pageNumber);
-  const [keyword, setKeyword] = useState(queryKeyword);
-
   const modalRoot = document.getElementById('modal');
   const {
     Modal,
@@ -38,8 +28,7 @@ const ProductList = () => {
     setIsActionConfirmed,
   } = useModal(modalRoot);
 
-  const history = useHistory();
-
+  const queryClient = useQueryClient();
   const createProductInfo = useMutation(ApiService.admin.createProduct, {
     onSuccess: (data) => {
       queryClient.setQueryData(
@@ -110,99 +99,97 @@ const ProductList = () => {
     }
   }, [createProductInfo, history]);
 
-  useEffect(() => {
-    setPage(pageNumber);
-    setKeyword(queryKeyword);
-    setLimit(queryLimit);
-  }, [pageNumber, queryKeyword, queryLimit, setLimit]);
-
   return (
-    <div className='flex-grow flex flex-col justify-between'>
+    <>
       <Meta title='E-Shop | Product List' />
-      <div>
-        <Modal>
-          <span>
-            Are you sure you want to <strong>DELETE</strong>{' '}
-            {selectedProduct?.name}?
-          </span>
-        </Modal>
+      <div className='flex-grow flex flex-col justify-between'>
         <div>
-          <div className='flex justify-between items-center'>
-            <h1>Products {isFetching && <span>...</span>}</h1>
-            <button
-              className='btn primary'
-              onClick={() => createProductInfo.mutate()}
-            >
-              New Product
-            </button>
-          </div>
-          <ItemLimit limit={limit} step={25} />
-          {isLoading ? (
-            <Loader />
-          ) : isError ? (
-            <Message type='danger'>{error.message}</Message>
-          ) : data.products?.length ? (
-            <div className='overflow-x-scroll md:overflow-x-auto'>
-              <table className='product-list'>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>NAME</th>
-                    <th>BRAND</th>
-                    <th>CATEGORY</th>
-                    <th>PRICE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.products.map((product) => (
-                    <tr key={product._id}>
-                      <td>
-                        <Link to={`/product/${product._id}`}>
-                          {product._id}
-                        </Link>
-                      </td>
-                      <td>{product.name}</td>
-                      <td>{product.brand}</td>
-                      <td>{product.category}</td>
-                      <td>{`${GBP(product.price).format()}`}</td>
-                      <td className='flex items-center justify-around'>
-                        <Link
-                          to={`/admin/product/${product._id}/edit`}
-                          className='btn primary'
-                          title='Edit'
-                        >
-                          <FaEdit fill='white' />
-                        </Link>
-                        <button
-                          type='button'
-                          className='btn primary'
-                          title='Delete'
-                          onClick={() => {
-                            setSelectedProduct(product);
-                            setShowModal(true);
-                          }}
-                        >
-                          <FaTrash fill='white' />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <SearchBox />
+          <Modal>
+            <span>
+              Are you sure you want to <strong>DELETE</strong>{' '}
+              {selectedProduct?.name}?
+            </span>
+          </Modal>
+          <div>
+            <div className='flex justify-between items-center'>
+              <h1>Products {isFetching && <span>...</span>}</h1>
+              <button
+                className='btn primary'
+                onClick={() => createProductInfo.mutate()}
+              >
+                New Product
+              </button>
             </div>
-          ) : (
-            <Message>No products found</Message>
-          )}
+            <ItemLimit keyword={keyword} limit={limit} step={25} />
+            {isLoading ? (
+              <Loader />
+            ) : isError ? (
+              <Message type='danger'>{error.message}</Message>
+            ) : data.products?.length > 0 ? (
+              <div className='overflow-x-scroll md:overflow-x-auto'>
+                <table className='product-list'>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>NAME</th>
+                      <th>BRAND</th>
+                      <th>CATEGORY</th>
+                      <th>PRICE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.products.map((product) => (
+                      <tr key={product._id}>
+                        <td>
+                          <Link to={`/product/${product._id}`}>
+                            {product._id}
+                          </Link>
+                        </td>
+                        <td>{product.name}</td>
+                        <td>{product.brand}</td>
+                        <td>{product.category}</td>
+                        <td>{`${GBP(product.price).format()}`}</td>
+                        <td className='flex items-center justify-around'>
+                          <Link
+                            to={`/admin/product/${product._id}/edit`}
+                            className='btn primary'
+                            title='Edit'
+                          >
+                            <FaEdit fill='white' />
+                          </Link>
+                          <button
+                            type='button'
+                            className='btn primary'
+                            title='Delete'
+                            onClick={() => {
+                              setSelectedProduct(product);
+                              setShowModal(true);
+                            }}
+                          >
+                            <FaTrash fill='white' />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <Message>No products found</Message>
+            )}
+          </div>
+        </div>
+        <div className='mt-4 w-1/2 mx-auto'>
+          <Paginate
+            limit={limit}
+            pages={data?.pages}
+            page={page}
+            isPreviousData={isPreviousData}
+          />
         </div>
       </div>
-      <div className='mt-4 w-1/2 mx-auto'>
-        <Paginate
-          pages={data?.pages}
-          page={page}
-          isPreviousData={isPreviousData}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

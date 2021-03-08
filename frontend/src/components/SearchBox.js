@@ -27,28 +27,32 @@ const SearchBox = () => {
   };
 
   return (
-    <form onSubmit={submitHandler} className='hidden sm:inline-flex'>
-      <div className='flex items-center bg-gray-100 px-2 mr-1 md:mr-2'>
-        <input
-          type='text'
-          name='searchTerm'
-          id='searchTerm'
-          value={keyword}
-          placeholder='Search products...'
-          className='searchinput mr-1 text-black bg-gray-100 p-1'
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <button type='button' onClick={onClearHandler} className='p-1'>
-          <FaTimes className='text-gray-400' />
-        </button>
-      </div>
-      <button
-        type='submit'
-        className='btn rounded text-green-600 ring-2 ring-green-600 ring-inset hover:bg-green-600 hover:text-white'
+    <div className='flex justify-center my-4'>
+      <form
+        onSubmit={submitHandler}
+        className='inline-flex border rounded-md focus-within:ring-4 focus-within:ring-green-500 focus-within:ring-opacity-50 w-56 sm:w-1/3'
       >
-        Search
-      </button>
-    </form>
+        <div className='flex items-center bg-gray-100 px-2 w-full'>
+          <input
+            type='text'
+            name='searchTerm'
+            id='searchTerm'
+            value={keyword}
+            placeholder='Search..'
+            className='searchinput mr-1 text-black bg-gray-100 p-1 outline-none flex-grow'
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+          <button
+            type='button'
+            onClick={onClearHandler}
+            className='p-1'
+            title='clear search'
+          >
+            <FaTimes className='text-gray-400' />
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

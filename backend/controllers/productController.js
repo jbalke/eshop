@@ -196,8 +196,19 @@ export const getTopProducts = asyncHandler(async (req, res) => {
 // @route    GET /api/products/stocklevel
 // @access   Public
 export const getStockLevels = asyncHandler(async (req, res) => {
-  const products = await Product.find({}, null, {
+  const filter = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: 'i' } }
+    : {};
+
+  const totalProducts = await Product.estimatedDocumentCount();
+  const matchedProducts = await Product.countDocuments(filter);
+
+  const { page = '1', limit = '100' } = req.query;
+
+  const products = await Product.find(filter, null, {
     lean: true,
+    skip: parseInt(limit * (page - 1)),
+    limit: parseInt(limit),
   });
 
   const orders = await Order.find({ isDelivered: false }, null, { lean: true });
@@ -206,7 +217,7 @@ export const getStockLevels = asyncHandler(async (req, res) => {
     order.orderItems.map((item) => ({ ...item, orderDate: order.createdAt }))
   );
 
-  const stockLevels = products
+  const stock = products
     .map((product) => {
       return {
         id: product._id,
@@ -234,5 +245,10 @@ export const getStockLevels = asyncHandler(async (req, res) => {
       return a.qtyToSell - b.qtyToSell;
     });
 
-  res.json(stockLevels);
+  res.json({
+    stock,
+    totalProducts,
+    matchedProducts,
+    pages: Math.ceil(matchedProducts / limit),
+  });
 });
