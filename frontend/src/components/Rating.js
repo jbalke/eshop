@@ -19,7 +19,7 @@ function Rating({ value, text, color = '#f8e825', maxRating = 5 }) {
   }
 
   return (
-    <div className='rating inline'>
+    <div className='inline'>
       <div className='inline-flex'>
         {ratingStars.map((star, index) => (
           <span key={index} style={{ color }} className='mr-0.5'>

@@ -6,6 +6,7 @@ import ApiService from '../api/ApiService';
 import Loader from './Loader';
 import Message from './Message';
 import { GBP } from '../config/currency';
+import './ProductCarousel.css';
 
 const ProductCarousel = () => {
   const { isLoading, data, isError, error } = useQuery(

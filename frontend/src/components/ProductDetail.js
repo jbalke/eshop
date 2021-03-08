@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { GBP } from '../config/currency';
 import Rating from './Rating';
+import './ProductDetail.css';
 
 const ProductDetail = ({
   _id,

@@ -1,0 +1,15 @@
+.admin-menu-item a {
+  @apply bg-gray-200 hover:bg-gray-300;
+}
+
+.dropdown::after {
+  content: '';
+  border: 4px solid transparent;
+  border-top-color: #98a1a1;
+  margin-left: 0.5em;
+  @apply transition-colors;
+}
+
+.dropdown:hover::after {
+  border-top-color: #fff;
+}

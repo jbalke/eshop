@@ -1,0 +1,13 @@
+.sub-menu * {
+  display: block;
+  width: 100%;
+}
+
+.sub-menu {
+  padding: 0.5em 0;
+}
+
+.sub-menu a {
+  padding: 0.5em 1em;
+  @apply hover:bg-gray-200;
+}

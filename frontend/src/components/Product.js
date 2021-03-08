@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { GBP } from '../config/currency';
 import Rating from './Rating';
+import './Product.css';
 
 const Product = ({
   _id,

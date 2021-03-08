@@ -75,10 +75,6 @@ form > section + section {
   margin-top: 1rem;
 }
 
-.inputError {
-  @apply text-red-700 text-sm mt-2 flex items-center;
-}
-
 table {
   @apply table-auto divide-y text-left w-full;
 }
@@ -90,32 +86,6 @@ table tbody {
 table th,
 table td {
   @apply p-1;
-}
-
-.dropdown::after {
-  content: '';
-  border: 4px solid transparent;
-  border-top-color: #98a1a1;
-  margin-left: 0.5em;
-  @apply transition-colors;
-}
-
-.dropdown:hover::after {
-  border-top-color: #fff;
-}
-
-.sub-menu * {
-  display: block;
-  width: 100%;
-}
-
-.sub-menu {
-  padding: 0.5em 0;
-}
-
-.sub-menu a {
-  padding: 0.5em 1em;
-  @apply hover:bg-gray-200;
 }
 
 .btn {
@@ -134,42 +104,11 @@ table td {
   @apply text-xs px-2 py-1;
 }
 
-.card {
-  max-width: 280px;
-  @apply rounded border p-3 shadow-md cursor-pointer flex flex-col justify-between;
-}
-
 .products-grid {
   display: grid;
   gap: 0.75rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   justify-items: center;
-}
-
-.product-layout {
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 700px) {
-  .product-layout {
-    gap: 1.5rem;
-  }
-}
-
-.stock-info-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-content: start;
-  align-items: center;
-  gap: 1em;
-  @apply text-sm font-semibold tracking-widest;
-}
-
-@media (min-width: 700px) {
-  .product-layout {
-    grid-template-columns: 35% 2fr 1fr;
-  }
 }
 
 .cart-layout {
@@ -284,54 +223,6 @@ table td {
 .user-list,
 .product-list {
   @apply text-center;
-}
-
-.admin-menu-item a {
-  @apply bg-gray-200 hover:bg-gray-300;
-}
-
-.carousel {
-  @apply bg-gray-300 relative;
-}
-
-.carousel h2 {
-  @apply text-white text-base absolute w-1/3 left-10 bottom-2;
-  min-width: 250px;
-}
-
-@media (min-width: 600px) {
-  .carousel h2 {
-    @apply left-1/4;
-  }
-}
-
-@media (min-width: 800px) {
-  .carousel h2 {
-    @apply left-1/3;
-  }
-}
-
-.carousel h2 span {
-  background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.65);
-  font-size: 16px;
-  line-height: 28px;
-  padding: 3px;
-}
-
-.carousel img {
-  height: 250px;
-  margin: 5px auto;
-}
-
-.carousel-caption {
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-.carousel-caption .caption-container {
-  @apply w-1/3 mx-auto text-center;
 }
 
 .slick-arrow.slick-prev {

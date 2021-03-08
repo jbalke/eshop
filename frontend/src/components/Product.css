@@ -1,0 +1,4 @@
+.card {
+  max-width: 280px;
+  @apply rounded border p-3 shadow-md cursor-pointer flex flex-col justify-between;
+}

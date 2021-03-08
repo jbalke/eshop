@@ -1,0 +1,25 @@
+.product-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .product-layout {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .product-layout {
+    grid-template-columns: 35% 2fr 1fr;
+  }
+}
+
+.stock-info-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  align-items: center;
+  gap: 1em;
+  @apply text-sm font-semibold tracking-widest;
+}
