@@ -1,6 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+// Replaced by Progress.js
+// Kept for reference
+
 const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
   return (
     <nav className='mb-8'>

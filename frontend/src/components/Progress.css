@@ -1,0 +1,69 @@
+.steps {
+  display: flex;
+  justify-content: center;
+  letter-spacing: 1px;
+  margin-bottom: 2rem;
+}
+
+.steps .step {
+  margin: 0.5rem 2.5rem;
+  display: flex;
+  align-items: center;
+  color: #ccc;
+}
+
+.steps .step a {
+  @apply text-gray-500;
+}
+
+.steps .step div:first-of-type {
+  border: 1px solid currentColor;
+  padding: 5px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 100%;
+  padding-top: 7%;
+}
+
+.steps .step div:last-child {
+  width: max-content;
+  @apply font-semibold;
+}
+
+.steps .step.active div:first-of-type {
+  @apply bg-gray-600 text-white;
+  border: 1px solid transparent;
+}
+
+.steps .step.active div:last-of-type {
+  @apply text-gray-600;
+}
+
+@media screen and (max-width: 900px) {
+  .steps .step {
+    margin: 0.5rem 2rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .steps .step {
+    margin: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .steps .step div:first-of-type {
+    padding-top: 9%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .steps .step {
+    margin: 0.5rem;
+  }
+
+  .steps .step div:first-of-type {
+    display: none;
+  }
+}

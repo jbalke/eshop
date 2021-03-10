@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { savePaymentMethod } from '../actions/cartActions';
-import CheckoutSteps from '../components/CheckoutSteps';
+import Progress from '../components/Progress';
 
 const Payment = () => {
   const history = useHistory();
@@ -27,24 +27,25 @@ const Payment = () => {
   };
 
   return (
-    <div className='sm:w-full md:max-w-md mx-auto'>
-      <CheckoutSteps step1 step2 step3 />
-      <h1>Payment Method</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 className='text-xl text-gray-600 font-semibold capitalize'>
-          Select Method
-        </h2>
-        <section className='form-payment'>
-          <input
-            name='paymentMethod'
-            type='radio'
-            id='PayPal'
-            value='PayPal'
-            ref={register}
-          />
-          <label htmlFor='Paypal'>PayPal or Credit Card</label>
-        </section>
-        {/* <div className='form-payment'>
+    <>
+      <Progress />
+      <div className='sm:w-full md:max-w-md mx-auto'>
+        <h1>Payment Method</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <h2 className='text-xl text-gray-600 font-semibold capitalize'>
+            Select Method
+          </h2>
+          <section className='form-payment'>
+            <input
+              name='paymentMethod'
+              type='radio'
+              id='PayPal'
+              value='PayPal'
+              ref={register}
+            />
+            <label htmlFor='Paypal'>PayPal or Credit Card</label>
+          </section>
+          {/* <div className='form-payment'>
           <input
             type='radio'
             name='paymentMethod'
@@ -55,11 +56,12 @@ const Payment = () => {
           />
           <label htmlFor='Stripe'>Stripe</label>
         </div> */}
-        <button type='submit' className='btn primary mt-6'>
-          Continue
-        </button>
-      </form>
-    </div>
+          <button type='submit' className='btn primary mt-6'>
+            Continue
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

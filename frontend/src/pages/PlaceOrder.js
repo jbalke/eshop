@@ -5,15 +5,16 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { clearCart } from '../actions/cartActions';
 import ApiService from '../api/ApiService';
-import CheckoutSteps from '../components/CheckoutSteps';
-import Message from '../components/Message';
-import { GBP } from '../config/currency';
 import Loader from '../components/Loader';
+import Message from '../components/Message';
+import Progress from '../components/Progress';
+import { GBP } from '../config/currency';
 
 const PlaceOrder = () => {
-  const [isOrderSent, setIsOrderSent] = useState(false);
   const cart = useSelector((state) => state.cart);
   const [order, setOrder] = useState(cart);
+  const [isOrderSent, setIsOrderSent] = useState(false);
+
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -47,7 +48,6 @@ const PlaceOrder = () => {
 
   useEffect(() => {
     if (ratesInfo.isSuccess) {
-      console.log(ratesInfo.data);
       const { taxRate, freeShippingThreshold } = ratesInfo.data;
       setOrder((cart) => {
         const itemsPrice = cart.cartItems.reduce(
@@ -83,9 +83,7 @@ const PlaceOrder = () => {
 
   return (
     <>
-      <div className='sm:w-full md:max-w-md mx-auto'>
-        <CheckoutSteps step1 step2 step3 step4 />
-      </div>
+      <Progress />
       <h1 className='sr-only'>Place Order</h1>
       <div className='placeorder-layout'>
         <div className='order-layout'>
@@ -137,7 +135,8 @@ const PlaceOrder = () => {
             <div className='order-summary-item'>
               <div>VAT</div>
               <div>
-                {`${GBP(order.taxPrice).format()}`} ({ratesInfo.data.taxRate}%)
+                {`${GBP(order.taxPrice).format()}`} ({ratesInfo.data.taxRate}
+                %)
               </div>
             </div>
             <div className='order-summary-item'>
