@@ -15,7 +15,7 @@ const calcOrderPrices = async (items) => {
     (acc, item) => acc + item.price * item.qty,
     0
   );
-  const taxPrice = (itemsPrice * taxRate) / 100;
+  const taxPrice = Math.round((itemsPrice * taxRate) / 100);
   const shippingPrice = itemsPrice >= freeShippingThreshold ? 0 : SHIPPING_COST;
 
   return {
@@ -103,7 +103,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     itemsPrice: serverPrices.itemsPrice,
     taxPrice: serverPrices.taxPrice,
     shippingPrice: serverPrices.shippingPrice,
-    totalPrice: currency(serverPrices.totalPrice).intValue,
+    totalPrice: serverPrices.totalPrice,
   });
 
   const newOrder = await order.save();

@@ -1,10 +1,13 @@
-import User from '../models/userModel.js';
-import Order from '../models/orderModel.js';
-import asyncHandler from 'express-async-handler';
-import { setRefreshCookie, clearRefreshCookie } from '../utils/tokens.js';
-import { FriendlyError } from '../errors/errors.js';
 import axios from 'axios';
+import asyncHandler from 'express-async-handler';
+import expressValidator from 'express-validator';
+import { FriendlyError } from '../errors/errors.js';
+import Order from '../models/orderModel.js';
+import User from '../models/userModel.js';
 import { ROLE } from '../permissions/roles.js';
+import { clearRefreshCookie, setRefreshCookie } from '../utils/tokens.js';
+
+const { validationResult } = expressValidator;
 
 const validateHuman = async (token) => {
   const { data } = await axios.post(
@@ -171,6 +174,11 @@ export const updateUser = asyncHandler(async (req, res) => {
 // @route    POST /api/users
 // @access   Public
 export const newUser = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.mapped() });
+  }
+
   const { name, email, password, token } = req.body;
 
   if (!(await validateHuman(token))) {

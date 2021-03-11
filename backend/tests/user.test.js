@@ -1,17 +1,19 @@
-import mongoose from 'mongoose';
+import currency from 'currency.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import request from 'supertest';
 import app from '../app.js';
-import User from '../models/userModel.js';
+import Config from '../models/configModel.js';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
 import { resetTestData } from './test-seeder';
 import { jest } from '@jest/globals';
 
 const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
   _id: userOneId,
-  name: 'Mike',
+  name: 'MikeB',
   email: 'mike@example.com',
   password: '654321',
 };
@@ -36,7 +38,7 @@ describe('a new user', () => {
       .set('Accept', 'application/json')
       .send({
         name: 'test user 1',
-        password: '654321',
+        password: '65aFD4321!',
         email: 'user1@test.com',
         token: 'sgfsdfgsdfglkj',
       })
@@ -68,7 +70,7 @@ describe('a new user', () => {
       .set('Accept', 'application/json')
       .send({
         name: 'test user 2',
-        password: '654321',
+        password: '654fF!321',
         email: 'user1@test.com',
         token: 'sgfsdfgsdfglkj',
       })
@@ -86,13 +88,31 @@ describe('a new user', () => {
       .set('Accept', 'application/json')
       .send({
         name: 'test user 2',
-        password: '654321',
+        password: '654fF1!321',
         token: 'sgfsdfgsdfglkj',
       })
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: expect.any(String),
+      errors: expect.any(Object),
+    });
+  });
+
+  test('should not signup without a valid email address', async () => {
+    const response = await request(app)
+      .post('/api/users')
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'test user 2',
+        email: 'gibberish',
+        password: '654fF1!321',
+        token: 'sgfsdfgsdfglkj',
+      })
+      .expect(400);
+
+    expect(response.body).toMatchObject({
+      errors: expect.any(Object),
     });
   });
 
@@ -109,7 +129,43 @@ describe('a new user', () => {
       .expect(400);
 
     expect(response.body).toMatchObject({
-      message: expect.any(String),
+      errors: expect.any(Object),
+    });
+  });
+
+  test('should not signup without a complex password', async () => {
+    const response = await request(app)
+      .post('/api/users')
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'test user 2',
+        email: 'user2@test.com',
+        password: '1234567',
+        token: 'sgfsdfgsdfglkj',
+      })
+      .expect(400);
+
+    expect(response.body).toMatchObject({
+      errors: expect.any(Object),
+    });
+  });
+
+  test('should not signup without a long password', async () => {
+    const response = await request(app)
+      .post('/api/users')
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'test user 2',
+        email: 'user2@test.com',
+        password: '1gG!',
+        token: 'sgfsdfgsdfglkj',
+      })
+      .expect(400);
+
+    expect(response.body).toMatchObject({
+      errors: expect.any(Object),
     });
   });
 });
@@ -189,13 +245,15 @@ describe('an existing user', () => {
   });
 
   test('should be able to place an order', async () => {
+    const { taxRate, freeShippingThreshold } = await Config.getSingleton();
+
     const itemToOrder = await Product.findOne(
-      { countInStock: { $gt: 0 }, price: { $lt: 10000 } },
+      { countInStock: { $gt: 0 }, price: { $lt: freeShippingThreshold } },
       null,
       { lean: true }
     );
 
-    const taxPrice = Math.round(itemToOrder.price * 15) / 100;
+    const taxPrice = Math.round((itemToOrder.price * taxRate) / 100);
     const shippingPrice = 10000;
 
     const order = {
