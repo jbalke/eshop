@@ -48,12 +48,7 @@ export const authUser = asyncHandler(async (req, res) => {
     setRefreshCookie(res, user);
 
     res.json({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user,
       token: user.createAccessToken(),
     });
   } else {
@@ -66,7 +61,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route    GET /api/users/profile
 // @access   Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password').lean();
+  const user = await User.findById(req.user.id);
 
   if (!user) {
     res.status(404);
@@ -84,7 +79,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 export const getUserById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findById(id).select('-password').lean();
+  const user = await User.findById(id);
 
   if (!user) {
     res.status(404);
@@ -113,8 +108,6 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = email || user.email;
     if (newPassword) {
       user.password = newPassword;
-      // Increment token version to invalidate existing tokens
-      user.tokenVersion += 1;
     }
 
     const updatedUser = await user.save();
@@ -123,12 +116,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
     req.user = updatedUser;
     res.json({
-      user: {
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        role: updatedUser.role,
-      },
+      user,
       token: updateUser.createAccessToken(),
     });
   } else {
@@ -150,7 +138,7 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   const { name, email, role } = req.body;
 
-  const user = await User.findById(id).select('-password');
+  const user = await User.findById(id);
   if (user) {
     user.name = name || user.name;
     user.email = email || user.email;
@@ -191,12 +179,7 @@ export const newUser = asyncHandler(async (req, res) => {
     setRefreshCookie(res, user);
 
     res.status(201).json({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user,
       token: user.createAccessToken(),
     });
   } else {
@@ -209,7 +192,7 @@ export const newUser = asyncHandler(async (req, res) => {
 // @route    GET /api/users
 // @access   Admin
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select('-password').lean();
+  const users = await User.find();
   res.json(users);
 });
 
