@@ -55,6 +55,11 @@ function Register() {
     }
   }, [isSuccess, history, from]);
 
+  const validateEmail = (value) => {
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegex.test(value) || 'Not a valid address';
+  };
+
   const validatePassword = (value) => {
     return (
       [/[a-z]/, /[A-Z]/, /[0-9]/, /[^a-zA-Z0-9\s]/].every((pattern) =>
@@ -116,7 +121,7 @@ function Register() {
               type='email'
               placeholder='email address'
               autoComplete='email'
-              ref={register({ required: 'Required' })}
+              ref={register({ required: 'Required', validate: validateEmail })}
               aria-required='true'
               aria-describedby='emailDescription'
             />
