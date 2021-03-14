@@ -4,7 +4,6 @@ import Config from '../models/configModel.js';
 import asyncHandler from 'express-async-handler';
 import { FriendlyError } from '../errors/errors.js';
 import { ROLE, hasRoles } from '../permissions/roles.js';
-import currency from 'currency.js';
 
 const SHIPPING_COST = 10000;
 
