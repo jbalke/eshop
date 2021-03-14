@@ -20,22 +20,28 @@ const configSchema = mongoose.Schema(
   }
 );
 
-configSchema.statics.setSingleton = function (cb) {
-  this.findOne()
-    .sort({ updated: -1 })
-    .limit(1)
-    .exec(function (error, model) {
-      if (error) {
-        cb(error, null);
-      } else if (!model) {
-        cb(error, new Config());
-      } else {
-        cb(error, model);
-      }
-    });
+configSchema.statics.setSingleton = async function (cb) {
+  try {
+    const config = await this.findOne().sort({ updated: -1 }).limit(1);
+
+    if (config) {
+      cb(null, config);
+    } else {
+      cb(null, new Config());
+    }
+  } catch (error) {
+    cb(error);
+  }
 };
-configSchema.statics.getSingleton = function () {
-  return this.findOne().sort({ updated: -1 }).limit(1).exec();
+configSchema.statics.getSingleton = async function () {
+  const config = await this.findOne().sort({ updated: -1 }).limit(1);
+
+  if (!config) {
+    console.error('Application config could not be found. Exiting...');
+    process.exit(1);
+  }
+
+  return config;
 };
 
 configSchema.pre('save', function (next) {
