@@ -61,15 +61,15 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route    GET /api/users/profile
 // @access   Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+  // const user = await User.findById(req.user.id);
 
-  if (!user) {
-    res.status(404);
-    throw new FriendlyError(`User ${id} not found`);
-  }
+  // if (!user) {
+  //   res.status(404);
+  //   throw new FriendlyError(`User ${id} not found`);
+  // }
 
   res.json({
-    user,
+    user: req.user,
   });
 });
 
@@ -97,32 +97,26 @@ export const getUserById = asyncHandler(async (req, res) => {
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { name, email, password, newPassword } = req.body;
 
-  const user = await User.findById(req.user._id);
-  if (!(await user.matchPassword(password))) {
+  if (!(await req.user.matchPassword(password))) {
     res.status(400);
     throw new FriendlyError('Incorrect password');
   }
 
-  if (user) {
-    user.name = name || user.name;
-    user.email = email || user.email;
-    if (newPassword) {
-      user.password = newPassword;
-    }
-
-    const updatedUser = await user.save();
-    // set new refresh token due to token version change
-    setRefreshCookie(res, updatedUser);
-
-    req.user = updatedUser;
-    res.json({
-      user,
-      token: updateUser.createAccessToken(),
-    });
-  } else {
-    res.status(404);
-    throw new FriendlyError('User not found');
+  req.user.name = name || req.user.name;
+  req.user.email = email || req.user.email;
+  if (newPassword) {
+    user.password = newPassword;
   }
+
+  const updatedUser = await req.user.save();
+  // set new refresh token due to token version change
+  setRefreshCookie(res, updatedUser);
+
+  req.user = updatedUser;
+  res.json({
+    user: updatedUser,
+    token: updateUser.createAccessToken(),
+  });
 });
 
 // @desc     Update user by ID
@@ -224,7 +218,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   const deletedUser = await User.findByIdAndDelete(user._id).lean();
 
-  // await Order.deleteMany({ user: deletedUser._id });
   res.json(deletedUser);
 });
 

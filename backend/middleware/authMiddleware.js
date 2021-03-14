@@ -23,9 +23,7 @@ export const requireAuth = asyncHandler(async (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET
     );
 
-    const existUser = await User.findOne({ _id: sub, tokenVersion }).select(
-      '-password'
-    );
+    const existUser = await User.findOne({ _id: sub, tokenVersion });
 
     if (!existUser) {
       res.status(401);
