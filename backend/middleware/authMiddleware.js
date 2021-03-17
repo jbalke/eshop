@@ -52,12 +52,3 @@ export const authRoles = (roles) => {
     throw new FriendlyError('forbidden');
   };
 };
-
-// export const isAdmin = (req, res, next) => {
-//   if (req?.user?.isAdmin) {
-//     return next();
-//   }
-
-//   res.status(403);
-//   throw new Error('admin access only');
-// };
