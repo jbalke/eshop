@@ -12,6 +12,8 @@ import tokenRoutes from './routes/tokenRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import hpp from 'hpp';
+import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -19,7 +21,16 @@ dotenv.config();
 connectDatabase();
 const app = express();
 
+app.set('trust proxy', 1);
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', apiLimiter);
+
 app.use(express.json());
+app.use(hpp());
 app.use(cookieParser());
 
 app.use(
