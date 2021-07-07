@@ -5,7 +5,7 @@ const NoMatch = () => {
   return (
     <>
       <Meta title='E-Shop | 404' />
-      <div>404 Not Found</div>;
+      <div>404 Not Found</div>
     </>
   );
 };
