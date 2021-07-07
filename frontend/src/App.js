@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AdminRoute from './components/AdminRoute';
 import Footer from './components/Footer';
@@ -27,92 +25,82 @@ import UndeliveredOrderList from './pages/UndeliveredOrderList';
 import UserList from './pages/UserList';
 import UserProfile from './pages/UserProfile';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
-    },
-  },
-});
-
 function App() {
   const [appLimit, setAppLimit] = useState(12);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className='flex flex-col h-screen'>
-          <Header />
-          <main className='flex-grow flex flex-col'>
-            <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-4 flex flex-col'>
-              <Switch>
-                <Route path='/' exact>
-                  <Home appLimit={appLimit} setAppLimit={setAppLimit} />
-                </Route>
-                <Route path='/register'>
-                  <Register />
-                </Route>
-                <Route path='/login'>
-                  <Login />
-                </Route>
-                <Route path='/logout'>
-                  <Logout />
-                </Route>
-                <Route path='/product/:id'>
-                  <Product />
-                </Route>
-                <Route path='/cart/:id?'>
-                  <Cart />
-                </Route>
-                <PrivateRoute path='/profile'>
-                  <Profile />
-                </PrivateRoute>
-                <PrivateRoute path='/shipping'>
-                  <Shipping />
-                </PrivateRoute>
-                <PrivateRoute path='/payment'>
-                  <Payment />
-                </PrivateRoute>
-                <PrivateRoute path='/placeorder'>
-                  <PlaceOrder />
-                </PrivateRoute>
-                <PrivateRoute path='/order/:id'>
-                  <Order />
-                </PrivateRoute>
-                <PrivateRoute path='/me'>
-                  <Profile />
-                </PrivateRoute>
-                <AdminRoute path='/admin/order-list'>
-                  <OrderList />
-                </AdminRoute>
-                <AdminRoute path='/admin/undelivered-order-list'>
-                  <UndeliveredOrderList />
-                </AdminRoute>
-                <AdminRoute path='/admin/product-list'>
-                  <ProductList />
-                </AdminRoute>
-                <AdminRoute path='/admin/stock-list'>
-                  <StockList />
-                </AdminRoute>
-                <AdminRoute path='/admin/product/:id/edit'>
-                  <ProductEdit />
-                </AdminRoute>
-                <AdminRoute path='/admin/user-list'>
-                  <UserList />
-                </AdminRoute>
-                <AdminRoute path='/admin/user/:id'>
-                  <UserProfile />
-                </AdminRoute>
-                <Route path='*'>
-                  <NoMatch />
-                </Route>
-              </Switch>
-            </div>
-          </main>
-          <Footer />
-        </div>
-        <div id='modal'></div>
-      </Router>
+    <>
+      <div className='flex flex-col h-screen'>
+        <Header />
+        <main className='flex-grow flex flex-col'>
+          <div className='w-screen lg:max-w-screen-lg lg:mx-auto flex-grow py-2 px-4 flex flex-col'>
+            <Switch>
+              <Route path='/' exact>
+                <Home appLimit={appLimit} setAppLimit={setAppLimit} />
+              </Route>
+              <Route path='/register'>
+                <Register />
+              </Route>
+              <Route path='/login'>
+                <Login />
+              </Route>
+              <Route path='/logout'>
+                <Logout />
+              </Route>
+              <Route path='/product/:id'>
+                <Product />
+              </Route>
+              <Route path='/cart/:id?'>
+                <Cart />
+              </Route>
+              <PrivateRoute path='/profile'>
+                <Profile />
+              </PrivateRoute>
+              <PrivateRoute path='/shipping'>
+                <Shipping />
+              </PrivateRoute>
+              <PrivateRoute path='/payment'>
+                <Payment />
+              </PrivateRoute>
+              <PrivateRoute path='/placeorder'>
+                <PlaceOrder />
+              </PrivateRoute>
+              <PrivateRoute path='/order/:id'>
+                <Order />
+              </PrivateRoute>
+              <PrivateRoute path='/me'>
+                <Profile />
+              </PrivateRoute>
+              <AdminRoute path='/admin/order-list'>
+                <OrderList />
+              </AdminRoute>
+              <AdminRoute path='/admin/undelivered-order-list'>
+                <UndeliveredOrderList />
+              </AdminRoute>
+              <AdminRoute path='/admin/product-list'>
+                <ProductList />
+              </AdminRoute>
+              <AdminRoute path='/admin/stock-list'>
+                <StockList />
+              </AdminRoute>
+              <AdminRoute path='/admin/product/:id/edit'>
+                <ProductEdit />
+              </AdminRoute>
+              <AdminRoute path='/admin/user-list'>
+                <UserList />
+              </AdminRoute>
+              <AdminRoute path='/admin/user/:id'>
+                <UserProfile />
+              </AdminRoute>
+              <Route path='*'>
+                <NoMatch />
+              </Route>
+            </Switch>
+          </div>
+        </main>
+        <Footer />
+      </div>
+      <div id='modal'></div>
       <ToastContainer
         position='bottom-right'
         autoClose={3000}
@@ -122,10 +110,7 @@ function App() {
         pauseOnFocusLoss
         pauseOnHover
       />
-      {process.env.NODE_ENV !== 'production' && (
-        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
-      )}
-    </QueryClientProvider>
+    </>
   );
 }
 

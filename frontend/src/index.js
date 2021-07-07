@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -9,10 +12,25 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import store from './store';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <App />
+        </Router>
+        {process.env.NODE_ENV !== 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+        )}
+      </QueryClientProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
