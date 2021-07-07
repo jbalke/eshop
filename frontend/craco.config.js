@@ -15,6 +15,7 @@ module.exports = {
         'node_modules',
         __dirname, // the root directory
       ],
+      setupFilesAfterEnv: [],
     },
   },
 };
