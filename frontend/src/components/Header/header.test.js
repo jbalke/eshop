@@ -1,16 +1,19 @@
 import React from 'react';
 import { renderWithRouter } from 'test-utils';
+import { screen } from '@testing-library/react';
 import Header from './index';
 
 jest.mock('./Submenu', () => () => <div>Submenu</div>);
 
 describe('Header', () => {
   it('renders correctly', () => {
-    const { container, getByText } = renderWithRouter(<Header />);
+    renderWithRouter(<Header />);
 
-    expect(container.innerHTML).toMatch(/e-shop/i);
+    // screen.debug();
+    expect(screen.getByRole('banner')).toBeInTheDocument();
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
 
-    expect(getByText(/sign in/i)).toHaveAttribute('href', '/login');
-    expect(getByText(/cart/i)).toHaveAttribute('href', '/cart');
+    expect(screen.getByText(/sign in/i)).toHaveAttribute('href', '/login');
+    expect(screen.getByText(/cart/i)).toHaveAttribute('href', '/cart');
   });
 });
