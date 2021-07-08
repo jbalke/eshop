@@ -11,5 +11,8 @@
     "production": {
       "URL": "http://localhost:5000"
     }
-  }
+  },
+  "jest.jestCommandLine": "yarn --cwd ./frontend test",
+  "jest.autoRun": { "watch": true },
+  "jest.debugMode": true,
 }
