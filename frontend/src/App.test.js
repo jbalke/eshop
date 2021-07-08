@@ -1,4 +1,5 @@
-import { render, renderWithRouter } from '../test-utils';
+import { renderWithRouter } from '../test-utils';
+import { screen } from '@testing-library/react';
 import App from './App';
 
 jest.mock('./pages/Home', () => () => <div>Home</div>);
@@ -10,42 +11,46 @@ jest.mock('./pages/Product', () => () => <div>Product</div>);
 
 describe('App', () => {
   it('renders successfully', () => {
-    const { container } = renderWithRouter(<App />);
-    expect(container.innerHTML).toMatch(/E-Shop/i);
+    renderWithRouter(<App />);
+
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
   });
 });
 
 describe('routing unauthenticated', () => {
   it('renders Home component on root route', () => {
-    const { container } = renderWithRouter(<App />, { route: '/' });
-    expect(container.innerHTML).toMatch('Home');
+    renderWithRouter(<App />, { route: '/' });
+    expect(screen.getByText('Home')).toBeInTheDocument();
   });
   it('renders Register component on /register route', () => {
-    const { container } = renderWithRouter(<App />, { route: '/register' });
-    expect(container.innerHTML).toMatch('Register');
+    renderWithRouter(<App />, { route: '/register' });
+    expect(screen.getByText('Register')).toBeInTheDocument();
   });
   it('renders Login component on /login route', () => {
-    const { container } = renderWithRouter(<App />, { route: '/login' });
-    expect(container.innerHTML).toMatch('Login');
+    renderWithRouter(<App />, { route: '/login' });
+    expect(screen.getByText('Login')).toBeInTheDocument();
   });
   it('renders Cart component on /cart route', () => {
-    const { container } = renderWithRouter(<App />, { route: '/cart' });
-    expect(container.innerHTML).toMatch('Cart');
+    renderWithRouter(<App />, { route: '/cart' });
+    expect(screen.getByText('Cart')).toBeInTheDocument();
   });
-  it("redirects to login on private route", ()=> {
-    const {history} = renderWithRouter(<App />, {route: '/me'})
+  it('redirects to login on private route', () => {
+    const { history } = renderWithRouter(<App />, { route: '/me' });
 
-    expect(history.location.pathname).toBe("/login")
-  })
-  it("redirects to login on admin route", ()=> {
-    const {history} = renderWithRouter(<App />, {route: '/admin/user-list'})
+    expect(history.location.pathname).toBe('/login');
+  });
+  it('redirects to login on admin route', () => {
+    const { history } = renderWithRouter(<App />, {
+      route: '/admin/user-list',
+    });
 
-    expect(history.location.pathname).toBe("/login")
-  })
-  it("returns '404 Not Found' on bad route", ()=> {
-    const {container} = renderWithRouter(<App />, {route: '/nonexisting-route'})
+    expect(history.location.pathname).toBe('/login');
+  });
+  it("returns '404 Not Found' on bad route", () => {
+    renderWithRouter(<App />, { route: '/nonexisting-route' });
 
-    expect(container.innerHTML).toMatch(/404 Not Found/i)
-  })
-  
+    expect(screen.getByText(/404 Not Found/i)).toBeInTheDocument();
+  });
 });
