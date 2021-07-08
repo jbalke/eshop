@@ -14,5 +14,5 @@
   },
   "jest.jestCommandLine": "yarn --cwd ./frontend test",
   "jest.autoRun": { "watch": true },
-  "jest.debugMode": true,
+  // "jest.debugMode": true,
 }
