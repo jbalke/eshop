@@ -1,21 +1,21 @@
-import { renderWithRouter } from '../test-utils';
 import { screen } from '@testing-library/react';
+import { renderWithRouter } from '../test-utils';
 import App from './App';
 
 jest.mock('./pages/Home', () => () => <div>Home</div>);
 jest.mock('./pages/Cart', () => () => <div>Cart</div>);
+jest.mock('./pages/Product', () => () => <div>Product</div>);
 jest.mock('./pages/Login', () => () => <div>Login</div>);
 jest.mock('./pages/Register', () => () => <div>Register</div>);
 jest.mock('./pages/Logout', () => () => <div>Logout</div>);
-jest.mock('./pages/Product', () => () => <div>Product</div>);
 
 describe('App', () => {
   it('renders successfully', () => {
     renderWithRouter(<App />);
 
-    expect(screen.getByRole("banner")).toBeInTheDocument();
-    expect(screen.getByRole("main")).toBeInTheDocument();
-    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+    expect(screen.getByRole('banner')).toHaveTextContent(/e-shop/i);
+    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 });
 
@@ -38,7 +38,6 @@ describe('routing unauthenticated', () => {
   });
   it('redirects to login on private route', () => {
     const { history } = renderWithRouter(<App />, { route: '/me' });
-
     expect(history.location.pathname).toBe('/login');
   });
   it('redirects to login on admin route', () => {
@@ -50,7 +49,14 @@ describe('routing unauthenticated', () => {
   });
   it("returns '404 Not Found' on bad route", () => {
     renderWithRouter(<App />, { route: '/nonexisting-route' });
-
     expect(screen.getByText(/404 Not Found/i)).toBeInTheDocument();
+  });
+
+  it('"sign in" link goes to /login', async () => {
+    renderWithRouter(<App />);
+    expect(screen.getByRole('link', { name: 'sign in' })).toHaveAttribute(
+      'href',
+      '/login'
+    );
   });
 });
