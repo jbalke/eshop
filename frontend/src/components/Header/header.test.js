@@ -13,7 +13,13 @@ describe('Header', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('navigation')).toBeInTheDocument();
 
-    expect(screen.getByText(/sign in/i)).toHaveAttribute('href', '/login');
-    expect(screen.getByText(/cart/i)).toHaveAttribute('href', '/cart');
+    expect(screen.getByRole('link', { name: 'sign in' })).toHaveAttribute(
+      'href',
+      '/login'
+    );
+    expect(screen.getByRole('link', { name: 'cart' })).toHaveAttribute(
+      'href',
+      '/cart'
+    );
   });
 });
