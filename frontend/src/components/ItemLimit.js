@@ -14,9 +14,7 @@ const ItemLimit = ({ keyword = '', limit = 25, step = 12 }) => {
           id='displayLimit'
           onChange={(e) =>
             history.push(
-              `${location.pathname}?keyword=${keyword}&limit=${
-                e.target.value
-              }&page=${1}`
+              `${location.pathname}?keyword=${keyword}&limit=${e.target.value}&page=1`
             )
           }
           value={limit}
