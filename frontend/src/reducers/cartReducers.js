@@ -12,9 +12,9 @@ export const cartReducer = (
 ) => {
   switch (action.type) {
     case CART_ADD_ITEM:
-      const item = action.payload;
-
-      const existItem = state.cartItems.find((i) => i.product === item.product);
+      var item = action.payload;
+      var existItem = state.cartItems.find((i) => i.product === item.product);
+      
       if (existItem) {
         return {
           ...state,
