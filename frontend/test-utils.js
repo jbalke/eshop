@@ -44,6 +44,7 @@ const renderWithClient = (
   );
   return {
     ...result,
+    history,
     rerender: (rerenderUi) =>
       rerender(
         <QueryClientProvider client={client}>{rerenderUi}</QueryClientProvider>
