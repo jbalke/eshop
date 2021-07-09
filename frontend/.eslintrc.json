@@ -9,6 +9,14 @@
     "plugin:react/recommended",
     "plugin:jest/recommended"
   ],
+  "settings": {
+    "jest": {
+      "version": "26.6.3"
+    },
+    "react": {
+      "version": "detect"
+    }
+  },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -18,6 +26,8 @@
   },
   "plugins": ["testing-library", "jest", "jest-dom", "react-hooks", "react"],
   "rules": {
+    "no-unused-vars": "warn",
+    "react/prop-types": "off",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
