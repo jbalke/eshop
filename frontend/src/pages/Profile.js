@@ -65,7 +65,9 @@ const Profile = () => {
     try {
       await mutateAsync({ name, email, password, newPassword });
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const editHandler = (e) => {

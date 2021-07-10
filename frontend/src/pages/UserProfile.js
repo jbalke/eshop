@@ -59,7 +59,9 @@ const UserProfile = () => {
     try {
       await mutateAsync({ name, email, role });
       setIsEditing(false);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const editHandler = (e) => {
