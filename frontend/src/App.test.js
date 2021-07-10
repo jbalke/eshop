@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import * as React from 'react';
 import { QueryClient } from 'react-query';
-import { renderWithClient } from '../test-utils';
+import { renderWithClient } from 'test-utils';
 import App from './App';
 
 jest.mock('./pages/Home', () => () => <div>Home</div>);

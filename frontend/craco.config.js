@@ -13,7 +13,7 @@ module.exports = {
     configure: {
       moduleDirectories: [
         'node_modules',
-        __dirname, // the root directory
+        'test', // the root directory
       ],
       setupFilesAfterEnv: [],
     },

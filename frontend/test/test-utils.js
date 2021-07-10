@@ -5,7 +5,7 @@ import React from 'react';
 import { QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
-import store from './src/store';
+import store from '../src/store';
 
 const AllTheProviders = ({ children }) => {
   return <Provider store={store}>{children}</Provider>;

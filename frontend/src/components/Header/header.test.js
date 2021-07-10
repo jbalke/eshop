@@ -1,13 +1,16 @@
 import React from 'react';
-import { renderWithRouter } from 'test-utils';
+import { renderWithClient } from 'test-utils';
 import { screen } from '@testing-library/react';
 import Header from './index';
+import { QueryClient } from 'react-query';
 
 jest.mock('./Submenu', () => () => <div>Submenu</div>);
 
 describe('Header', () => {
+  const queryClient = new QueryClient();
+
   it('renders correctly', () => {
-    renderWithRouter(<Header />);
+    renderWithClient(queryClient, <Header />);
 
     // screen.debug();
     expect(screen.getByRole('banner')).toBeInTheDocument();
