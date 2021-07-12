@@ -10,6 +10,9 @@ jest.mock('./pages/Product', () => () => <div>Product</div>);
 jest.mock('./pages/Login', () => () => <div>Login</div>);
 jest.mock('./pages/Register', () => () => <div>Register</div>);
 jest.mock('./pages/Logout', () => () => <div>Logout</div>);
+jest.mock('./components/ProductCarousel', () => () => (
+  <div>Product Carousel</div>
+));
 
 describe('App', () => {
   const client = new QueryClient();
