@@ -14,8 +14,8 @@ jest.mock('./pages/Logout', () => () => <div>Logout</div>);
 describe('App', () => {
   const client = new QueryClient();
 
-  it('renders successfully', () => {
-    renderWithClient(client, <App />);
+  it('renders successfully', async () => {
+    await renderWithClient(client, <App />);
 
     expect(screen.getByRole('banner')).toHaveTextContent(/e-shop/i);
     expect(screen.getByRole('main')).toBeInTheDocument();
@@ -26,23 +26,27 @@ describe('App', () => {
 describe('routing unauthenticated', () => {
   const client = new QueryClient();
 
-  it('renders Home component on root route', () => {
+  it('renders Home component on root route', async () => {
     renderWithClient(client, <App />, { route: '/' });
-    expect(screen.getByText('Home')).toBeInTheDocument();
+    const elm = await screen.findByText('Home');
+    expect(elm).toBeInTheDocument();
   });
-  it('renders Register component on /register route', () => {
+  it('renders Register component on /register route', async () => {
     renderWithClient(client, <App />, { route: '/register' });
-    expect(screen.getByText('Register')).toBeInTheDocument();
+    const elm = await screen.findByText('Register');
+    expect(elm).toBeInTheDocument();
   });
-  it('renders Login component on /login route', () => {
+  it('renders Login component on /login route', async () => {
     renderWithClient(client, <App />, { route: '/login' });
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    const elm = await screen.findByText('Login');
+    expect(elm).toBeInTheDocument();
   });
-  it('renders Cart component on /cart route', () => {
+  it('renders Cart component on /cart route', async () => {
     renderWithClient(client, <App />, { route: '/cart' });
-    expect(screen.getByText('Cart')).toBeInTheDocument();
+    const elm = await screen.findByText('Cart');
+    expect(elm).toBeInTheDocument();
   });
-  it('redirects to login on private route', () => {
+  it('redirects to login on private route', async () => {
     const { history } = renderWithClient(client, <App />, { route: '/me' });
     expect(history.location.pathname).toBe('/login');
   });
@@ -53,16 +57,15 @@ describe('routing unauthenticated', () => {
 
     expect(history.location.pathname).toBe('/login');
   });
-  it("returns '404 Not Found' on bad route", () => {
+  it("returns '404 Not Found' on bad route", async () => {
     renderWithClient(client, <App />, { route: '/nonexisting-route' });
-    expect(screen.getByText(/404 Not Found/i)).toBeInTheDocument();
+    const elm = await screen.findByText(/404 Not Found/i);
+    expect(elm).toBeInTheDocument();
   });
 
   it('"sign in" link goes to /login', async () => {
     renderWithClient(client, <App />);
-    expect(screen.getByRole('link', { name: 'sign in' })).toHaveAttribute(
-      'href',
-      '/login'
-    );
+    const elm = await screen.findByRole('link', { name: 'sign in' });
+    expect(elm).toHaveAttribute('href', '/login');
   });
 });
