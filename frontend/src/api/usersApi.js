@@ -63,6 +63,7 @@ export const getUserProfile = async () => {
       throw new Error(error.response.data.message);
     }
 
+    console.error(error);
     throw new Error(error);
   }
 };
