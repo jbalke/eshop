@@ -1,4 +1,6 @@
 // add setup scripts here
+import '@testing-library/jest-dom/extend-expect';
+
 import { server } from './mocks/server.js';
 // Establish API mocking before all tests.
 beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
